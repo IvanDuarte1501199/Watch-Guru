@@ -1,0 +1,14 @@
+@import 'typography.css';
+@import 'components.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html,
+    body {
+        font-family: 'Courier New', Courier, monospace;
+        @apply bg-pink-whirl;
+    }
+}

@@ -1,0 +1,10 @@
+.h1-guru {
+    @apply text-2xl font-bold text-medium-purple;
+}
+.h2-guru {
+    @apply text-xl font-semibold text-deep-amethyst;
+}
+.p-guru {
+    @apply text-base font-bold text-medium-purple;
+    
+}

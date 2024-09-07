@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
-import SeriesInfo from './pages/SeriesInfo'; // Importa la nueva página
+import ShowInfo from './pages/ShowInfo';
 
 const router = createBrowserRouter([
     {
@@ -9,8 +9,8 @@ const router = createBrowserRouter([
         element: <Home />,
     },
     {
-        path: '/series/:id', // Ruta con parámetro 'id'
-        element: <SeriesInfo />,
+        path: '/shows/:id',
+        element: <ShowInfo />,
     },
 ]);
 
