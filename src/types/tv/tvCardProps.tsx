@@ -1,3 +1,6 @@
-import { TvProps } from "./tvProps";
+import { TvProps } from './tvProps'
 
-export type TvCardProps = Pick<TvProps, 'name' | 'poster_path' | 'vote_average' | 'id'>;
+export type TvCardProps = Pick<
+  TvProps,
+  'name' | 'poster_path' | 'vote_average' | 'id'
+>

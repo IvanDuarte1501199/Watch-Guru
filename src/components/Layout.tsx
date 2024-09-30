@@ -12,7 +12,7 @@ export function Layout({
 }: LayoutProps): JSX.Element {
   return (
     <>
-      <div className="max-w-screen-xl px-4 m-auto lg:px-12">
+      <div className="m-auto max-w-screen-xl px-4 lg:px-12">
         {showHeader && <Header />}
         <main>{children}</main>
         <Footer />

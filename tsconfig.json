@@ -4,7 +4,8 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
+      "WebWorker"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -24,18 +25,30 @@
       "@components/*": [
         "src/components/*"
       ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ],
+      "@pages/*": [
+        "src/pages/*"
+      ],
       "@services/*": [
         "src/services/*"
+      ],
+      "@slice/*": [
+        "src/slice/*"
+      ],
+      "@store/*": [
+        "src/store/*"
       ],
       "@styles/*": [
         "src/styles/*"
       ],
+      "@types/*": [
+        "src/types/*"
+      ],
       "@utils/*": [
         "src/utils/*"
       ],
-      "@types/*": [
-        "src/types/*"
-      ]
     }
   },
   "include": [

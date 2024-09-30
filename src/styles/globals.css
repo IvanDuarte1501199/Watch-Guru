@@ -6,11 +6,10 @@
 @tailwind utilities;
 
 @layer base {
-
-    html,
-    body {
-        overflow-x: hidden;
-        font-family: 'Courier New', Courier, monospace;
-        @apply bg-pink-whirl;
-    }
+  html,
+  body {
+    overflow-x: hidden;
+    font-family: 'Courier New', Courier, monospace;
+    @apply bg-pink-whirl;
+  }
 }
