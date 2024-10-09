@@ -1,94 +1,66 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Layout } from '@components/Layout'
 import { GenericList } from '@components/common/GenericList'
-import { getTrendingAll } from '@services/tmdbService'
-import { GenericItemProps } from '@types/common/genericItemProps'
-import { getTrendingMovies } from '@services/movieService'
-import { getTrendingTv } from '@services/tvService'
-import useGenres from '@hooks/useGenres'
-import { useAppSelector } from '@hooks/store'
+import useTrendingData from '@hooks/useTrending'
+import { useTrendingMovies, useUpcomingMovies } from '@hooks/movies/useMovies'
+import { useTrendingTv, useAiringToday } from '@hooks/tv/useTvShows'
+import SuggestBox from '@components/SuggestBox'
 
 const Home: React.FC = () => {
-  const { tvGenres, moviesGenres, isLoading, error } = useGenres()
-  const genre = useAppSelector((state) => state.genres)
+    const { trending, isLoading: trendingLoading, error: trendingError } = useTrendingData();
+    const { tvShows: trendingTv, loading: tvLoading, error: tvError } = useTrendingTv();
+    const { movies: trendingMovies, loading: moviesLoading, error: moviesError } = useTrendingMovies();
+    const { tvShows: airingToday, loading: isLoadingAiring, error: errorAiring } = useAiringToday();
+    const { movies: upcomingMovies, loading: upcomingMoviesLoading, error: upcomingMoviesError } = useUpcomingMovies();
 
-  useEffect(() => {
-    console.log('genre.tvGenres', genre.tvGenres)
-    console.log('genre.moviesGenres', genre.moviesGenres)
-    console.log('isLoading', isLoading)
-    console.log('error', error)
-  })
+    return (
+        <Layout>
+            <h1 className="h1-guru pb-6 pt-6 text-center uppercase">
+                Welcome to your next binge-worthy recommendation!
+            </h1>
 
-  const [trending, setTrending] = useState<GenericItemProps[]>([])
-  const [trendingTv, setTrendingTv] = useState<GenericItemProps[]>([])
-  const [trendingMovies, setTrendingMovies] = useState<GenericItemProps[]>([])
+            {/*  <h2 className='h2-guru mb-12 text-center'>Suggest me a random movie or tv show</h2> */}
 
-  useEffect(() => {
-    const fetchAll = async () => {
-      const trendingResult = await getTrendingAll()
-      const trendingTvResult = await getTrendingTv()
-      const trendingMoviesResult = await getTrendingMovies()
-      setTrending(trendingResult)
-      setTrendingTv(trendingTvResult)
-      setTrendingMovies(trendingMoviesResult)
-    }
-    fetchAll()
-  }, [])
+            {/* TODO: Add a random movie or tv show */}
+            {/* <section className='flex align-middle justify-center gap-10 mb-12'>
+                <SuggestBox placeholder='Get random Movie recommendation' fromColor='blue-400' toColor='pink-800' />
+                <SuggestBox placeholder='Get random Tv Show recommendation' fromColor='red-200' toColor='pink-600' />
+            </section> */}
 
-  useEffect(() => {
-    console.log('trending', trending)
-  }, [trending])
+            {/* trending all */}
+            {trending && trending.length > 0 && <GenericList
+                title="Trending Tv Shows and Movies"
+                genericList={trending}
+            />}
 
-  return (
-    <Layout>
-      <h1 className="h1-guru pb-6 pt-6 text-center uppercase">
-        Welcome to your next binge-worthy recommendation!
-      </h1>
-      {isLoading ? <h1>is Loading</h1> : <></>}
-      {error ? <h1>Error</h1> : <></>}
-      {genre.moviesGenres && genre.moviesGenres.map((genre) => {
-        return <p>{genre.name}</p>
-      })}
+            {/* trending tv shows */}
+            {trendingTv && trendingTv.length > 0 && <GenericList
+                title="Trending Tv Shows"
+                genericList={trendingTv}
+            />}
 
-      <hr className='border-black my-5'/>
-      {tvGenres && tvGenres.map((genre) => {
-        return <p>{genre.name}</p>
-      })}
-      {/* trending all */}
-      <GenericList
-        title="Trending Tv Shows and Movies"
-        genericList={trending.slice(0, 5)}
-      />
-      {/* trending tv shows */}
-      <GenericList
-        title="Trending Tv Shows"
-        genericList={trendingTv.slice(0, 5)}
-      />
-      {/* tendring movies */}
-      <GenericList
-        title="Trending Movies"
-        genericList={trendingMovies.slice(0, 5)}
-      />
-      {/* MOVIE LISTS
-            Now Playing
-            Popular
-            Top Rated
-            Upcoming */}
+            {/* tendring movies */}
+            {trendingMovies && trendingMovies.length > 0 && <GenericList
+                title="Trending Movies"
+                genericList={trendingMovies}
+            />}
 
-      {/* TV SERIES LISTS
-            Airing Today
-            On The Air
-            Popular
-            Top Rated */}
+            {/* airing today */}
+            {airingToday && airingToday.length > 0 && <GenericList
+                title="Airing Today"
+                genericList={airingToday}
+            />}
 
-      {/* popular tv shows */}
+            {/* upcoming movies */}
+            {upcomingMovies && upcomingMovies.length > 0 && <GenericList
+                title="Upcoming Movies"
+                genericList={upcomingMovies}
+            />}
 
-      {/* top rated tv shows */}
-      {/* popular movie list */}
-      {/* now playing movie list */}
-      {/*  */}
-    </Layout>
-  )
+
+
+        </Layout>
+    )
 }
 
 export default Home

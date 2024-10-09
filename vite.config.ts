@@ -12,7 +12,8 @@ export default defineConfig({
       '@services': path.resolve(__dirname, 'src/services'),
       '@types': path.resolve(__dirname, 'src/types'),
       '@hooks': path.resolve(__dirname, 'src/hooks'),
-      '@slice': path.resolve(__dirname, 'src/slice')
+      '@slice': path.resolve(__dirname, 'src/slice'),
+      '@sections': path.resolve(__dirname, 'src/sections')
     },
   },
 })

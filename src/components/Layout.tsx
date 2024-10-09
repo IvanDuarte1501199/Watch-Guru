@@ -12,11 +12,11 @@ export function Layout({
 }: LayoutProps): JSX.Element {
   return (
     <>
-      <div className="m-auto max-w-screen-xl px-4 lg:px-12">
-        {showHeader && <Header />}
+      {showHeader && <Header />}
+      <div className="container mx-auto px-4 md:px-0">
         <main>{children}</main>
-        <Footer />
       </div>
+      <Footer />
     </>
   )
 }

@@ -1,15 +1,37 @@
 @import 'typography.css';
 @import 'components.css';
+@import 'slick.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+
   html,
   body {
     overflow-x: hidden;
     font-family: 'Courier New', Courier, monospace;
-    @apply bg-pink-whirl;
+    @apply bg-secondary h-screen;
+    min-height: 100vh;
+  }
+
+  main {
+    margin-top: 72px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #0d253f;
+    border-radius: 10px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #0d253f transparent;
   }
 }

@@ -43,8 +43,11 @@
       "@styles/*": [
         "src/styles/*"
       ],
-      "@types/*": [
-        "src/types/*"
+      "@sections/*": [
+        "src/sections/*"
+      ],
+      "@test/*": [
+        "src/test/*"
       ],
       "@utils/*": [
         "src/utils/*"

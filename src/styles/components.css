@@ -6,3 +6,21 @@
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
 }
+
+@keyframes color-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-color-shift {
+  animation: color-shift 5s ease-in-out infinite;
+}

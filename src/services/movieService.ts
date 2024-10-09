@@ -1,22 +1,88 @@
-import { TimeWindow } from '@types/service/imdb'
-import tmdbApi from './tmdbApi'
+import { TimeWindow } from '@types/service/imdb';
+import tmdbApi from './tmdbApi';
+import { TmdbResponse } from '@types/common/tmdbResponse';
+import { MediaType } from '@types/common/MediaType';
 
 export const getTrendingMovies = async (time: TimeWindow = 'week') => {
   try {
-    const response = await tmdbApi.get(`/trending/movie/${time}`)
-    return response.data.results
+    const response = await tmdbApi.get<TmdbResponse>(`/trending/movie/${time}`);
+    return response.data.results;
   } catch (error) {
-    console.error('Error fetching popular movies:', error)
-    throw error
+    console.error('Error fetching popular movies:', error);
+    throw error;
   }
 }
 
-export const getMovieById = async (id: String) => {
+export const getMovieById = async (id: string) => {
   try {
-    const response = await tmdbApi.get(`/movie/${id}`)
-    return response.data.results
+    const response = await tmdbApi.get(`/movie/${id}`);
+    return response.data;
   } catch (error) {
-    console.error('Error fetching movie by id:', error)
-    throw error
+    console.error('Error fetching movie by id:', error);
+    throw error;
   }
 }
+
+export const searchMovies = async (query: string) => {
+  try {
+    const response = await tmdbApi.get<TmdbResponse>('/search/movie', {
+      params: { query },
+    });
+    return response.data.results;
+  } catch (error) {
+    console.error('Error searching tv shows:', error);
+    throw error;
+  }
+}
+
+export const getNowPlayingMovies = async () => {
+  try {
+    const response = await tmdbApi.get<TmdbResponse>('/movie/now_playing');
+    return response.data.results.map((item) => ({
+      ...item,
+      media_type: MediaType.Movie,
+    }));
+  } catch (error) {
+    console.error('Error fetching now playing movies:', error);
+    throw error;
+  }
+};
+
+export const getPopularMovies = async () => {
+  try {
+    const response = await tmdbApi.get<TmdbResponse>('/movie/popular');
+    return response.data.results.map((item) => ({
+      ...item,
+      media_type: MediaType.Movie,
+    }));
+  } catch (error) {
+    console.error('Error fetching popular movies:', error);
+    throw error;
+  }
+};
+
+export const getTopRatedMovies = async () => {
+  try {
+    const response = await tmdbApi.get<TmdbResponse>('/movie/top_rated');
+    return response.data.results.map((item) => ({
+      ...item,
+      media_type: MediaType.Movie,
+    }));
+  } catch (error) {
+    console.error('Error fetching top rated movies:', error);
+    throw error;
+  }
+};
+
+export const getUpcomingMovies = async () => {
+  try {
+    const response = await tmdbApi.get<TmdbResponse>('/movie/upcoming');
+    return response.data.results.map((item) => ({
+      ...item,
+      media_type: MediaType.Movie,
+    }));
+  } catch (error) {
+    console.error('Error fetching upcoming movies:', error);
+    throw error;
+  }
+};

@@ -1,9 +1,19 @@
 .h1-guru {
-  @apply text-2xl font-bold text-medium-purple;
+  @apply text-lg md:text-2xl font-bold text-default;
 }
+
 .h2-guru {
-  @apply text-xl font-semibold text-deep-amethyst;
+  @apply text-xl font-semibold text-gray;
 }
+
+.h3-guru {
+  @apply text-lg font-semibold text-default;
+}
+
 .p-guru {
-  @apply text-base font-bold text-medium-purple;
+  @apply text-base font-bold text-default;
+}
+
+.nav-link-guru {
+  @apply text-default text-base md:text-xl hover:underline transition duration-200 ease-in-out;
 }

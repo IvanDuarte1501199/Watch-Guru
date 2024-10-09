@@ -4,12 +4,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        'medium-purple': '#8959DB',
-        'deep-amethyst': '#6C4F8F',
-        'lilac-breeze': '#D5A6FD',
-        'soft-cloud': '#F4F4F4',
-        'pink-whirl': '#F3C3F1',
-        'lime-zest': '#ABDB59',
+        'primary': '#0d253f',
+        'secondary': '#3a4348',
+        'default': 'white',
+        'gray': '#c6cbd3',
+      },
+      container: {
+        center: true,
+        screens: {
+          sm: '100%',
+          md: '640px',
+          lg: '768px',
+          xl: '1024px',
+          '2xl': '1280px',
+        },
       },
     },
   },
