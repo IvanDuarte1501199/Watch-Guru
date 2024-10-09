@@ -1,50 +1,120 @@
-# React + TypeScript + Vite
+# App currently in progress 🚧
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This application is currently under development. New features and improvements are being added regularly.
 
-Currently, two official plugins are available:
+# 📺 Movie & TV Show Recommendation App
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Description
 
-## Expanding the ESLint configuration
+**Movie & TV Show Recommendation App** allows you to explore popular TV shows and movies, discover new releases, and get personalized random recommendations for TV shows or movies. The app uses The Movie Database (TMDb) API to provide detailed information on movies, TV shows, actors, genres, and more.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Features
 
-- Configure the top-level `parserOptions` property like this:
+- 📽 **Random Recommendations**: Get random movie or TV show recommendations with a single click.
+- 🔍 **Advanced Search**: Search for your favorite movies or TV shows using our TMDb integration.
+- 🌟 **Popular Movies**: Discover trending movies or find out what's playing in theaters.
+- 📅 **Popular TV Shows**: Access the most-watched TV shows or what's currently on air.
+- 🎬 **Detailed Information**: View comprehensive details for each movie or show, such as genres, seasons, episodes, and reviews.
+- 🧑‍🤝‍🧑 **Actor Profiles**: Explore information about actors and their latest projects.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Tech Stack
+
+- **Frontend**: 
+  - React
+  - TypeScript
+  - Tailwind CSS
+  - React Router
+  - Axios
+  - Vite
+  
+- **State Management**: 
+  - Redux
+  
+- **API**: 
+  - [The Movie Database (TMDb)](https://www.themoviedb.org/documentation/api)
+  
+## Installation & Setup
+
+Follow these steps to run the app on your local environment:
+
+1. **Clone the repository**:
+
+    ```bash
+    git clone https://github.com/your-username/movie-tv-app.git
+    cd movie-tv-app
+    ```
+
+2. **Install dependencies**:
+
+    Ensure you have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed, then run:
+
+    ```bash
+    npm install
+    ```
+
+3. **Set up TMDb API**:
+
+   You will need an API key from [The Movie Database (TMDb)](https://www.themoviedb.org/documentation/api). Create a `.env` file in the root of the project and add your API key:
+
+    ```bash
+    VITE_TMDB_API_KEY=your_api_key_here
+    ```
+
+4. **Run the development server**:
+
+    ```bash
+    npm run dev
+    ```
+
+5. **Open the app**:
+
+    Navigate to `http://localhost:3000` in your browser.
+
+## Available Scripts
+
+- `npm run dev`: Start the development server.
+- `npm run build`: Create a production build.
+- `npm run preview`: Preview the optimized build.
+- `npm run lint`: Run lint checks and fix code issues.
+
+## Project Structure
+
+```bash
+src/
+├── assets/               # Static files
+├── components/           # Reusable components
+├── hooks/                # Custom hooks
+├── pages/                # Main app pages
+├── services/             # TMDb API calls
+├── store/                # Global state with Redux
+├── App.tsx               # Root component
+├── main.tsx              # App entry point
+└── index.css             # Global styles
 ```
+## API Used
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+This app uses the TMDb API to fetch information about movies and TV shows. For more details, visit [TMDb API Documentation](https://developers.themoviedb.org/3).
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Future Improvements
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- 💾 **Favorites Functionality**: Allow users to save their favorite movies or TV shows.
+- 📱 **Enhanced Mobile Responsiveness**: Further optimize the experience on mobile devices.
+- 💬 **Commenting System**: Add a system for users to comment and leave reviews.
+
+## Contributions
+
+Contributions are welcome! If you'd like to contribute to this project, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/new-feature`).
+3. Make your changes and commit them (`git commit -m 'Add new feature'`).
+4. Push to your branch (`git push origin feature/new-feature`).
+5. Open a Pull Request.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more information.
+
+## Author
+
+Developed by [Iván](https://github.com/IvanDuarte1501199).
