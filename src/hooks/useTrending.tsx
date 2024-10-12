@@ -5,21 +5,21 @@ import { useAppDispatch } from '@hooks/store';
 import { fetchTrendingAll } from '@slice/trendingSlice';
 
 const useTrendingAll = () => {
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-    const {
-        tvAndMoviesItems: trendingItems,
-        loading,
-        error,
-    } = useSelector((state: RootState) => state.trendingAll);
+  const {
+    tvAndMoviesItems: trendingItems,
+    loading,
+    error,
+  } = useSelector((state: RootState) => state.trendingAll);
 
-    useEffect(() => {
-        if (trendingItems.length === 0) {
-            dispatch(fetchTrendingAll());
-        }
-    }, [dispatch, trendingItems.length]);
+  useEffect(() => {
+    if (trendingItems.length === 0) {
+      dispatch(fetchTrendingAll());
+    }
+  }, [dispatch, trendingItems.length]);
 
-    return { trendingItems, loading, error };
+  return { trendingItems, loading, error };
 };
 
 export default useTrendingAll;

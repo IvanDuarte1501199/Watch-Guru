@@ -10,56 +10,56 @@ import { fetchTopRatedTv } from '@slice/tv/topRatedTvSlice';
 import { fetchTrendingTv } from '@slice/tv/trendingTvSlice';
 
 const useTvShows = (tvShowType: TvShowType) => {
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-    const { tvShows, loading, error } = useSelector((state: RootState) => {
-        switch (tvShowType) {
-            case TvShowType.Popular:
-                return state.popularTv;
-            case TvShowType.AiringToday:
-                return state.airingTodayTv;
-            case TvShowType.OnTheAir:
-                return state.onTheAirTv;
-            case TvShowType.TopRated:
-                return state.topRatedTv;
-            case TvShowType.Trending:
-                return state.trendingTv;
-            default:
-                throw new Error('Invalid TV show type');
+  const { tvShows, loading, error } = useSelector((state: RootState) => {
+    switch (tvShowType) {
+      case TvShowType.Popular:
+        return state.popularTv;
+      case TvShowType.AiringToday:
+        return state.airingTodayTv;
+      case TvShowType.OnTheAir:
+        return state.onTheAirTv;
+      case TvShowType.TopRated:
+        return state.topRatedTv;
+      case TvShowType.Trending:
+        return state.trendingTv;
+      default:
+        throw new Error('Invalid TV show type');
+    }
+  });
+
+  useEffect(() => {
+    switch (tvShowType) {
+      case TvShowType.Popular:
+        if (tvShows.length === 0) {
+          dispatch(fetchPopularTv());
         }
-    });
-
-    useEffect(() => {
-        switch (tvShowType) {
-            case TvShowType.Popular:
-                if (tvShows.length === 0) {
-                    dispatch(fetchPopularTv());
-                }
-                break;
-            case TvShowType.AiringToday:
-                if (tvShows.length === 0) {
-                    dispatch(fetchAiringToday());
-                }
-                break;
-            case TvShowType.OnTheAir:
-                if (tvShows.length === 0) {
-                    dispatch(fetchOnTheAir());
-                }
-                break;
-            case TvShowType.TopRated:
-                if (tvShows.length === 0) {
-                    dispatch(fetchTopRatedTv());
-                }
-                break;
-            case TvShowType.Trending:
-                if (tvShows.length === 0) {
-                    dispatch(fetchTrendingTv());
-                }
-                break;
+        break;
+      case TvShowType.AiringToday:
+        if (tvShows.length === 0) {
+          dispatch(fetchAiringToday());
         }
-    }, [dispatch, tvShowType, tvShows.length]);
+        break;
+      case TvShowType.OnTheAir:
+        if (tvShows.length === 0) {
+          dispatch(fetchOnTheAir());
+        }
+        break;
+      case TvShowType.TopRated:
+        if (tvShows.length === 0) {
+          dispatch(fetchTopRatedTv());
+        }
+        break;
+      case TvShowType.Trending:
+        if (tvShows.length === 0) {
+          dispatch(fetchTrendingTv());
+        }
+        break;
+    }
+  }, [dispatch, tvShowType, tvShows.length]);
 
-    return { tvShows, loading, error };
+  return { tvShows, loading, error };
 };
 
 export default useTvShows;

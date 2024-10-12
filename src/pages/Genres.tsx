@@ -5,13 +5,13 @@ import { Layout } from '@components/Layout';
 
 /* TODO: COMPLETE THIS PAGE */
 const Genres: React.FC = () => {
-    return (
-        <Layout>
-            <h1 className="h1-guru d-flex flex items-center justify-center">
-                Page not developed yet
-            </h1>
-        </Layout>
-    );
+  return (
+    <Layout>
+      <h1 className="h1-guru d-flex flex items-center justify-center">
+        Page not developed yet
+      </h1>
+    </Layout>
+  );
 };
 
 export default Genres;

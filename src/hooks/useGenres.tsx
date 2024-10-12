@@ -5,19 +5,19 @@ import { RootState } from '@store/index';
 import { useAppDispatch } from '@hooks/store';
 
 const useGenres = () => {
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-    const { tvGenres, moviesGenres, isLoading, error } = useSelector(
-        (state: RootState) => state.genres
-    );
+  const { tvGenres, moviesGenres, isLoading, error } = useSelector(
+    (state: RootState) => state.genres
+  );
 
-    useEffect(() => {
-        if (moviesGenres.length === 0 && tvGenres.length === 0) {
-            dispatch(fetchGenres());
-        }
-    }, [dispatch, moviesGenres.length, tvGenres.length]);
+  useEffect(() => {
+    if (moviesGenres.length === 0 && tvGenres.length === 0) {
+      dispatch(fetchGenres());
+    }
+  }, [dispatch, moviesGenres.length, tvGenres.length]);
 
-    return { tvGenres, moviesGenres, isLoading, error };
+  return { tvGenres, moviesGenres, isLoading, error };
 };
 
 export default useGenres;

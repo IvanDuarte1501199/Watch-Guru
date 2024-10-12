@@ -1,44 +1,44 @@
 .slick-list,
 .slick-slider,
 .slick-track {
-    position: relative;
-    display: block;
+  position: relative;
+  display: block;
 }
 
 .slick-track li {
-    list-style: none;
-    background-color: transparent;
+  list-style: none;
+  background-color: transparent;
 }
 
 .slick-vertical .slick-slide {
-    display: block;
-    height: auto;
-    border: 1px solid transparent;
+  display: block;
+  height: auto;
+  border: 1px solid transparent;
 }
 
 .slick-arrow.slick-hidden {
-    display: none;
+  display: none;
 }
 
 .slick-arrow.slick-disabled {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 .slick-slide > div {
-    padding-right: 12px;
+  padding-right: 12px;
 }
 
 .slick-steps {
-    position: absolute;
-    right: 5rem;
+  position: absolute;
+  right: 5rem;
 }
 
 .slick-dots li button:before {
-    color: white !important;
+  color: white !important;
 }
 
 @media (max-width: 768px) {
-    .slick-list {
-        overflow: visible !important;
-    }
+  .slick-list {
+    overflow: visible !important;
+  }
 }

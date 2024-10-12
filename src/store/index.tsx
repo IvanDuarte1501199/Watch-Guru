@@ -13,20 +13,20 @@ import trendingTvSlice from '../slice/tv/trendingTvSlice';
 import trendingAllSlice from '../slice/trendingSlice';
 
 export const store = configureStore({
-    reducer: {
-        genres: genresReducer,
-        popularMovies: popularMoviesReducer,
-        nowPlayingMovies: nowPlayingMoviesReducer,
-        topRatedMovies: topRatedMoviesReducer,
-        upcomingMovies: upcomingMoviesReducer,
-        trendingMovies: trendingMoviesReducer,
-        airingTodayTv: airingTodayTvSlice,
-        onTheAirTv: onTheAirTvSlice,
-        popularTv: popularTvSlice,
-        topRatedTv: topRatedTvSlice,
-        trendingTv: trendingTvSlice,
-        trendingAll: trendingAllSlice,
-    },
+  reducer: {
+    genres: genresReducer,
+    popularMovies: popularMoviesReducer,
+    nowPlayingMovies: nowPlayingMoviesReducer,
+    topRatedMovies: topRatedMoviesReducer,
+    upcomingMovies: upcomingMoviesReducer,
+    trendingMovies: trendingMoviesReducer,
+    airingTodayTv: airingTodayTvSlice,
+    onTheAirTv: onTheAirTvSlice,
+    popularTv: popularTvSlice,
+    topRatedTv: topRatedTvSlice,
+    trendingTv: trendingTvSlice,
+    trendingAll: trendingAllSlice,
+  },
 });
 
 export type AppDispatch = typeof store.dispatch;

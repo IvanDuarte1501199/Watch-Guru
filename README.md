@@ -10,26 +10,26 @@ This application is currently under development. New features and improvements a
 
 ## Features
 
--   📽 **Random Recommendations**: Get random movie or TV show recommendations with a single click.
--   🔍 **Advanced Search**: Search for your favorite movies or TV shows using our TMDb integration.
--   🌟 **Popular Movies**: Discover trending movies or find out what's playing in theaters.
--   📅 **Popular TV Shows**: Access the most-watched TV shows or what's currently on air.
--   🎬 **Detailed Information**: View comprehensive details for each movie or show, such as genres, seasons, episodes, and reviews.
--   🧑‍🤝‍🧑 **Actor Profiles**: Explore information about actors and their latest projects.
+- 📽 **Random Recommendations**: Get random movie or TV show recommendations with a single click.
+- 🔍 **Advanced Search**: Search for your favorite movies or TV shows using our TMDb integration.
+- 🌟 **Popular Movies**: Discover trending movies or find out what's playing in theaters.
+- 📅 **Popular TV Shows**: Access the most-watched TV shows or what's currently on air.
+- 🎬 **Detailed Information**: View comprehensive details for each movie or show, such as genres, seasons, episodes, and reviews.
+- 🧑‍🤝‍🧑 **Actor Profiles**: Explore information about actors and their latest projects.
 
 ## Tech Stack
 
--   **Frontend**:
-    -   React
-    -   TypeScript
-    -   Tailwind CSS
-    -   React Router
-    -   Axios
-    -   Vite
--   **State Management**:
-    -   Redux
--   **API**:
-    -   [The Movie Database (TMDb)](https://www.themoviedb.org/documentation/api)
+- **Frontend**:
+  - React
+  - TypeScript
+  - Tailwind CSS
+  - React Router
+  - Axios
+  - Vite
+- **State Management**:
+  - Redux
+- **API**:
+  - [The Movie Database (TMDb)](https://www.themoviedb.org/documentation/api)
 
 ## Installation & Setup
 
@@ -37,50 +37,50 @@ Follow these steps to run the app on your local environment:
 
 1. **Clone the repository**:
 
-    ```bash
-    git clone https://github.com/your-username/movie-tv-app.git
-    cd movie-tv-app
-    ```
+   ```bash
+   git clone https://github.com/your-username/movie-tv-app.git
+   cd movie-tv-app
+   ```
 
 2. **Install dependencies**:
 
-    Ensure you have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed, then run:
+   Ensure you have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed, then run:
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
 3. **Set up TMDb API**:
 
-    You will need an API key from [The Movie Database (TMDb)](https://www.themoviedb.org/documentation/api). Create a `.env` file in the root of the project and add your API key:
+   You will need an API key from [The Movie Database (TMDb)](https://www.themoviedb.org/documentation/api). Create a `.env` file in the root of the project and add your API key:
 
-    ```bash
-    VITE_TMDB_API_KEY=your_api_key_here
-    ```
+   ```bash
+   VITE_TMDB_API_KEY=your_api_key_here
+   ```
 
 4. **Run the development server**:
 
-    ```bash
-    npm run dev
-    ```
+   ```bash
+   npm run dev
+   ```
 
 5. **Open the app**:
 
-    Navigate to `http://localhost:3000` in your browser.
+   Navigate to `http://localhost:3000` in your browser.
 
 ## Available Scripts
 
--   `npm run dev`: Start the development server.
--   `npm run build`: Create a production build.
--   `npm run preview`: Preview the optimized build.
--   `npm run lint`: Run lint checks and fix code issues.
+- `npm run dev`: Start the development server.
+- `npm run build`: Create a production build.
+- `npm run preview`: Preview the optimized build.
+- `npm run lint`: Run lint checks and fix code issues.
 
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your `.env` file:
 
--   `VITE_TMDB_API_KEY`: This is your API key from The Movie Database (TMDb). You can obtain it by creating an account on [TMDb](https://www.themoviedb.org/) and generating an API key in the developer section.
--   `VITE_TMDB_BASE_URL`: "VITE_TMDB_BASE_URL=https://api.themoviedb.org/3" This is the base URL for The Movie Database API.
+- `VITE_TMDB_API_KEY`: This is your API key from The Movie Database (TMDb). You can obtain it by creating an account on [TMDb](https://www.themoviedb.org/) and generating an API key in the developer section.
+- `VITE_TMDB_BASE_URL`: "VITE_TMDB_BASE_URL=https://api.themoviedb.org/3" This is the base URL for The Movie Database API.
 
 ## Project Structure
 
@@ -103,9 +103,9 @@ This app uses the TMDb API to fetch information about movies and TV shows. For m
 
 ## Future Improvements
 
--   💾 **Favorites Functionality**: Allow users to save their favorite movies or TV shows.
--   📱 **Enhanced Mobile Responsiveness**: Further optimize the experience on mobile devices.
--   💬 **Commenting System**: Add a system for users to comment and leave reviews.
+- 💾 **Favorites Functionality**: Allow users to save their favorite movies or TV shows.
+- 📱 **Enhanced Mobile Responsiveness**: Further optimize the experience on mobile devices.
+- 💬 **Commenting System**: Add a system for users to comment and leave reviews.
 
 ## Contributions
 
