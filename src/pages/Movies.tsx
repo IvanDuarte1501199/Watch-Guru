@@ -2,17 +2,18 @@ import React from 'react'
 import { Layout } from '@components/Layout'
 import { GenericList } from '@components/common/GenericList'
 import useGenres from '@hooks/useGenres'
-import { useTrendingMovies, useNowPlayingMovies, usePopularMovies, useTopRatedMovies, useUpcomingMovies } from '@hooks/movies/useMovies'
+import useMovies from '@hooks/movies/useMovies'
 import { MainTitle } from '@components/common/MainTitle'
 import GenresSection from '@sections/GenresSection'
 import FeaturedGenresSection from '@sections/FeaturedGenresSection'
+import { MovieType } from '@appTypes/movies/movieProps'
 
 const Movies: React.FC = () => {
-    const { movies: trendingMovies, loading: trendingMoviesLoading, error: trendingMoviesError } = useTrendingMovies();
-    const { movies: nowPlayingMovies, loading: nowPlayingMoviesLoading, error: nowPlayingMoviesError } = useNowPlayingMovies();
-    const { movies: popularMovies, loading: popularMoviesLoading, error: popularMoviesError } = usePopularMovies();
-    const { movies: topRatedMovies, loading: topRatedMoviesLoading, error: topRatedMoviesError } = useTopRatedMovies();
-    const { movies: upcomingMovies, loading: upcomingMoviesLoading, error: upcomingMoviesError } = useUpcomingMovies();
+    const { movies: trendingMovies, loading: trendingMoviesLoading, error: trendingMoviesError } = useMovies(MovieType.Trending);
+    const { movies: nowPlayingMovies, loading: nowPlayingMoviesLoading, error: nowPlayingMoviesError } = useMovies(MovieType.NowPlaying);
+    const { movies: popularMovies, loading: popularMoviesLoading, error: popularMoviesError } = useMovies(MovieType.Popular);
+    const { movies: topRatedMovies, loading: topRatedMoviesLoading, error: topRatedMoviesError } = useMovies(MovieType.TopRated);
+    const { movies: upcomingMovies, loading: upcomingMoviesLoading, error: upcomingMoviesError } = useMovies(MovieType.Upcoming);
 
     const { moviesGenres, isLoading: genresLoading, error: genresError } = useGenres();
 

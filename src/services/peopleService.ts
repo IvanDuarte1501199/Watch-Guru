@@ -1,4 +1,4 @@
-import { TimeWindow } from '@types/service/imdb'
+import { TimeWindow } from '@appTypes/service/imdb'
 import tmdbApi from './tmdbApi'
 
 export const getTrendingPeople = async (time: TimeWindow = 'week') => {

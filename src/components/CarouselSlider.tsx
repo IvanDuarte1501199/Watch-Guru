@@ -40,37 +40,40 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
 
     const settings = {
         dots: true,
-        infinite: false,
+        arrows: true,
         speed: 500,
         slidesToShow: maxItems,
         slidesToScroll: 1,
         afterChange: (current: number) => setCurrentSlide(current),
-        arrows: true,
+        infinite: false,
         responsive: [
             {
                 breakpoint: 1024,
                 settings: {
                     slidesToShow: 3,
                     slidesToScroll: 3,
-                    arrows: false,
+                    arrows: true,
                 },
             },
             {
-                breakpoint: 600,
+                breakpoint: 768,
                 settings: {
+                    centerPadding: 0,
                     slidesToShow: 2,
                     slidesToScroll: 2,
+                    centerMode: true,
                     arrows: false,
+                    dots: false,
                 },
             },
             {
                 breakpoint: 480,
-                centerMode: true,
                 settings: {
-                    centerMode: true,
+                    centerPadding: 0,
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     arrows: false,
+                    dots: false,
                 },
             },
         ],

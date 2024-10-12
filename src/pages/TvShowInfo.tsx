@@ -43,6 +43,7 @@ const TvShowInfo: React.FC = () => {
             {/* poster image */}
             {tvShow?.poster_path && (
               <img
+                loading='lazy'
                 src={`https://image.tmdb.org/t/p/w500/${tvShow.poster_path}`}
                 alt={tvShow.name}
                 className="w-full md:w-1/3 rounded-lg shadow-lg"
@@ -111,7 +112,7 @@ const TvShowInfo: React.FC = () => {
                             Air Date: {episode.air_date || 'N/A'}
                           </p>
                           <p className="text-sm">
-                            {episode.overview || 'No description available'}
+                            {episode.overview || ''}
                           </p>
                         </li>
                       ))}

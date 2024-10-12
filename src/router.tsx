@@ -1,17 +1,18 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Home from './pages/Home'
-import TvShowInfo from './pages/TvShowInfo'
-import MovieInfo from './pages/MovieInfo'
-import TvShows from './pages/TvShows'
-import Movies from './pages/Movies'
-import PageNotFound from './pages/PageNotFound'
-import Genres from './pages/Genres'
+import Home from '@pages/Home'
+import TvShowInfo from '@pages/TvShowInfo'
+import MovieInfo from '@pages/MovieInfo'
+import TvShows from '@pages/TvShows'
+import Movies from '@pages/Movies'
+import PageNotFound from '@pages/PageNotFound'
+import Genres from '@pages/Genres'
+import SandBox from '@pages/SandBox'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    element: (true) ? <Home /> : <SandBox />,
   },
   {
     path: '/tv-shows/:id',

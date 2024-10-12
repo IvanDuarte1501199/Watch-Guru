@@ -1,17 +1,18 @@
 import React from 'react'
 import { Layout } from '@components/Layout'
 import { GenericList } from '@components/common/GenericList'
-import useTrendingData from '@hooks/useTrending'
-import { useTrendingMovies, useUpcomingMovies } from '@hooks/movies/useMovies'
-import { useTrendingTv, useAiringToday } from '@hooks/tv/useTvShows'
-import SuggestBox from '@components/SuggestBox'
+import { MovieType } from '@appTypes/movies/movieProps'
+import useMovies from '@hooks/movies/useMovies'
+import useTvShows from '@hooks/tv/useTvShows'
+import { TvShowType } from '@appTypes/tv/tvProps'
+import useTrendingAll from '@hooks/useTrending'
 
 const Home: React.FC = () => {
-    const { trending, isLoading: trendingLoading, error: trendingError } = useTrendingData();
-    const { tvShows: trendingTv, loading: tvLoading, error: tvError } = useTrendingTv();
-    const { movies: trendingMovies, loading: moviesLoading, error: moviesError } = useTrendingMovies();
-    const { tvShows: airingToday, loading: isLoadingAiring, error: errorAiring } = useAiringToday();
-    const { movies: upcomingMovies, loading: upcomingMoviesLoading, error: upcomingMoviesError } = useUpcomingMovies();
+    const { trendingItems: trending, loading: trendingLoading, error: trendingError } = useTrendingAll();
+    const { tvShows: trendingTv, loading: tvLoading, error: tvError } = useTvShows(TvShowType.Trending);
+    const { movies: trendingMovies, loading: moviesLoading, error: moviesError } = useMovies(MovieType.Trending);
+    const { tvShows: airingToday, loading: isLoadingAiring, error: errorAiring } = useTvShows(TvShowType.AiringToday);
+    const { movies: upcomingMovies, loading: upcomingMoviesLoading, error: upcomingMoviesError } = useMovies(MovieType.Upcoming);
 
     return (
         <Layout>

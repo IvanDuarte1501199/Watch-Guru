@@ -16,8 +16,8 @@ const Button: React.FC<ButtonProps> = ({
   const baseStyles = 'px-4 py-2 rounded-md font-semibold'
   const variantStyles =
     variant === 'primary'
-      ? 'bg-blue-600 text-white hover:bg-blue-700'
-      : 'bg-gray-300 text-gray-800 hover:bg-gray-400'
+      ? 'bg-primary text-white hover:bg-secondary'
+      : 'bg-secondary text-gray-800 hover:bg-primary'
 
   return (
     <button

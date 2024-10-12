@@ -77,6 +77,14 @@ Follow these steps to run the app on your local environment:
 - `npm run preview`: Preview the optimized build.
 - `npm run lint`: Run lint checks and fix code issues.
 
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your `.env` file:
+
+- `VITE_TMDB_API_KEY`: This is your API key from The Movie Database (TMDb). You can obtain it by creating an account on [TMDb](https://www.themoviedb.org/) and generating an API key in the developer section.
+- `VITE_TMDB_BASE_URL`: "VITE_TMDB_BASE_URL=https://api.themoviedb.org/3" This is the base URL for The Movie Database API.
+
+
 ## Project Structure
 
 ```bash

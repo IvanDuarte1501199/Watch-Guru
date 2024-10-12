@@ -10,10 +10,11 @@ export default defineConfig({
       '@utils': path.resolve(__dirname, 'src/utils'),
       '@styles': path.resolve(__dirname, 'src/styles'),
       '@services': path.resolve(__dirname, 'src/services'),
-      '@types': path.resolve(__dirname, 'src/types'),
+      '@appTypes': path.resolve(__dirname, 'src/types'),
       '@hooks': path.resolve(__dirname, 'src/hooks'),
       '@slice': path.resolve(__dirname, 'src/slice'),
-      '@sections': path.resolve(__dirname, 'src/sections')
+      '@sections': path.resolve(__dirname, 'src/sections'),
+      '@pages': path.resolve(__dirname, 'src/pages')
     },
   },
 })

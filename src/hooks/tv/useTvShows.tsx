@@ -1,41 +1,66 @@
-import { useEffect, useState } from 'react';
-import { GenericItemProps } from '@types/common/genericItemProps';
-import {
-    getAiringToday,
-    getOnTheAir,
-    getPopularTv,
-    getTopRatedTv,
-    getTrendingTv
-} from '@services/tvService';
-import { TimeWindow } from '@types/service/imdb';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@store/index';
+import { useAppDispatch } from '@hooks/store';
+import { TvShowType } from '@appTypes/tv/tvProps';
+import { fetchPopularTv } from '@slice/tv/popularTvSlice';
+import { fetchAiringToday } from '@slice/tv/airingTodaySlice';
+import { fetchOnTheAir } from '@slice/tv/onTheAirSlice';
+import { fetchTopRatedTv } from '@slice/tv/topRatedTvSlice';
+import { fetchTrendingTv } from '@slice/tv/trendingTvSlice';
 
-const useTvShows = (fetchTvShows: () => Promise<GenericItemProps[]>) => {
-    const [tvShows, setTvShows] = useState<GenericItemProps[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+
+const useTvShows = (tvShowType: TvShowType) => {
+    const dispatch = useAppDispatch();
+
+    const { tvShows, loading, error } = useSelector((state: RootState) => {
+        switch (tvShowType) {
+            case TvShowType.Popular:
+                return state.popularTv;
+            case TvShowType.AiringToday:
+                return state.airingTodayTv;
+            case TvShowType.OnTheAir:
+                return state.onTheAirTv;
+            case TvShowType.TopRated:
+                return state.topRatedTv;
+            case TvShowType.Trending:
+                return state.trendingTv;
+            default:
+                throw new Error('Invalid TV show type');
+        }
+    });
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                const results = await fetchTvShows();
-                setTvShows(results);
-            } catch (error) {
-                console.error('Error fetching TV shows:', error);
-                setError('Failed to load TV shows');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [fetchTvShows]);
+        switch (tvShowType) {
+            case TvShowType.Popular:
+                if (tvShows.length === 0) {
+                    dispatch(fetchPopularTv());
+                }
+                break;
+            case TvShowType.AiringToday:
+                if (tvShows.length === 0) {
+                    dispatch(fetchAiringToday());
+                }
+                break;
+            case TvShowType.OnTheAir:
+                if (tvShows.length === 0) {
+                    dispatch(fetchOnTheAir());
+                }
+                break;
+            case TvShowType.TopRated:
+                if (tvShows.length === 0) {
+                    dispatch(fetchTopRatedTv());
+                }
+                break;
+            case TvShowType.Trending:
+                if (tvShows.length === 0) {
+                    dispatch(fetchTrendingTv());
+                }
+                break;
+        }
+    }, [dispatch, tvShowType, tvShows.length]);
 
     return { tvShows, loading, error };
 };
 
-export const useAiringToday = () => useTvShows(getAiringToday);
-export const useOnTheAir = () => useTvShows(getOnTheAir);
-export const usePopularTv = () => useTvShows(getPopularTv);
-export const useTopRatedTv = () => useTvShows(getTopRatedTv);
-export const useTrendingTv = (time: TimeWindow = 'week') => useTvShows(() => getTrendingTv(time));
+export default useTvShows;

@@ -52,11 +52,16 @@
       "@utils/*": [
         "src/utils/*"
       ],
+      "@appTypes/*": [
+        "src/types/*"
+      ],
     }
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.tsx"
+    "src/**/*.tsx",
+    "src/**/*.jsx",
+    "src/**/*.js",
   ],
   "exclude": [
     "node_modules"

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 type HeaderProps = {
@@ -12,9 +13,25 @@ const LINKS = [
 ];
 
 export function Header({ }: HeaderProps): JSX.Element {
+  const [isOpaque, setIsOpaque] = useState(false);
+
+  const handleScroll = () => {
+    const scrollY = window.scrollY;
+    setIsOpaque(scrollY > 50);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <header className="fixed top-0 left-0 w-full bg-primary z-50 shadow-md">
-      <div className="container m-auto mx-auto flex max-w-screen-xl items-center justify-between p-4 px-4 lg:px-0">
+    <header
+      className={`fixed top-0 left-0 w-full z-50 shadow-md transition-opacity duration-300 ${isOpaque ? 'bg-tertiary-80 backdrop-blur-md' : 'bg-tertiary'}`}
+    >
+      <div className="flex items-center justify-between max-w-7xl mx-auto py-4 px-4 md:px-8 lg:px-12">
         <NavLink
           to="/"
           className="nav-link-guru hover:underline transition duration-200 ease-in-out"
@@ -27,8 +44,7 @@ export function Header({ }: HeaderProps): JSX.Element {
               key={link.name}
               to={link.href}
               className={({ isActive }) =>
-                `nav-link-guru hover:underline transition duration-200 ease-in-out ${isActive ? "font-bold" : ""
-                }`
+                `nav-link-guru hover:underline transition duration-200 ease-in-out ${isActive ? "font-bold underline" : ""}`
               }
             >
               {link.name}

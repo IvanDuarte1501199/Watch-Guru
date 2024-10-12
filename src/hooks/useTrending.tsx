@@ -1,28 +1,21 @@
-import { useEffect, useState } from 'react';
-import { getTrendingAll } from '@services/tmdbService';
-import { GenericItemProps } from '@types/common/genericItemProps';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@store/index';
+import { useAppDispatch } from '@hooks/store';
+import { fetchTrendingAll } from '@slice/trendingSlice';
 
-const useTrendingData = () => {
-    const [trending, setTrending] = useState<GenericItemProps[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+const useTrendingAll = () => {
+  const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        const fetchTrending = async () => {
-            try {
-                const trendingResult = await getTrendingAll();
-                setTrending(trendingResult);
-            } catch (err) {
-                setError("Failed to load trending data");
-                console.error('Error fetching trending data:', err);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchTrending();
-    }, []);
+  const { tvAndMoviesItems: trendingItems, loading, error } = useSelector((state: RootState) => state.trendingAll);
 
-    return { trending, isLoading, error };
+  useEffect(() => {
+    if (trendingItems.length === 0) {
+      dispatch(fetchTrendingAll());
+    }
+  }, [dispatch, trendingItems.length]);
+
+  return { trendingItems, loading, error };
 };
 
-export default useTrendingData;
+export default useTrendingAll;

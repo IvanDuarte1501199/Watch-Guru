@@ -21,6 +21,7 @@ const FeaturedGenresSection: React.FC = () => {
                         className="relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 transform hover:scale-105"
                     >
                         <img
+                            loading='lazy'
                             src={genre.image}
                             alt={genre.name}
                             className="w-full h-full object-cover transition-transform duration-300"

@@ -11,7 +11,7 @@
 }
 
 .p-guru {
-  @apply text-base font-bold text-default;
+  @apply text-base font-normal text-default;
 }
 
 .nav-link-guru {

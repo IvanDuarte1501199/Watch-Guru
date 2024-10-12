@@ -14,7 +14,7 @@ const GenresSection: React.FC<GenresSectionProps> = ({ genres }) => {
                     <li key={genre.id} className="flex flex-col items-center">
                         <Link
                             to={`/genres/${genre.id}`}
-                            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition"
+                            className="bg-tertiary text-white px-4 py-2 rounded-lg shadow hover:bg-secondary transition"
                         >
                             {genre.name}
                         </Link>

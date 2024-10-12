@@ -8,30 +8,30 @@
 
 @layer base {
 
-  html,
-  body {
-    overflow-x: hidden;
-    font-family: 'Courier New', Courier, monospace;
-    @apply bg-secondary h-screen;
-    min-height: 100vh;
-  }
+    html,
+    body {
+        overflow-x: clip;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        @apply bg-primary h-screen;
+        min-height: 100vh;
+    }
 
-  main {
-    margin-top: 72px;
-  }
+    main {
+        margin-top: 72px;
+    }
 
-  ::-webkit-scrollbar {
-    width: 8px;
-    background: transparent;
-  }
+    ::-webkit-scrollbar {
+        width: 8px;
+        background: transparent;
+    }
 
-  ::-webkit-scrollbar-thumb {
-    background: #0d253f;
-    border-radius: 10px;
-  }
+    ::-webkit-scrollbar-thumb {
+        background: #0d253f;
+        border-radius: 10px;
+    }
 
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: #0d253f transparent;
-  }
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: #0d253f transparent;
+    }
 }

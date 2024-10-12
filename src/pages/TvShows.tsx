@@ -5,11 +5,13 @@ import { MainTitle } from '@components/common/MainTitle'
 import useGenres from '@hooks/useGenres'
 import GenresSection from '@sections/GenresSection'
 import FeaturedGenresSection from '@sections/FeaturedGenresSection'
-import { useTrendingTv, usePopularTv, useTopRatedTv } from '@hooks/tv/useTvShows'
+import useTvShows from '@hooks/tv/useTvShows'
+import { TvShowType } from '@appTypes/tv/tvProps'
+
 const TvShows: React.FC = () => {
-    const { tvShows: trendingTv, loading: tvLoading, error: tvError } = useTrendingTv();
-    const { tvShows: popularTv, loading: isLoadingPopular, error: errorPopular } = usePopularTv();
-    const { tvShows: topRatedTv, loading: isLoadingTopRated, error: errorTopRated } = useTopRatedTv();
+    const { tvShows: trendingTv, loading: tvLoading, error: tvError } = useTvShows(TvShowType.Trending);
+    const { tvShows: popularTv, loading: isLoadingPopular, error: errorPopular } = useTvShows(TvShowType.Popular);
+    const { tvShows: topRatedTv, loading: isLoadingTopRated, error: errorTopRated } = useTvShows(TvShowType.TopRated);
 
     const { tvGenres, isLoading: genresLoading, error: genresError } = useGenres();
     return (

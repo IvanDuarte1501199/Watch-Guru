@@ -1,6 +1,6 @@
-import { GenericItemProps } from '@types/common/genericItemProps'
+import { GenericItemProps } from '@appTypes/common/genericItemProps'
 import { InLineTitle } from './InLineTitle'
-import { MediaCard } from './Card'
+import { Card } from './Card'
 import CarouselSlider from '@components/CarouselSlider'
 
 type GenericListProps = {
@@ -18,9 +18,9 @@ export function GenericList({
     <section className={`mb-${mb}`}>
       <InLineTitle label={title} showViewMore={false} />
       <CarouselSlider maxItems={5}>
-        {genericList.map((item, i: number) => {
+        {genericList.map((item: GenericItemProps, i: number) => {
           return (
-            <MediaCard key={i} item={item} />
+            <Card key={i} {...item} />
           )
         })}
       </CarouselSlider>

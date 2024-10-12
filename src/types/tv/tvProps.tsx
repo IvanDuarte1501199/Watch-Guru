@@ -17,3 +17,17 @@ export interface TvProps {
   vote_count: number
   origin_country: string[]
 }
+
+export interface TvShowsState {
+  tvShows: TvProps[];
+  loading: boolean;
+  error: string | null;
+}
+
+export enum TvShowType {
+  AiringToday = 'airingToday',
+  OnTheAir = 'onTheAir',
+  Popular = 'popularTv',
+  TopRated = 'topRatedTv',
+  Trending = 'trendingTv'
+}

@@ -1,11 +1,11 @@
-import { TimeWindow } from '@types/service/imdb';
+import { TimeWindow } from '@appTypes/service/imdb';
 import tmdbApi from './tmdbApi';
-import { TmdbResponse } from '@types/common/tmdbResponse';
-import { MediaType } from '@types/common/MediaType';
+import { TmdbMovieResponse } from '@appTypes/common/tmdbResponse';
+import { MediaType } from '@appTypes/common/MediaType';
 
 export const getTrendingMovies = async (time: TimeWindow = 'week') => {
   try {
-    const response = await tmdbApi.get<TmdbResponse>(`/trending/movie/${time}`);
+    const response = await tmdbApi.get<TmdbMovieResponse>(`/trending/movie/${time}`);
     return response.data.results;
   } catch (error) {
     console.error('Error fetching popular movies:', error);
@@ -25,7 +25,7 @@ export const getMovieById = async (id: string) => {
 
 export const searchMovies = async (query: string) => {
   try {
-    const response = await tmdbApi.get<TmdbResponse>('/search/movie', {
+    const response = await tmdbApi.get<TmdbMovieResponse>('/search/movie', {
       params: { query },
     });
     return response.data.results;
@@ -37,7 +37,7 @@ export const searchMovies = async (query: string) => {
 
 export const getNowPlayingMovies = async () => {
   try {
-    const response = await tmdbApi.get<TmdbResponse>('/movie/now_playing');
+    const response = await tmdbApi.get<TmdbMovieResponse>('/movie/now_playing');
     return response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Movie,
@@ -50,7 +50,7 @@ export const getNowPlayingMovies = async () => {
 
 export const getPopularMovies = async () => {
   try {
-    const response = await tmdbApi.get<TmdbResponse>('/movie/popular');
+    const response = await tmdbApi.get<TmdbMovieResponse>('/movie/popular');
     return response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Movie,
@@ -63,7 +63,7 @@ export const getPopularMovies = async () => {
 
 export const getTopRatedMovies = async () => {
   try {
-    const response = await tmdbApi.get<TmdbResponse>('/movie/top_rated');
+    const response = await tmdbApi.get<TmdbMovieResponse>('/movie/top_rated');
     return response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Movie,
@@ -76,7 +76,7 @@ export const getTopRatedMovies = async () => {
 
 export const getUpcomingMovies = async () => {
   try {
-    const response = await tmdbApi.get<TmdbResponse>('/movie/upcoming');
+    const response = await tmdbApi.get<TmdbMovieResponse>('/movie/upcoming');
     return response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Movie,

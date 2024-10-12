@@ -5,7 +5,7 @@ import { store } from './store'
 
 const App: React.FC = () => {
   return (
-    <div>
+    <div className='h-screen w-screen flex flex-col'>
       <Provider store={store}>
         <AppRouter />
       </Provider>

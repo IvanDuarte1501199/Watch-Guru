@@ -32,6 +32,7 @@ const MovieInfo: React.FC = () => {
                     <div className="flex flex-col md:flex-row">
                         {movie?.poster_path && (
                             <img
+                                loading='lazy'
                                 src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                                 alt={movie.title}
                                 className="w-full md:w-1/3 rounded-lg shadow-lg"

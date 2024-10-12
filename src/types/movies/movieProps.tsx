@@ -17,3 +17,18 @@ export interface MovieProps {
   vote_average: number
   vote_count: number
 }
+
+
+export interface MoviesState {
+  movies: MovieProps[];
+  loading: boolean;
+  error: string | null;
+}
+
+export enum MovieType {
+  Popular = 'popular',
+  NowPlaying = 'nowPlaying',
+  TopRated = 'topRated',
+  Upcoming = 'upcoming',
+  Trending = 'trending',
+}

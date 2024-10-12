@@ -2,7 +2,7 @@ type FooterProps = {};
 
 export function Footer({ }: FooterProps): JSX.Element {
   return (
-    <footer className="w-full bg-primary py-6">
+    <footer className="w-full bg-tertiary py-6">
       <div className="m-auto text-center">
         <p className="p-guru">
           &copy; {new Date().getFullYear()} Watch Guru. All Rights Reserved.

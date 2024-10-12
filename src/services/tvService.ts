@@ -1,11 +1,11 @@
-import { TimeWindow } from '@types/service/imdb';
+import { TimeWindow } from '@appTypes/service/imdb';
 import tmdbApi from './tmdbApi';
-import { TmdbResponse } from '@types/common/tmdbResponse';
-import { MediaType } from '@types/common/MediaType';
+import { TmdbTvShowResponse } from '@appTypes/common/tmdbResponse';
+import { MediaType } from '@appTypes/common/MediaType';
 
 export const getTrendingTv = async (time: TimeWindow = 'week') => {
   try {
-    const response = await tmdbApi.get<TmdbResponse>(`/trending/tv/${time}`);
+    const response = await tmdbApi.get<TmdbTvShowResponse>(`/trending/tv/${time}`);
     return response.data.results;
   } catch (error) {
     console.error('Error fetching popular tv shows:', error);
@@ -25,7 +25,7 @@ export const getTvById = async (id: string) => {
 
 export const searchTv = async (query: string) => {
   try {
-    const response = await tmdbApi.get<TmdbResponse>('/search/tv', {
+    const response = await tmdbApi.get<TmdbTvShowResponse>('/search/tv', {
       params: { query },
     });
     return response.data.results;
@@ -37,7 +37,7 @@ export const searchTv = async (query: string) => {
 
 export const getAiringToday = async () => {
   try {
-    const response = await tmdbApi.get<TmdbResponse>('/tv/airing_today');
+    const response = await tmdbApi.get<TmdbTvShowResponse>('/tv/airing_today');
     return response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Tv,
@@ -50,7 +50,7 @@ export const getAiringToday = async () => {
 
 export const getOnTheAir = async () => {
   try {
-    const response = await tmdbApi.get<TmdbResponse>('/tv/on_the_air');
+    const response = await tmdbApi.get<TmdbTvShowResponse>('/tv/on_the_air');
     return response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Tv,
@@ -63,7 +63,7 @@ export const getOnTheAir = async () => {
 
 export const getPopularTv = async () => {
   try {
-    const response = await tmdbApi.get<TmdbResponse>('/tv/popular');
+    const response = await tmdbApi.get<TmdbTvShowResponse>('/tv/popular');
     return response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Tv,
@@ -76,7 +76,7 @@ export const getPopularTv = async () => {
 
 export const getTopRatedTv = async () => {
   try {
-    const response = await tmdbApi.get<TmdbResponse>('/tv/top_rated');
+    const response = await tmdbApi.get<TmdbTvShowResponse>('/tv/top_rated');
     return response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Tv,
