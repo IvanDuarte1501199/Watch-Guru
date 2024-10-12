@@ -1,18 +1,38 @@
-import React from 'react'
-import { Layout } from '@components/Layout'
-import { GenericList } from '@components/common/GenericList'
-import { MovieType } from '@appTypes/movies/movieProps'
-import useMovies from '@hooks/movies/useMovies'
-import useTvShows from '@hooks/tv/useTvShows'
-import { TvShowType } from '@appTypes/tv/tvProps'
-import useTrendingAll from '@hooks/useTrending'
+import React from 'react';
+import { Layout } from '@components/Layout';
+import { GenericList } from '@components/common/GenericList';
+import { MovieType } from '@appTypes/movies/movieProps';
+import useMovies from '@hooks/movies/useMovies';
+import useTvShows from '@hooks/tv/useTvShows';
+import { TvShowType } from '@appTypes/tv/tvProps';
+import useTrendingAll from '@hooks/useTrending';
 
 const Home: React.FC = () => {
-    const { trendingItems: trending, loading: trendingLoading, error: trendingError } = useTrendingAll();
-    const { tvShows: trendingTv, loading: tvLoading, error: tvError } = useTvShows(TvShowType.Trending);
-    const { movies: trendingMovies, loading: moviesLoading, error: moviesError } = useMovies(MovieType.Trending);
-    const { tvShows: airingToday, loading: isLoadingAiring, error: errorAiring } = useTvShows(TvShowType.AiringToday);
-    const { movies: upcomingMovies, loading: upcomingMoviesLoading, error: upcomingMoviesError } = useMovies(MovieType.Upcoming);
+    const {
+        trendingItems: trending,
+        loading: trendingLoading,
+        error: trendingError,
+    } = useTrendingAll();
+    const {
+        tvShows: trendingTv,
+        loading: tvLoading,
+        error: tvError,
+    } = useTvShows(TvShowType.Trending);
+    const {
+        movies: trendingMovies,
+        loading: moviesLoading,
+        error: moviesError,
+    } = useMovies(MovieType.Trending);
+    const {
+        tvShows: airingToday,
+        loading: isLoadingAiring,
+        error: errorAiring,
+    } = useTvShows(TvShowType.AiringToday);
+    const {
+        movies: upcomingMovies,
+        loading: upcomingMoviesLoading,
+        error: upcomingMoviesError,
+    } = useMovies(MovieType.Upcoming);
 
     return (
         <Layout>
@@ -29,39 +49,43 @@ const Home: React.FC = () => {
             </section> */}
 
             {/* trending all */}
-            {trending && trending.length > 0 && <GenericList
-                title="Trending Tv Shows and Movies"
-                genericList={trending}
-            />}
+            {trending && trending.length > 0 && (
+                <GenericList
+                    title="Trending Tv Shows and Movies"
+                    genericList={trending}
+                />
+            )}
 
             {/* trending tv shows */}
-            {trendingTv && trendingTv.length > 0 && <GenericList
-                title="Trending Tv Shows"
-                genericList={trendingTv}
-            />}
+            {trendingTv && trendingTv.length > 0 && (
+                <GenericList
+                    title="Trending Tv Shows"
+                    genericList={trendingTv}
+                />
+            )}
 
             {/* tendring movies */}
-            {trendingMovies && trendingMovies.length > 0 && <GenericList
-                title="Trending Movies"
-                genericList={trendingMovies}
-            />}
+            {trendingMovies && trendingMovies.length > 0 && (
+                <GenericList
+                    title="Trending Movies"
+                    genericList={trendingMovies}
+                />
+            )}
 
             {/* airing today */}
-            {airingToday && airingToday.length > 0 && <GenericList
-                title="Airing Today"
-                genericList={airingToday}
-            />}
+            {airingToday && airingToday.length > 0 && (
+                <GenericList title="Airing Today" genericList={airingToday} />
+            )}
 
             {/* upcoming movies */}
-            {upcomingMovies && upcomingMovies.length > 0 && <GenericList
-                title="Upcoming Movies"
-                genericList={upcomingMovies}
-            />}
-
-
-
+            {upcomingMovies && upcomingMovies.length > 0 && (
+                <GenericList
+                    title="Upcoming Movies"
+                    genericList={upcomingMovies}
+                />
+            )}
         </Layout>
-    )
-}
+    );
+};
 
-export default Home
+export default Home;

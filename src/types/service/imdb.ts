@@ -1,1 +1,1 @@
-export type TimeWindow = 'day' | 'week'
+export type TimeWindow = 'day' | 'week';

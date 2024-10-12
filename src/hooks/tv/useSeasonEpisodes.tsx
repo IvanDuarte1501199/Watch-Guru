@@ -13,8 +13,11 @@ export const useSeasonEpisodes = (tvId: string, seasons: any[]) => {
             const episodesBySeason: Record<number, any[]> = {};
             try {
                 for (const season of seasons) {
-                    const response = await tmdbApi.get(`/tv/${tvId}/season/${season.season_number}`);
-                    episodesBySeason[season.season_number] = response.data.episodes;
+                    const response = await tmdbApi.get(
+                        `/tv/${tvId}/season/${season.season_number}`
+                    );
+                    episodesBySeason[season.season_number] =
+                        response.data.episodes;
                 }
                 setAllEpisodes(episodesBySeason);
             } catch (error) {

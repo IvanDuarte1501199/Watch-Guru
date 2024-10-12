@@ -3,7 +3,12 @@ import { Link } from 'react-router-dom';
 
 const featuredGenres = [
     { id: 1, name: 'Horror', image: '/horror.jpg', path: '/genres/horror' },
-    { id: 2, name: 'Cartoons', image: '/cartoons.jpg', path: '/genres/cartoons' },
+    {
+        id: 2,
+        name: 'Cartoons',
+        image: '/cartoons.jpg',
+        path: '/genres/cartoons',
+    },
     { id: 3, name: 'Comedy', image: '/comedy.jpg', path: '/genres/comedy' },
     { id: 4, name: 'Dramas', image: '/dramas.jpg', path: '/genres/dramas' },
     { id: 5, name: 'Sci-Fi', image: '/scifi.jpg', path: '/genres/scifi' },
@@ -21,7 +26,7 @@ const FeaturedGenresSection: React.FC = () => {
                         className="relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 transform hover:scale-105"
                     >
                         <img
-                            loading='lazy'
+                            loading="lazy"
                             src={genre.image}
                             alt={genre.name}
                             className="w-full h-full object-cover transition-transform duration-300"

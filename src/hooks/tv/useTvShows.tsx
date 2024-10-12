@@ -9,7 +9,6 @@ import { fetchOnTheAir } from '@slice/tv/onTheAirSlice';
 import { fetchTopRatedTv } from '@slice/tv/topRatedTvSlice';
 import { fetchTrendingTv } from '@slice/tv/trendingTvSlice';
 
-
 const useTvShows = (tvShowType: TvShowType) => {
     const dispatch = useAppDispatch();
 

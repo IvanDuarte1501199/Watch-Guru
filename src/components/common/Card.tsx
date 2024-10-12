@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GenericItemProps } from '@appTypes/common/genericItemProps'
+import { GenericItemProps } from '@appTypes/common/genericItemProps';
 import { MediaType } from '@appTypes/common/MediaType';
 import { MovieCard } from '@components/movies/movieCard';
 import { TvCard } from '@components/tv/TvCard';
@@ -13,8 +13,10 @@ type MediaCardProps = {
 
 /* this is deprecated */
 export const MediaCard: React.FC<MediaCardProps> = ({ item }) => {
-    const isMovie = (item: GenericItemProps): item is MovieProps => item.media_type === MediaType.Movie;
-    const isTv = (item: GenericItemProps): item is TvProps => item.media_type === MediaType.Tv;
+    const isMovie = (item: GenericItemProps): item is MovieProps =>
+        item.media_type === MediaType.Movie;
+    const isTv = (item: GenericItemProps): item is TvProps =>
+        item.media_type === MediaType.Tv;
 
     if (isMovie(item)) {
         return <MovieCard {...item} />;
@@ -27,8 +29,14 @@ export const MediaCard: React.FC<MediaCardProps> = ({ item }) => {
     return null;
 };
 
-export const Card: React.FC<CardProps> = ({ id, poster_path, vote_average, name, title, media_type }: CardProps) => {
-
+export const Card: React.FC<CardProps> = ({
+    id,
+    poster_path,
+    vote_average,
+    name,
+    title,
+    media_type,
+}: CardProps) => {
     const [isHover, setIsHover] = useState(false);
 
     const handleMouseEnter = () => {
@@ -50,7 +58,7 @@ export const Card: React.FC<CardProps> = ({ id, poster_path, vote_average, name,
             <div className="overflow-hidden">
                 <a href={`/${url}/${id}`}>
                     <img
-                        loading='lazy'
+                        loading="lazy"
                         src={`https://image.tmdb.org/t/p/w500${poster_path}`}
                         title={title || name}
                         alt={title || name}
@@ -63,7 +71,4 @@ export const Card: React.FC<CardProps> = ({ id, poster_path, vote_average, name,
             </div>
         </article>
     );
-
 };
-
-

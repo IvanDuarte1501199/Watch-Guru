@@ -1,6 +1,6 @@
-import { MovieProps } from "@appTypes/movies/movieProps";
-import { TvProps } from "@appTypes/tv/tvProps";
-import { GenericItemProps } from "./genericItemProps";
+import { MovieProps } from '@appTypes/movies/movieProps';
+import { TvProps } from '@appTypes/tv/tvProps';
+import { GenericItemProps } from './genericItemProps';
 
 export interface TmdbMovieResponse {
     page: number;
@@ -22,4 +22,3 @@ export interface TmdbGenericResponse {
     total_results: number;
     total_pages: number;
 }
-

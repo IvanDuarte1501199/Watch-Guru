@@ -32,7 +32,7 @@ const MovieInfo: React.FC = () => {
                     <div className="flex flex-col md:flex-row">
                         {movie?.poster_path && (
                             <img
-                                loading='lazy'
+                                loading="lazy"
                                 src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                                 alt={movie.title}
                                 className="w-full md:w-1/3 rounded-lg shadow-lg"
@@ -40,7 +40,9 @@ const MovieInfo: React.FC = () => {
                         )}
 
                         <div className="md:ml-10 mt-6 md:mt-0">
-                            <h1 className="text-4xl font-bold mb-4">{movie?.title}</h1>
+                            <h1 className="text-4xl font-bold mb-4">
+                                {movie?.title}
+                            </h1>
 
                             {movie?.tagline && (
                                 <p className="italic text-lg text-gray-300 mb-4">
@@ -52,7 +54,9 @@ const MovieInfo: React.FC = () => {
 
                             {movie?.genres && movie.genres.length > 0 && (
                                 <div className="mb-6">
-                                    <h3 className="text-xl font-semibold mb-2">Genres</h3>
+                                    <h3 className="text-xl font-semibold mb-2">
+                                        Genres
+                                    </h3>
                                     <div className="flex flex-wrap gap-2">
                                         {movie.genres.map((genre: any) => (
                                             <span
@@ -68,13 +72,16 @@ const MovieInfo: React.FC = () => {
 
                             <div className="flex flex-col md:flex-row md:items-center gap-4">
                                 <p className="text-lg">
-                                    <strong>Release Date:</strong> {movie?.release_date}
+                                    <strong>Release Date:</strong>{' '}
+                                    {movie?.release_date}
                                 </p>
                                 <p className="text-lg">
-                                    <strong>Rating:</strong> {movie?.vote_average} / 10
+                                    <strong>Rating:</strong>{' '}
+                                    {movie?.vote_average} / 10
                                 </p>
                                 <p className="text-lg">
-                                    <strong>Runtime:</strong> {movie?.runtime} minutes
+                                    <strong>Runtime:</strong> {movie?.runtime}{' '}
+                                    minutes
                                 </p>
                             </div>
                         </div>

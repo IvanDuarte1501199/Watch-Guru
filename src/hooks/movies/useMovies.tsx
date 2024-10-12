@@ -12,11 +12,21 @@ import { MovieType } from '@appTypes/movies/movieProps';
 const useMovies = (movieType: MovieType) => {
     const dispatch = useAppDispatch();
 
-    const popularMoviesState = useSelector((state: RootState) => state.popularMovies);
-    const nowPlayingMoviesState = useSelector((state: RootState) => state.nowPlayingMovies);
-    const topRatedMoviesState = useSelector((state: RootState) => state.topRatedMovies);
-    const upcomingMoviesState = useSelector((state: RootState) => state.upcomingMovies);
-    const trendingMovies = useSelector((state: RootState) => state.trendingMovies);
+    const popularMoviesState = useSelector(
+        (state: RootState) => state.popularMovies
+    );
+    const nowPlayingMoviesState = useSelector(
+        (state: RootState) => state.nowPlayingMovies
+    );
+    const topRatedMoviesState = useSelector(
+        (state: RootState) => state.topRatedMovies
+    );
+    const upcomingMoviesState = useSelector(
+        (state: RootState) => state.upcomingMovies
+    );
+    const trendingMovies = useSelector(
+        (state: RootState) => state.trendingMovies
+    );
 
     useEffect(() => {
         switch (movieType) {
@@ -48,7 +58,14 @@ const useMovies = (movieType: MovieType) => {
             default:
                 break;
         }
-    }, [dispatch, movieType, popularMoviesState.movies.length, nowPlayingMoviesState.movies.length, topRatedMoviesState.movies.length, upcomingMoviesState.movies.length]);
+    }, [
+        dispatch,
+        movieType,
+        popularMoviesState.movies.length,
+        nowPlayingMoviesState.movies.length,
+        topRatedMoviesState.movies.length,
+        upcomingMoviesState.movies.length,
+    ]);
 
     switch (movieType) {
         case MovieType.Popular:

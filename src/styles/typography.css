@@ -1,19 +1,19 @@
 .h1-guru {
-  @apply text-lg md:text-2xl font-bold text-default;
+    @apply text-lg md:text-2xl font-bold text-default;
 }
 
 .h2-guru {
-  @apply text-xl font-semibold text-gray;
+    @apply text-xl font-semibold text-gray;
 }
 
 .h3-guru {
-  @apply text-lg font-semibold text-default;
+    @apply text-lg font-semibold text-default;
 }
 
 .p-guru {
-  @apply text-base font-normal text-default;
+    @apply text-base font-normal text-default;
 }
 
 .nav-link-guru {
-  @apply text-default text-base md:text-xl hover:underline transition duration-200 ease-in-out;
+    @apply text-default text-base md:text-xl hover:underline transition duration-200 ease-in-out;
 }
