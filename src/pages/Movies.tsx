@@ -37,7 +37,7 @@ const Movies: React.FC = () => {
 
   const {
     moviesGenres,
-    isLoading: genresLoading,
+    loading: genresLoading,
     error: genresError,
   } = useGenres();
 

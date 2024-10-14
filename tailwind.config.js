@@ -12,6 +12,9 @@ export default {
         default: 'white',
         gray: '#c6cbd3',
       },
+      spacing: {
+        '30dvh': '30dvh',
+      },
       container: {
         center: true,
         screens: {

@@ -5,12 +5,13 @@ import nowPlayingMoviesReducer from '../slice/movies/nowPlayingMoviesSlice';
 import topRatedMoviesReducer from '../slice/movies/topRatedMoviesSlice';
 import upcomingMoviesReducer from '../slice/movies/upcomingMoviesSlice';
 import trendingMoviesReducer from '../slice/movies/trendingMoviesSlice';
-import airingTodayTvSlice from '../slice/tv/airingTodaySlice';
-import onTheAirTvSlice from '../slice/tv/onTheAirSlice';
-import popularTvSlice from '../slice/tv/popularTvSlice';
-import topRatedTvSlice from '../slice/tv/topRatedTvSlice';
-import trendingTvSlice from '../slice/tv/trendingTvSlice';
-import trendingAllSlice from '../slice/trendingSlice';
+import airingTodayTvReducer from '../slice/tv/airingTodaySlice';
+import onTheAirTvReducer from '../slice/tv/onTheAirSlice';
+import popularTvReducer from '../slice/tv/popularTvSlice';
+import topRatedTvReducer from '../slice/tv/topRatedTvSlice';
+import trendingTvReducer from '../slice/tv/trendingTvSlice';
+import trendingAllReducer from '../slice/trendingSlice';
+import DataByGenreIdReducer from '../slice/genres/DataByGenreIdSlice';
 
 export const store = configureStore({
   reducer: {
@@ -20,12 +21,13 @@ export const store = configureStore({
     topRatedMovies: topRatedMoviesReducer,
     upcomingMovies: upcomingMoviesReducer,
     trendingMovies: trendingMoviesReducer,
-    airingTodayTv: airingTodayTvSlice,
-    onTheAirTv: onTheAirTvSlice,
-    popularTv: popularTvSlice,
-    topRatedTv: topRatedTvSlice,
-    trendingTv: trendingTvSlice,
-    trendingAll: trendingAllSlice,
+    airingTodayTv: airingTodayTvReducer,
+    onTheAirTv: onTheAirTvReducer,
+    popularTv: popularTvReducer,
+    topRatedTv: topRatedTvReducer,
+    trendingTv: trendingTvReducer,
+    trendingAll: trendingAllReducer,
+    mediaByCategory: DataByGenreIdReducer,
   },
 });
 

@@ -1,3 +1,4 @@
+import { TmdbGenericResponse } from '@appTypes/common/tmdbResponse';
 import tmdbApi from './tmdbApi';
 
 export const getMoviesGenres = async () => {
@@ -16,6 +17,21 @@ export const getTvGenres = async () => {
     return response.data.genres || [];
   } catch (error) {
     console.error('Error fetching genres: ', error);
+    throw error;
+  }
+};
+
+export const getDataByCategoryId = async (mediaType: 'movie' | 'tv', genreId: string, page: number = 1): Promise<TmdbGenericResponse> => {
+  try {
+    const response = await tmdbApi.get<TmdbGenericResponse>(`/discover/${mediaType}`, {
+      params: {
+        with_genres: genreId,
+        page,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data by category:', error);
     throw error;
   }
 };

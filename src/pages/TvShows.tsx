@@ -27,7 +27,7 @@ const TvShows: React.FC = () => {
 
   const {
     tvGenres,
-    isLoading: genresLoading,
+    loading: genresLoading,
     error: genresError,
   } = useGenres();
   return (

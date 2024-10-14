@@ -4,14 +4,14 @@ import { getMoviesGenres, getTvGenres } from '@services/genreService';
 interface GenreState {
   tvGenres: any[];
   moviesGenres: any[];
-  isLoading: boolean;
+  loading: boolean;
   error: string | null;
 }
 
 const initialState: GenreState = {
   tvGenres: [],
   moviesGenres: [],
-  isLoading: false,
+  loading: false,
   error: null,
 };
 
@@ -31,16 +31,16 @@ const seriesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchGenres.pending, (state) => {
-        state.isLoading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetchGenres.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.loading = false;
         state.moviesGenres = action.payload.moviesGenres;
         state.tvGenres = action.payload.tvGenres;
       })
       .addCase(fetchGenres.rejected, (state, action) => {
-        state.isLoading = false;
+        state.loading = false;
         state.error = action.error.message || 'Failed to fetch genres';
       });
   },

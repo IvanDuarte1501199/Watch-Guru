@@ -14,7 +14,7 @@ export function Layout({
     <>
       {showHeader && <Header />}
       <div className="container mx-auto px-4 md:px-8 lg:px-12 flex-1">
-        <main className="h-full">{children}</main>
+        <main>{children}</main>
       </div>
       <Footer />
     </>

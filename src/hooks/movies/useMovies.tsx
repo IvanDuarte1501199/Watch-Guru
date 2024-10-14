@@ -9,7 +9,7 @@ import { fetchUpcomingMovies } from '@slice/movies/upcomingMoviesSlice';
 import { fetchTrendingMovies } from '@slice/movies/trendingMoviesSlice';
 import { MovieType } from '@appTypes/movies/movieProps';
 
-const useMovies = (movieType: MovieType) => {
+const useMovies = (movieType: MovieType, categoryId?: string) => {
   const dispatch = useAppDispatch();
 
   const popularMoviesState = useSelector(

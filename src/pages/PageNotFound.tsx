@@ -4,7 +4,7 @@ import React from 'react';
 const PageNotFound: React.FC = () => {
   return (
     <Layout>
-      <div className="flex flex-col items-center justify-center h-full">
+      <div className="flex flex-col items-center justify-center h-full mt-30dvh">
         <h1 className="h1-guru text-6xl font-bold">404</h1>
         <p className="h2-guru text-2xl">¡Page not found!</p>
         <p className="p-guru">

@@ -6,6 +6,7 @@ import useMovies from '@hooks/movies/useMovies';
 import useTvShows from '@hooks/tv/useTvShows';
 import { TvShowType } from '@appTypes/tv/tvProps';
 import useTrendingAll from '@hooks/useTrending';
+import SuggestBox from '@components/SuggestBox';
 
 const Home: React.FC = () => {
   const {
@@ -43,10 +44,10 @@ const Home: React.FC = () => {
       {/*  <h2 className='h2-guru mb-12 text-center'>Suggest me a random movie or tv show</h2> */}
 
       {/* TODO: Add a random movie or tv show */}
-      {/* <section className='flex align-middle justify-center gap-10 mb-12'>
-                <SuggestBox placeholder='Get random Movie recommendation' fromColor='blue-400' toColor='pink-800' />
-                <SuggestBox placeholder='Get random Tv Show recommendation' fromColor='red-200' toColor='pink-600' />
-            </section> */}
+      <section className='flex align-middle justify-center gap-10 mb-12'>
+        <SuggestBox placeholder='Random Movie recommendation' icon='movie' />
+        <SuggestBox placeholder='Random Tv Show recommendation' icon='tv-shows' />
+      </section>
 
       {/* trending all */}
       {trending && trending.length > 0 && (

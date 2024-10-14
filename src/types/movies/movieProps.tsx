@@ -30,4 +30,5 @@ export enum MovieType {
   TopRated = 'topRated',
   Upcoming = 'upcoming',
   Trending = 'trending',
+  ByCategory = 'byCategory',
 }

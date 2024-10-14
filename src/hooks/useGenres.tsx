@@ -7,7 +7,7 @@ import { useAppDispatch } from '@hooks/store';
 const useGenres = () => {
   const dispatch = useAppDispatch();
 
-  const { tvGenres, moviesGenres, isLoading, error } = useSelector(
+  const { tvGenres, moviesGenres, loading, error } = useSelector(
     (state: RootState) => state.genres
   );
 
@@ -17,7 +17,7 @@ const useGenres = () => {
     }
   }, [dispatch, moviesGenres.length, tvGenres.length]);
 
-  return { tvGenres, moviesGenres, isLoading, error };
+  return { tvGenres, moviesGenres, loading, error };
 };
 
 export default useGenres;
