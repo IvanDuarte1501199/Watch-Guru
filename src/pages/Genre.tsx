@@ -3,6 +3,10 @@ import { Layout } from '@components/Layout';
 import { useParams } from 'react-router-dom';
 import useMediaByCategoryId from '@hooks/useDataByCategoryId';
 import { Card } from '@components/common/Card';
+import useGenres from '@hooks/useGenres';
+import { MainTitle } from '@components/common/MainTitle';
+
+
 
 const Genres: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +26,23 @@ const Genres: React.FC = () => {
     }
   };
 
+
+  /* move to util file */
+  const {
+    moviesGenres,
+    tvGenres,
+  } = useGenres();
+  const getGenreName = (genreId: string) => {
+    console.log(moviesGenres)
+    console.log(tvGenres)
+    console.log(genreId)
+    const genreObj = moviesGenres.find((g) => g.id == genreId) || tvGenres.find((g) => g.id == genreId);
+    console.log(genreObj)
+    return genreObj?.name;
+  };
+
+
+
   /* this is currently in development */
   /* I need separate de movies grid and the pagination to another componente */
   /* improve loading  */
@@ -30,8 +51,9 @@ const Genres: React.FC = () => {
       {
         loading ? <></> :
           media && media.length > 0 && (
-            <section className='mt-36 mb-24'>
-              <span className='grid grid-cols-5 gap-4 mb-6'>
+            <section className='mb-24'>
+              {id && <MainTitle>{getGenreName(id)}</MainTitle>}
+              <span className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6'>
                 {media.map((media) => (
                   <Card key={media.id} {...media} />
                 ))}
