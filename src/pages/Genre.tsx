@@ -3,7 +3,6 @@ import { Layout } from '@components/Layout';
 import { useParams } from 'react-router-dom';
 import useMediaByCategoryId from '@hooks/useDataByCategoryId';
 import { Card } from '@components/common/Card';
-import { Fade } from "react-awesome-reveal";
 
 const Genres: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,9 +33,7 @@ const Genres: React.FC = () => {
             <section className='mt-36 mb-24'>
               <span className='grid grid-cols-5 gap-4 mb-6'>
                 {media.map((media) => (
-                  <Fade key={media.id} triggerOnce>
-                    <Card {...media} />
-                  </Fade>
+                  <Card key={media.id} {...media} />
                 ))}
               </span>
               <div className="text-white flex gap-12 item-center justify-center">

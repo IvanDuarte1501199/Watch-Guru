@@ -7,6 +7,8 @@ import useTvShows from '@hooks/tv/useTvShows';
 import { TvShowType } from '@appTypes/tv/tvProps';
 import useTrendingAll from '@hooks/useTrending';
 import SuggestBox from '@components/SuggestBox';
+import { Fade } from 'react-awesome-reveal';
+import { MainTitle } from '@components/common/MainTitle';
 
 const Home: React.FC = () => {
   const {
@@ -36,15 +38,15 @@ const Home: React.FC = () => {
   } = useMovies(MovieType.Upcoming);
 
   return (
-    <Layout>
-      <h1 className="h1-guru pb-6 pt-6 text-center uppercase">
-        Welcome to your next binge-worthy recommendation!
-      </h1>
+    <Layout className='mb-10'>
+      <MainTitle>Welcome to your next binge-worthy recommendation!</MainTitle>
+
 
       {/*  <h2 className='h2-guru mb-12 text-center'>Suggest me a random movie or tv show</h2> */}
 
       {/* TODO: Add a random movie or tv show */}
-      <section className='flex align-middle justify-center gap-10 mb-12'>
+      <p className='text-white text-center pb-2'>Currently in develop</p>
+      <section className='flex flex-col md:flex-row align-middle justify-center gap-10 mb-12 '>
         <SuggestBox placeholder='Random Movie recommendation' icon='movie' />
         <SuggestBox placeholder='Random Tv Show recommendation' icon='tv-shows' />
       </section>

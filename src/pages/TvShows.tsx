@@ -31,14 +31,14 @@ const TvShows: React.FC = () => {
     error: genresError,
   } = useGenres();
   return (
-    <Layout>
+    <Layout className='mb-10'>
       <MainTitle>TV SHOWS</MainTitle>
       <GenresSection genres={tvGenres} />
 
       {trendingTv && trendingTv.length > 0 && (
         <GenericList title="Trending Tv Shows" genericList={trendingTv} />
       )}
-      <FeaturedGenresSection />
+      {/* <FeaturedGenresSection /> */}
       {popularTv && popularTv.length > 0 && (
         <GenericList title="Popular Tv Shows" genericList={popularTv} />
       )}

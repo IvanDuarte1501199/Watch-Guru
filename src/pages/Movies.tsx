@@ -42,7 +42,7 @@ const Movies: React.FC = () => {
   } = useGenres();
 
   return (
-    <Layout>
+    <Layout className='mb-10'>
       <MainTitle>MOVIES</MainTitle>
 
       {/* movies genres */}
