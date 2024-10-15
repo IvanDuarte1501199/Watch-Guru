@@ -38,7 +38,7 @@ const Home: React.FC = () => {
   } = useMovies(MovieType.Upcoming);
 
   return (
-    <Layout className='mb-10'>
+    <Layout className='mb-4 md:mb-10'>
       <MainTitle>Welcome to your next binge-worthy recommendation!</MainTitle>
 
 

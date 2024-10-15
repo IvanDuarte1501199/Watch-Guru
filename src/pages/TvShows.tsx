@@ -31,7 +31,7 @@ const TvShows: React.FC = () => {
     error: genresError,
   } = useGenres();
   return (
-    <Layout className='mb-10'>
+    <Layout className='mb-4 md:mb-10'>
       <MainTitle>TV SHOWS</MainTitle>
       <GenresSection genres={tvGenres} />
 
