@@ -1,4 +1,5 @@
 import { TmdbGenericResponse } from '@appTypes/common/tmdbResponse';
+import { Genre } from '@appTypes/genres/genre';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getDataByCategoryId } from '@services/genreService';
 
@@ -22,8 +23,8 @@ const initialState: MediaByCategoryState = {
 export const fetchMediaByCategoryId = createAsyncThunk(
   'media/getMediaByCategoryId',
   async ({ categoryId, page }: { categoryId: string, page: number }, { getState }) => {
-    const { genres } = getState() as { genres: { moviesGenres: { id: string; name: string }[], tvGenres: { id: string; name: string }[] } };
-    const movieGenreObj = genres.moviesGenres.find((g) => g.id == categoryId);
+    const { genres } = getState() as { genres: { moviesGenres: Genre[], tvGenres: Genre[] } };
+    const movieGenreObj = genres.moviesGenres.find((g) => g.id === categoryId);
     const tvShowGenreObj = genres.tvGenres.find((g) => g.id == categoryId);
     const mediaType = movieGenreObj ? 'movie' : 'tv';
     if (!movieGenreObj && !tvShowGenreObj) {

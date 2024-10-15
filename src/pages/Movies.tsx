@@ -61,7 +61,7 @@ const Movies: React.FC = () => {
         />
       )}
 
-      <FeaturedGenresSection />
+      {/* <FeaturedGenresSection /> */}
 
       {/* popular movies */}
       {popularMovies && popularMovies.length > 0 && (

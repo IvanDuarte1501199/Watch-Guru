@@ -1,8 +1,9 @@
+import { Genre } from '@appTypes/genres/genre';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 type GenresSectionProps = {
-  genres: { id: number; name: string }[];
+  genres: Genre[];
 };
 
 const GenresSection: React.FC<GenresSectionProps> = ({ genres }) => {

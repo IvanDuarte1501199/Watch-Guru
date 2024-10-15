@@ -1,9 +1,10 @@
+import { Genre } from '@appTypes/genres/genre';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getMoviesGenres, getTvGenres } from '@services/genreService';
 
 interface GenreState {
-  tvGenres: any[];
-  moviesGenres: any[];
+  tvGenres: Genre[];
+  moviesGenres: Genre[];
   loading: boolean;
   error: string | null;
 }

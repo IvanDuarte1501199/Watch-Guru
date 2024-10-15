@@ -7,6 +7,7 @@ import { MovieProps } from '@appTypes/movies/movieProps';
 import { TvProps } from '@appTypes/tv/tvProps';
 import { CardProps } from '@appTypes/common/CardProps';
 
+
 type MediaCardProps = {
   item: GenericItemProps;
 };
@@ -50,23 +51,25 @@ export const Card: React.FC<CardProps> = ({
   const url = media_type === MediaType.Tv ? 'tv-shows' : 'movies';
 
   return (
-    <article
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className={`relative rounded-lg bg-white shadow-md transition-transform duration-300 ease-in-out ${isHover ? 'shadow-lg' : ''}`}
-    >
-      <div className="overflow-hidden">
-        <a href={`/${url}/${id}`}>
-          <img
-            loading="lazy"
-            src={`https://image.tmdb.org/t/p/w500${poster_path}`}
-            title={title || name}
-            alt={title || name}
-            className={`h-full w-full object-cover filter transition-transform duration-300 ease-in-out ${isHover ? 'scale-105' : ''}`}
-          />
-          <p className="p-guru absolute right-4 top-4">{vote_average}</p>
-        </a>
-      </div>
-    </article>
+    <>
+      <article
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className={`relative rounded-lg bg-white shadow-md transition-transform duration-300 ease-in-out ${isHover ? 'shadow-lg' : ''}`}
+      >
+        <div className="overflow-hidden h-full">
+          <a href={`/${url}/${id}`}>
+            <img
+              loading="lazy"
+              src={`https://image.tmdb.org/t/p/w500${poster_path}`}
+              title={title || name}
+              alt={title || name}
+              className={`h-full w-full rounded-lg object-cover filter transition-transform duration-300 ease-in-out ${isHover ? 'scale-105' : ''}`}
+            />
+            <p className="p-guru absolute right-4 top-4">{vote_average}</p>
+          </a>
+        </div>
+      </article>
+    </>
   );
 };

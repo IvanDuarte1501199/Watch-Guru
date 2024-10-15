@@ -1,32 +1,40 @@
 import { Layout } from '@components/Layout';
 import { useMovie } from '@hooks/movies/useMovie';
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const MovieInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
-  if (!id) {
-    return <p>Movie ID is missing.</p>;
-  }
+  useEffect(() => {
+    if (!id) {
+      navigate('/404');
+    }
+  }, [id, navigate]);
 
-  const { movie, loading, error } = useMovie(id);
+  const { movie, loading, error } = useMovie(id!);
 
+  useEffect(() => {
+    if (error) {
+      navigate('/404');
+    }
+  }, [error, navigate]);
+
+  /* improve loading and create 505 page */
   if (loading) return <p className="text-center">Loading movie details...</p>;
-  if (error) return <p className="text-center text-red-500">{error}</p>;
-
   return (
     <Layout>
       <div className="relative">
         {/* Background image */}
-        {movie?.backdrop_path && (
+        {/*  {movie?.backdrop_path && (
           <div
             className="absolute top-0 left-0 w-full h-full -z-10 bg-cover bg-center opacity-40"
             style={{
               backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})`,
             }}
           ></div>
-        )}
+        )} */}
 
         <div className="container mx-auto px-4 py-20 text-white">
           <div className="flex flex-col md:flex-row">
@@ -35,7 +43,7 @@ const MovieInfo: React.FC = () => {
                 loading="lazy"
                 src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                 alt={movie.title}
-                className="w-full md:w-1/3 rounded-lg shadow-lg"
+                className="w-full md:w-1/3 rounded-lg shadow-lg object-contain"
               />
             )}
 

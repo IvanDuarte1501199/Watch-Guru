@@ -35,14 +35,14 @@ const TvShowInfo: React.FC = () => {
     <Layout>
       <div className="relative">
         {/* background image */}
-        {tvShow?.backdrop_path && (
+        {/* {tvShow?.backdrop_path && (
           <div
             className="absolute top-0 left-0 w-full h-full -z-10 bg-cover bg-center opacity-40"
             style={{
               backgroundImage: `url(https://image.tmdb.org/t/p/original/${tvShow.backdrop_path})`,
             }}
           ></div>
-        )}
+        )} */}
 
         <div className="container mx-auto px-4 pt-6 pb-16 text-white">
           <div className="flex flex-col md:flex-row">
@@ -102,11 +102,10 @@ const TvShowInfo: React.FC = () => {
 
                   {/* TODO: fix this, it's not working, use a ref to toggle the height or a libary */}
                   <div
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      expandedSeasons.includes(season.season_number)
-                        ? 'max-h-screen'
-                        : 'max-h-0'
-                    }`}
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${expandedSeasons.includes(season.season_number)
+                      ? 'max-h-screen'
+                      : 'max-h-0'
+                      }`}
                   >
                     <ul className="space-y-2 ml-4">
                       {allEpisodes[season.season_number]?.map((episode) => (
