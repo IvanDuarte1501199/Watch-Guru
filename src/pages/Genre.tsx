@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Layout } from '@components/Layout';
 import { useParams, useLocation } from 'react-router-dom';
 import useMediaByCategoryId from '@hooks/useDataByCategoryId';
-import { Card } from '@components/common/Card';
 import useGenres from '@hooks/useGenres';
 import { MainTitle } from '@components/common/MainTitle';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '@components/common/Pagination'; // Importa el nuevo componente
+import MediaGrid from '@components/mediaGrid';
 
 const Genres: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -48,11 +48,7 @@ const Genres: React.FC = () => {
         media && media.length > 0 && (
           <section className='mb-24'>
             {id && <MainTitle>{getGenreName(id)}</MainTitle>}
-            <span className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6'>
-              {media.map((media) => (
-                <Card key={media.id} {...media} />
-              ))}
-            </span>
+            <MediaGrid media={media} />
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
