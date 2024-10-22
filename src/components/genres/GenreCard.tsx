@@ -29,8 +29,11 @@ const GenreCard = ({ id, name, image, path }: GenreCardProps) => {
           alt={name}
           className="w-full h-full object-cover transition-transform duration-300"
         />
+        <div
+          className={`absolute inset-0 bg-black transition-opacity duration-300 ${isHovered ? 'opacity-0' : 'opacity-50'}`}
+        ></div>
         <div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-50">
-          <h3 className={`p-guru text-center transition-transform duration-300 transform ${isHovered ? '-translate-y-2' : ''} `}>
+          <h3 className={`p-guru text-center transition-transform duration-300 transform ${isHovered ? 'scale-125' : ''} `}>
             {name}
           </h3>
         </div>

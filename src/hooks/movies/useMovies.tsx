@@ -8,8 +8,14 @@ import { fetchTopRatedMovies } from '@slice/movies/topRatedMoviesSlice';
 import { fetchUpcomingMovies } from '@slice/movies/upcomingMoviesSlice';
 import { fetchTrendingMovies } from '@slice/movies/trendingMoviesSlice';
 import { MovieType } from '@appTypes/movies/movieProps';
+import { fetchMoviesByKeyword } from '@slice/movies/moviesByKeywordsSlice';
 
-const useMovies = (movieType: MovieType, categoryId?: string) => {
+interface UseMoviesParams {
+  movieType: MovieType;
+  keywordId?: string;
+}
+
+const useMovies = ({ movieType, keywordId }: UseMoviesParams) => {
   const dispatch = useAppDispatch();
 
   const popularMoviesState = useSelector(
@@ -26,6 +32,9 @@ const useMovies = (movieType: MovieType, categoryId?: string) => {
   );
   const trendingMovies = useSelector(
     (state: RootState) => state.trendingMovies
+  );
+  const moviesByKeywords = useSelector(
+    (state: RootState) => state.moviesByKeywords
   );
 
   useEffect(() => {
@@ -55,6 +64,10 @@ const useMovies = (movieType: MovieType, categoryId?: string) => {
           dispatch(fetchTrendingMovies());
         }
         break;
+      case MovieType.ByKeyword:
+        if (moviesByKeywords.movies.length === 0) {
+          dispatch(fetchMoviesByKeyword(keywordId ?? ''));
+        }
       default:
         break;
     }
@@ -65,6 +78,8 @@ const useMovies = (movieType: MovieType, categoryId?: string) => {
     nowPlayingMoviesState.movies.length,
     topRatedMoviesState.movies.length,
     upcomingMoviesState.movies.length,
+    trendingMovies.movies.length,
+    moviesByKeywords.movies.length,
   ]);
 
   switch (movieType) {
@@ -76,6 +91,10 @@ const useMovies = (movieType: MovieType, categoryId?: string) => {
       return { ...topRatedMoviesState };
     case MovieType.Upcoming:
       return { ...upcomingMoviesState };
+    case MovieType.Trending:
+      return { ...trendingMovies };
+    case MovieType.ByKeyword:
+      return { ...moviesByKeywords };
     default:
       return { movies: [], loading: false, error: null };
   }

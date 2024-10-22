@@ -35,3 +35,18 @@ export const getDataByCategoryId = async (mediaType: 'movie' | 'tv', genreId: st
     throw error;
   }
 };
+
+export const getDataByKeyword = async (mediaType: 'movie' | 'tv', keywordId: string, page: number = 1): Promise<TmdbGenericResponse> => {
+  try {
+    const response = await tmdbApi.get<TmdbGenericResponse>(`/discover/${mediaType}`, {
+      params: {
+        with_keywords: keywordId,
+        page,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data by keyword:', error);
+    throw error;
+  }
+};

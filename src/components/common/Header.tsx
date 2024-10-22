@@ -12,7 +12,7 @@ const LINKS = [
   { name: 'Movies', href: '/movies' },
 ];
 
-export function Header({}: HeaderProps): JSX.Element {
+export function Header({ }: HeaderProps): JSX.Element {
   const [isOpaque, setIsOpaque] = useState(false);
 
   const handleScroll = () => {

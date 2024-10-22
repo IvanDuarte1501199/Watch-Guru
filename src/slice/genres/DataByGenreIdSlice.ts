@@ -24,14 +24,13 @@ export const fetchMediaByCategoryId = createAsyncThunk(
   'media/getMediaByCategoryId',
   async ({ categoryId, page }: { categoryId: string, page: number }, { getState }) => {
     const { genres } = getState() as { genres: { moviesGenres: Genre[], tvGenres: Genre[] } };
-    const movieGenreObj = genres.moviesGenres.find((g) => g.id === categoryId);
+    const movieGenreObj = genres.moviesGenres.find((g) => g.id == categoryId);
     const tvShowGenreObj = genres.tvGenres.find((g) => g.id == categoryId);
     const mediaType = movieGenreObj ? 'movie' : 'tv';
     if (!movieGenreObj && !tvShowGenreObj) {
-      throw new Error(`Género con el id "${categoryId}" no encontrado`);
+      throw new Error(`Genre with id "${categoryId}" not found`);
     }
     const response = await getDataByCategoryId(mediaType, categoryId, page);
-
     return response;
   }
 );

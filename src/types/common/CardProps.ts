@@ -1,5 +1,5 @@
 export type CardProps = {
-  id: number;
+  id: string;
   poster_path: string;
   vote_average: number;
   title?: string;

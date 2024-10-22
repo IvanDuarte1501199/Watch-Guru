@@ -4,34 +4,25 @@ import { GenericList } from '@components/common/GenericList';
 import { MainTitle } from '@components/common/MainTitle';
 import useGenres from '@hooks/useGenres';
 import GenresSection from '@sections/GenresSection';
-import FeaturedGenresSection from '@sections/FeaturedGenresSection';
 import useTvShows from '@hooks/tv/useTvShows';
 import { TvShowType } from '@appTypes/tv/tvProps';
 
 const TvShows: React.FC = () => {
   const {
     tvShows: trendingTv,
-    loading: tvLoading,
-    error: tvError,
   } = useTvShows(TvShowType.Trending);
   const {
     tvShows: popularTv,
-    loading: isLoadingPopular,
-    error: errorPopular,
   } = useTvShows(TvShowType.Popular);
   const {
     tvShows: topRatedTv,
-    loading: isLoadingTopRated,
-    error: errorTopRated,
   } = useTvShows(TvShowType.TopRated);
 
   const {
     tvGenres,
-    loading: genresLoading,
-    error: genresError,
   } = useGenres();
   return (
-    <Layout className='mb-4 md:mb-10'>
+    <Layout className='mb-4 md:mb-8'>
       <MainTitle>TV SHOWS</MainTitle>
       <GenresSection genres={tvGenres} />
 

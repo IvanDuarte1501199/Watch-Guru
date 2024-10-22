@@ -1,8 +1,12 @@
+import { Genre } from '@appTypes/genres/genre';
 import { MediaType } from '../common/MediaType';
 
 export interface MovieProps {
+  tagline: any;
+  genres: Genre[];
+  runtime: any;
   backdrop_path: string;
-  id: number;
+  id: string;
   title: string;
   original_title: string;
   overview: string;
@@ -31,4 +35,5 @@ export enum MovieType {
   Upcoming = 'upcoming',
   Trending = 'trending',
   ByCategory = 'byCategory',
+  ByKeyword = 'byKeyword',
 }

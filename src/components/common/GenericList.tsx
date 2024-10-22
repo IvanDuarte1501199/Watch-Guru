@@ -11,7 +11,7 @@ type GenericListProps = {
 export function GenericList({
   title,
   genericList,
-  mb = 10,
+  mb = 8,
 }: GenericListProps): JSX.Element {
   return (
     <section className={`mb-${mb}`}>

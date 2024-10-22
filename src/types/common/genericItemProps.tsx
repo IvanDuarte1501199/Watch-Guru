@@ -8,3 +8,9 @@ export interface GenericItemsState {
   loading: boolean;
   error: string | null;
 }
+
+export interface GenericRandomItemState {
+  randomTvOrMovie: GenericItemProps;
+  loading: boolean;
+  error: string | null;
+}

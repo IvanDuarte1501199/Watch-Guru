@@ -1,8 +1,11 @@
+import { Genre } from '@appTypes/genres/genre';
 import { MediaType } from '../common/MediaType';
 
 export interface TvProps {
+  genres: Genre[];
+  seasons: any;
   backdrop_path: string;
-  id: number;
+  id: string;
   name: string;
   original_name: string;
   overview: string;

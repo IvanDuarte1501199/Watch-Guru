@@ -53,21 +53,34 @@ export const Card: React.FC<CardProps> = ({
 
   return (
     <>
-      <Fade >
+      <Fade triggerOnce>
         <article
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className={`relative rounded-lg bg-white shadow-md transition-transform duration-300 ease-in-out ${isHover ? 'shadow-lg' : ''}`}
+          className={`relative h-full rounded-md bg-transparent shadow-md transition-transform duration-300 ease-in-out ${isHover ? 'shadow-lg' : ''
+            }`}
         >
           <div className="overflow-hidden h-full">
             <a href={`/${url}/${id}`}>
-              <img
-                loading="lazy"
-                src={`https://image.tmdb.org/t/p/w500${poster_path}`}
-                title={title || name}
-                alt={title || name}
-                className={`h-full w-full rounded-lg object-cover filter transition-transform duration-300 ease-in-out ${isHover ? 'scale-105' : ''}`}
-              />
+              {poster_path ? (
+                <img
+                  loading="lazy"
+                  src={`https://image.tmdb.org/t/p/w500${poster_path}`}
+                  title={title || name}
+                  alt={title || name}
+                  className={`h-full w-full rounded-md object-cover filter transition-transform duration-300 ease-in-out ${isHover ? 'scale-105' : ''
+                    }`}
+                />
+              ) : (
+                <div
+                  className={`h-full w-full rounded-md transition-colors duration-300 ease-in-out ${isHover ? 'bg-gradient-to-br from-indigo-500 to-purple-600' : 'bg-gradient-to-br from-purple-600 to-indigo-500'
+                    } flex items-center justify-center text-white text-center p-4 ${isHover ? 'scale-105' : ''
+                    }`}
+                  title={title || name}
+                >
+                  <h2 className="text-lg font-bold">{title || name}</h2>
+                </div>
+              )}
               <p className="p-guru absolute right-4 top-4">{vote_average}</p>
             </a>
           </div>
