@@ -1,14 +1,19 @@
 import { TimeWindow } from '@appTypes/service/imdb';
 import tmdbApi from './tmdbApi';
-import { TmdbMovieResponse } from '@appTypes/common/tmdbResponse';
+import { TmdbGenericResponse, TmdbMovieResponse } from '@appTypes/common/tmdbResponse';
 import { MediaType } from '@appTypes/common/MediaType';
 
-export const getTrendingMovies = async (time: TimeWindow = 'week') => {
+export const getTrendingMovies = async (page, time: TimeWindow = 'week') => {
   try {
     const response = await tmdbApi.get<TmdbMovieResponse>(
-      `/trending/movie/${time}`
+      `/trending/movie/${time}`,
+      {
+        params: {
+          page: page
+        }
+      }
     );
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error('Error fetching popular movies:', error);
     throw error;
@@ -27,7 +32,7 @@ export const getMovieById = async (id: string) => {
 
 export const searchMovies = async (query: string) => {
   try {
-    const response = await tmdbApi.get<TmdbMovieResponse>('/search/movie', {
+    const response = await tmdbApi.get<TmdbGenericResponse>('/search/movie', {
       params: { query },
     });
     return response.data.results;
@@ -37,52 +42,85 @@ export const searchMovies = async (query: string) => {
   }
 };
 
-export const getNowPlayingMovies = async () => {
+export const getNowPlayingMovies = async (page: number = 1) => {
   try {
-    const response = await tmdbApi.get<TmdbMovieResponse>('/movie/now_playing');
-    return response.data.results.map((item) => ({
+    const response = await tmdbApi.get<TmdbGenericResponse>('/movie/now_playing',
+      {
+        params: {
+          page: page
+        }
+      });
+    const updatedResults = response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Movie,
     }));
+    return {
+      ...response.data,
+      results: updatedResults,
+    };
   } catch (error) {
     console.error('Error fetching now playing movies:', error);
     throw error;
   }
 };
 
-export const getPopularMovies = async () => {
+export const getPopularMovies = async (page: number = 1) => {
   try {
-    const response = await tmdbApi.get<TmdbMovieResponse>('/movie/popular');
-    return response.data.results.map((item) => ({
+    const response = await tmdbApi.get<TmdbGenericResponse>('/movie/popular', {
+      params: {
+        page: page
+      }
+    });
+    const updatedResults = response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Movie,
     }));
+    return {
+      ...response.data,
+      results: updatedResults,
+    };
   } catch (error) {
     console.error('Error fetching popular movies:', error);
     throw error;
   }
 };
 
-export const getTopRatedMovies = async () => {
+export const getTopRatedMovies = async (page: number = 1) => {
   try {
-    const response = await tmdbApi.get<TmdbMovieResponse>('/movie/top_rated');
-    return response.data.results.map((item) => ({
+    const response = await tmdbApi.get<TmdbGenericResponse>('/movie/top_rated', {
+      params: {
+        page: page
+      }
+    });
+    const updatedResults = response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Movie,
     }));
+    return {
+      ...response.data,
+      results: updatedResults,
+    };
   } catch (error) {
     console.error('Error fetching top rated movies:', error);
     throw error;
   }
 };
 
-export const getUpcomingMovies = async () => {
+export const getUpcomingMovies = async (page: number = 1) => {
   try {
-    const response = await tmdbApi.get<TmdbMovieResponse>('/movie/upcoming');
-    return response.data.results.map((item) => ({
+    const response = await tmdbApi.get<TmdbGenericResponse>('/movie/upcoming', {
+      params: {
+        page: page
+      }
+    });
+    const updatedResults = response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Movie,
     }));
+    return {
+      ...response.data,
+      results: updatedResults,
+    };
   } catch (error) {
     console.error('Error fetching upcoming movies:', error);
     throw error;

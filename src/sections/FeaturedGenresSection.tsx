@@ -16,7 +16,7 @@ const FeaturedGenresSection: React.FC<FeaturedGenresSectionProps> = ({ genres })
     return <></>;
   }
   return (
-    <section className="mb-4 md:mb-8">
+    <section className="mb-8 md:mb-16">
       <h2 className="h2-guru text-center mb-2">Featured Genres</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         {genres && genres.length > 0 && genres.map((genre) => (

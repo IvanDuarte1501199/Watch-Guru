@@ -13,11 +13,11 @@ import { fetchMoviesByKeyword } from '@slice/movies/moviesByKeywordsSlice';
 interface UseMoviesParams {
   movieType: MovieType;
   keywordId?: string;
+  page?: number
 }
 
-const useMovies = ({ movieType, keywordId }: UseMoviesParams) => {
+const useMovies = ({ movieType, keywordId, page = 1 }: UseMoviesParams) => {
   const dispatch = useAppDispatch();
-
   const popularMoviesState = useSelector(
     (state: RootState) => state.popularMovies
   );
@@ -30,42 +30,42 @@ const useMovies = ({ movieType, keywordId }: UseMoviesParams) => {
   const upcomingMoviesState = useSelector(
     (state: RootState) => state.upcomingMovies
   );
-  const trendingMovies = useSelector(
+  const trendingMoviesState = useSelector(
     (state: RootState) => state.trendingMovies
   );
-  const moviesByKeywords = useSelector(
+  const moviesByKeywordsState = useSelector(
     (state: RootState) => state.moviesByKeywords
   );
 
   useEffect(() => {
     switch (movieType) {
       case MovieType.Popular:
-        if (popularMoviesState.movies.length === 0) {
-          dispatch(fetchPopularMovies());
+        if (popularMoviesState.response.results.length === 0 || page != popularMoviesState.response.page) {
+          dispatch(fetchPopularMovies(page));
         }
         break;
       case MovieType.NowPlaying:
-        if (nowPlayingMoviesState.movies.length === 0) {
-          dispatch(fetchNowPlayingMovies());
+        if (nowPlayingMoviesState.response.results.length === 0 || page != nowPlayingMoviesState.response.page) {
+          dispatch(fetchNowPlayingMovies(page));
         }
         break;
       case MovieType.TopRated:
-        if (topRatedMoviesState.movies.length === 0) {
-          dispatch(fetchTopRatedMovies());
+        if (topRatedMoviesState.response.results.length === 0 || page != topRatedMoviesState.response.page) {
+          dispatch(fetchTopRatedMovies(page));
         }
         break;
       case MovieType.Upcoming:
-        if (upcomingMoviesState.movies.length === 0) {
-          dispatch(fetchUpcomingMovies());
+        if (upcomingMoviesState.response.results.length === 0 || page != upcomingMoviesState.response.page) {
+          dispatch(fetchUpcomingMovies(page));
         }
         break;
       case MovieType.Trending:
-        if (trendingMovies.movies.length === 0) {
-          dispatch(fetchTrendingMovies());
+        if (trendingMoviesState.response.results.length === 0 || page != trendingMoviesState.response.page) {
+          dispatch(fetchTrendingMovies(page));
         }
         break;
       case MovieType.ByKeyword:
-        if (moviesByKeywords.movies.length === 0) {
+        if (moviesByKeywordsState.response.results.length === 0 || page != moviesByKeywordsState.response.page) {
           dispatch(fetchMoviesByKeyword(keywordId ?? ''));
         }
       default:
@@ -74,29 +74,73 @@ const useMovies = ({ movieType, keywordId }: UseMoviesParams) => {
   }, [
     dispatch,
     movieType,
-    popularMoviesState.movies.length,
-    nowPlayingMoviesState.movies.length,
-    topRatedMoviesState.movies.length,
-    upcomingMoviesState.movies.length,
-    trendingMovies.movies.length,
-    moviesByKeywords.movies.length,
+    popularMoviesState.response.results.length,
+    nowPlayingMoviesState.response.results.length,
+    topRatedMoviesState.response.results.length,
+    upcomingMoviesState.response.results.length,
+    trendingMoviesState.response.results.length,
+    moviesByKeywordsState.response.results.length,
+    page
   ]);
 
   switch (movieType) {
     case MovieType.Popular:
-      return { ...popularMoviesState };
+      return {
+        media: popularMoviesState.response.results,
+        loading: popularMoviesState.loading,
+        error: popularMoviesState.error,
+        currentPage: popularMoviesState.response.page,
+        totalPages: popularMoviesState.response.total_pages
+      }
     case MovieType.NowPlaying:
-      return { ...nowPlayingMoviesState };
+      return {
+        media: nowPlayingMoviesState.response.results,
+        loading: nowPlayingMoviesState.loading,
+        error: nowPlayingMoviesState.error,
+        currentPage: nowPlayingMoviesState.response.page,
+        totalPages: nowPlayingMoviesState.response.total_pages
+      }
     case MovieType.TopRated:
-      return { ...topRatedMoviesState };
+      return {
+        media: topRatedMoviesState.response.results,
+        loading: topRatedMoviesState.loading,
+        error: topRatedMoviesState.error,
+        currentPage: topRatedMoviesState.response.page,
+        totalPages: topRatedMoviesState.response.total_pages
+      }
     case MovieType.Upcoming:
-      return { ...upcomingMoviesState };
+      return {
+        media: upcomingMoviesState.response.results,
+        loading: upcomingMoviesState.loading,
+        error: upcomingMoviesState.error,
+        currentPage: upcomingMoviesState.response.page,
+        totalPages: upcomingMoviesState.response.total_pages
+      }
     case MovieType.Trending:
-      return { ...trendingMovies };
+      return {
+        media: trendingMoviesState.response.results,
+        loading: trendingMoviesState.loading,
+        error: trendingMoviesState.error,
+        currentPage: trendingMoviesState.response.page,
+        totalPages: trendingMoviesState.response.total_pages
+      }
     case MovieType.ByKeyword:
-      return { ...moviesByKeywords };
+      return {
+        media: moviesByKeywordsState.response.results,
+        loading: moviesByKeywordsState.loading,
+        error: moviesByKeywordsState.error,
+        currentPage: moviesByKeywordsState.response.page,
+        totalPages: moviesByKeywordsState.response.total_pages
+      }
     default:
-      return { movies: [], loading: false, error: null };
+      return {
+        media: [],
+        loading: false,
+        error: null,
+        currentPage: 1,
+        totalPages: 1,
+      };
+
   }
 };
 

@@ -1,24 +1,23 @@
-import { MoviesState } from '@appTypes/movies/movieProps';
+import { MediaSliceState } from '@appTypes/common/genericItemProps';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getPopularMovies } from '@services/movieService';
 
-const initialState: MoviesState = {
-  movies: [],
+const initialState: MediaSliceState = {
+  response: {
+    page: 0,
+    results: [],
+    total_results: 0,
+    total_pages: 0
+  },
   loading: false,
   error: null,
 };
 
 export const fetchPopularMovies = createAsyncThunk(
   'popularMovies/fetchPopularMovies',
-  async (_, { getState, rejectWithValue }) => {
-    const state = getState() as { popularMovies: MoviesState };
-
-    if (state.popularMovies.movies.length > 0) {
-      return state.popularMovies.movies;
-    }
-
+  async (page: number, { rejectWithValue }) => {
     try {
-      const response = await getPopularMovies();
+      const response = await getPopularMovies(page);
       return response;
     } catch (error) {
       return rejectWithValue('Error fetching popular movies');
@@ -38,7 +37,7 @@ const popularMoviesSlice = createSlice({
       })
       .addCase(fetchPopularMovies.fulfilled, (state, action) => {
         state.loading = false;
-        state.movies = action.payload;
+        state.response = action.payload;
       })
       .addCase(fetchPopularMovies.rejected, (state, action) => {
         state.loading = false;

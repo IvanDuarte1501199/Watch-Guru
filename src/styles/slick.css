@@ -24,7 +24,7 @@
   opacity: 0.5;
 }
 
-.slick-slide > div {
+.slick-slide>div {
   padding-right: 12px;
 }
 
@@ -41,4 +41,8 @@
   .slick-list {
     overflow: visible !important;
   }
+}
+
+.slick-dots {
+  bottom: -40px !important;
 }

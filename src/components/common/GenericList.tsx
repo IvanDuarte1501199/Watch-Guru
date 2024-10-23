@@ -6,16 +6,20 @@ import CarouselSlider from '@components/CarouselSlider';
 type GenericListProps = {
   title: string;
   genericList: GenericItemProps[];
-  mb?: number;
+  showViewMore?: boolean;
+  href?: string;
+  customClass?: string;
 };
 export function GenericList({
   title,
   genericList,
-  mb = 8,
+  showViewMore = false,
+  href,
+  customClass
 }: GenericListProps): JSX.Element {
   return (
-    <section className={`mb-${mb}`}>
-      <InLineTitle label={title} showViewMore={false} />
+    <section className={`mb-8 md:mb-16 ${customClass}`}>
+      <InLineTitle label={title} showViewMore={showViewMore} href={href} />
       <CarouselSlider maxItems={5}>
         {genericList.map((item: GenericItemProps, i: number) => {
           return <Card key={i} {...item} />;

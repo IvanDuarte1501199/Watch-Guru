@@ -1,24 +1,23 @@
-import { MoviesState } from '@appTypes/movies/movieProps';
+import { MediaSliceState } from '@appTypes/common/genericItemProps';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getNowPlayingMovies } from '@services/movieService';
 
-const initialState: MoviesState = {
-  movies: [],
+const initialState: MediaSliceState = {
+  response: {
+    page: 0,
+    results: [],
+    total_results: 0,
+    total_pages: 0
+  },
   loading: false,
   error: null,
 };
 
 export const fetchNowPlayingMovies = createAsyncThunk(
   'nowPlayingMovies/fetchNowPlayingMovies',
-  async (_, { getState, rejectWithValue }) => {
-    const state = getState() as { nowPlayingMovies: MoviesState };
-
-    if (state.nowPlayingMovies.movies.length > 0) {
-      return state.nowPlayingMovies.movies;
-    }
-
+  async (page: number, { rejectWithValue }) => {
     try {
-      const response = await getNowPlayingMovies();
+      const response = await getNowPlayingMovies(page);
       return response;
     } catch (error) {
       return rejectWithValue('Error fetching now playing movies');
@@ -38,7 +37,7 @@ const nowPlayingMoviesSlice = createSlice({
       })
       .addCase(fetchNowPlayingMovies.fulfilled, (state, action) => {
         state.loading = false;
-        state.movies = action.payload;
+        state.response = action.payload;
       })
       .addCase(fetchNowPlayingMovies.rejected, (state, action) => {
         state.loading = false;

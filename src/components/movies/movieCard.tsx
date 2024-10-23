@@ -18,7 +18,7 @@ export function MovieCard(movie: MovieCardProps): JSX.Element {
       onMouseLeave={handleMouseLeave}
       className={`relative shadow-sm transform overflow-hidden rounded-lg bg-white shadow-md transition-transform duration-300 ease-in-out ${isHover ? 'scale-105' : ''}`}
     >
-      <a href={`/movies/${movie.id}`}>
+      <a href={`/movie/${movie.id}`}>
         <img
           loading="lazy"
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}

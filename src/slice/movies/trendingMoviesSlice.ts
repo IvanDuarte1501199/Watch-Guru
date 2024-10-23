@@ -1,24 +1,30 @@
-import { MoviesState } from '@appTypes/movies/movieProps';
+import { MediaSliceState } from '@appTypes/common/genericItemProps';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getTrendingMovies } from '@services/movieService';
 
-const initialState: MoviesState = {
-  movies: [],
+const initialState: MediaSliceState = {
+  response: {
+    page: 0,
+    results: [],
+    total_results: 0,
+    total_pages: 0
+  },
   loading: false,
   error: null,
 };
 
+
 export const fetchTrendingMovies = createAsyncThunk(
   'trendingMovies/fetchTrendingMovies',
-  async (_, { getState, rejectWithValue }) => {
-    const state = getState() as { trendingMovies: MoviesState };
+  async (page: number, { getState, rejectWithValue }) => {
+    const state = getState() as { trendingMovies: MediaSliceState };
 
-    if (state.trendingMovies.movies.length > 0) {
-      return state.trendingMovies.movies;
+    if (state.trendingMovies.response.results.length > 0) {
+      return state.trendingMovies.response;
     }
 
     try {
-      const response = await getTrendingMovies();
+      const response = await getTrendingMovies(page);
       return response;
     } catch (error) {
       return rejectWithValue('Error fetching trending movies');
@@ -38,7 +44,7 @@ const trendingMoviesSlice = createSlice({
       })
       .addCase(fetchTrendingMovies.fulfilled, (state, action) => {
         state.loading = false;
-        state.movies = action.payload;
+        state.response = action.payload;
       })
       .addCase(fetchTrendingMovies.rejected, (state, action) => {
         state.loading = false;

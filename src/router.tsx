@@ -12,6 +12,7 @@ import RandomMovieOrTvInfo from '@pages/RandomMovieOrTvInfo';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from './store';
 import { fetchGenres } from '@slice/genres/genresSlice';
+import MoviesBy from '@pages/MoviesBy';
 
 const AppRouter: React.FC = () => {
   const dispatch: AppDispatch = useDispatch(); // Tipar dispatch
@@ -24,8 +25,9 @@ const AppRouter: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={true ? <Home /> : <SandBox />} />
-        <Route path="/tv-shows/:id" element={<TvShowInfo />} />
-        <Route path="/movies/:id" element={<MovieInfo />} />
+        <Route path="/movies/:movieType" element={<MoviesBy />} />
+        <Route path="/tv-show/:id" element={<TvShowInfo />} />
+        <Route path="/movie/:id" element={<MovieInfo />} />
         <Route path="/tv-shows" element={<TvShows />} />
         <Route path="/movies" element={<Movies />} />
         <Route path="/genres/:id" element={<Genre />} />

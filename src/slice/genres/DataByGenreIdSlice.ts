@@ -1,15 +1,9 @@
-import { TmdbGenericResponse } from '@appTypes/common/tmdbResponse';
+import { MediaSliceState } from '@appTypes/common/genericItemProps';
 import { Genre } from '@appTypes/genres/genre';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getDataByCategoryId } from '@services/genreService';
 
-interface MediaByCategoryState {
-  response: TmdbGenericResponse;
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: MediaByCategoryState = {
+const initialState: MediaSliceState = {
   response: {
     page: 0,
     results: [],

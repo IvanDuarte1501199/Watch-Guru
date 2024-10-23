@@ -17,13 +17,13 @@ const Home: React.FC = () => {
     tvShows: trendingTv,
   } = useTvShows(TvShowType.Trending);
   const {
-    movies: trendingMovies,
+    media: trendingMovies,
   } = useMovies({ movieType: MovieType.Trending });
   const {
     tvShows: airingToday,
   } = useTvShows(TvShowType.AiringToday);
   const {
-    movies: upcomingMovies,
+    media: upcomingMovies,
   } = useMovies({ movieType: MovieType.Upcoming });
 
   return (
@@ -52,7 +52,7 @@ const Home: React.FC = () => {
 
       {/* tendring movies */}
       {trendingMovies && trendingMovies.length > 0 && (
-        <GenericList title="Trending Movies" genericList={trendingMovies} />
+        <GenericList title="Trending Movies" genericList={trendingMovies} showViewMore href="/movies/trending" />
       )}
 
       {/* airing today */}
@@ -62,7 +62,7 @@ const Home: React.FC = () => {
 
       {/* upcoming movies */}
       {upcomingMovies && upcomingMovies.length > 0 && (
-        <GenericList title="Upcoming Movies" genericList={upcomingMovies} />
+        <GenericList title="Upcoming Movies" genericList={upcomingMovies} showViewMore href="/movies/upcoming" />
       )}
     </Layout>
   );

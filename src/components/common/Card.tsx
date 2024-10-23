@@ -49,7 +49,7 @@ export const Card: React.FC<CardProps> = ({
     setIsHover(false);
   };
 
-  const url = media_type === MediaType.Tv ? 'tv-shows' : 'movies';
+  const url = media_type === MediaType.Tv ? 'tv-show' : 'movie';
 
   return (
     <>
