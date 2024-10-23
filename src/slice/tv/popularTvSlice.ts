@@ -1,24 +1,23 @@
-import { TvShowsState } from '@appTypes/tv/tvProps';
+import { MediaSliceState } from '@appTypes/common/genericItemProps';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getPopularTv } from '@services/tvService';
 
-const initialState: TvShowsState = {
-  tvShows: [],
+const initialState: MediaSliceState = {
+  response: {
+    page: 0,
+    results: [],
+    total_results: 0,
+    total_pages: 0
+  },
   loading: false,
   error: null,
 };
 
 export const fetchPopularTv = createAsyncThunk(
   'popularTv/fetchPopularTv',
-  async (_, { getState, rejectWithValue }) => {
-    const state = getState() as { popularTv: TvShowsState };
-
-    if (state.popularTv.tvShows.length > 0) {
-      return state.popularTv.tvShows;
-    }
-
+  async (page: number, { rejectWithValue }) => {
     try {
-      const response = await getPopularTv();
+      const response = await getPopularTv(page);
       return response;
     } catch (error) {
       return rejectWithValue('Error fetching popular TV shows');
@@ -38,7 +37,7 @@ const popularTvSlice = createSlice({
       })
       .addCase(fetchPopularTv.fulfilled, (state, action) => {
         state.loading = false;
-        state.tvShows = action.payload;
+        state.response = action.payload;
       })
       .addCase(fetchPopularTv.rejected, (state, action) => {
         state.loading = false;

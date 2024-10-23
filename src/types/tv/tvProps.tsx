@@ -30,7 +30,7 @@ export interface TvShowsState {
 export enum TvShowType {
   AiringToday = 'airingToday',
   OnTheAir = 'onTheAir',
-  Popular = 'popularTv',
-  TopRated = 'topRatedTv',
-  Trending = 'trendingTv',
+  Popular = 'popular',
+  TopRated = 'topRated',
+  Trending = 'trending',
 }

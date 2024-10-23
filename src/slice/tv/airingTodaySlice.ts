@@ -1,24 +1,23 @@
-import { TvShowsState } from '@appTypes/tv/tvProps';
+import { MediaSliceState } from '@appTypes/common/genericItemProps';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getAiringToday } from '@services/tvService';
 
-const initialState: TvShowsState = {
-  tvShows: [],
+const initialState: MediaSliceState = {
+  response: {
+    page: 0,
+    results: [],
+    total_results: 0,
+    total_pages: 0
+  },
   loading: false,
   error: null,
 };
 
 export const fetchAiringToday = createAsyncThunk(
   'airingToday/fetchAiringToday',
-  async (_, { getState, rejectWithValue }) => {
-    const state = getState() as { airingToday: TvShowsState };
-
-    if (state.airingToday.tvShows.length > 0) {
-      return state.airingToday.tvShows;
-    }
-
+  async (page: number, { rejectWithValue }) => {
     try {
-      const response = await getAiringToday();
+      const response = await getAiringToday(page);
       return response;
     } catch (error) {
       return rejectWithValue('Error fetching airing today TV shows');
@@ -38,7 +37,7 @@ const airingTodaySlice = createSlice({
       })
       .addCase(fetchAiringToday.fulfilled, (state, action) => {
         state.loading = false;
-        state.tvShows = action.payload;
+        state.response = action.payload;
       })
       .addCase(fetchAiringToday.rejected, (state, action) => {
         state.loading = false;

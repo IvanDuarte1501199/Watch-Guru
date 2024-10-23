@@ -1,14 +1,19 @@
 import { TimeWindow } from '@appTypes/service/imdb';
 import tmdbApi from './tmdbApi';
-import { TmdbTvShowResponse } from '@appTypes/common/tmdbResponse';
+import { TmdbMovieResponse, TmdbTvShowResponse } from '@appTypes/common/tmdbResponse';
 import { MediaType } from '@appTypes/common/MediaType';
 
-export const getTrendingTv = async (time: TimeWindow = 'week') => {
+export const getTrendingTv = async (page: number = 1, time: TimeWindow = 'week') => {
   try {
-    const response = await tmdbApi.get<TmdbTvShowResponse>(
-      `/trending/tv/${time}`
+    const response = await tmdbApi.get<TmdbMovieResponse>(
+      `/trending/tv/${time}`,
+      {
+        params: {
+          page: page
+        }
+      }
     );
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error('Error fetching popular tv shows:', error);
     throw error;
@@ -37,52 +42,88 @@ export const searchTv = async (query: string) => {
   }
 };
 
-export const getAiringToday = async () => {
+export const getAiringToday = async (page: number = 1) => {
   try {
-    const response = await tmdbApi.get<TmdbTvShowResponse>('/tv/airing_today');
-    return response.data.results.map((item) => ({
+    const response = await tmdbApi.get<TmdbTvShowResponse>('/tv/airing_today',
+      {
+        params: {
+          page: page
+        }
+      });
+    const updatedResults = response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Tv,
     }));
+    return {
+      ...response.data,
+      results: updatedResults,
+    };
   } catch (error) {
     console.error('Error fetching airing today tv shows:', error);
     throw error;
   }
 };
 
-export const getOnTheAir = async () => {
+export const getOnTheAir = async (page: number = 1) => {
   try {
-    const response = await tmdbApi.get<TmdbTvShowResponse>('/tv/on_the_air');
-    return response.data.results.map((item) => ({
+    const response = await tmdbApi.get<TmdbTvShowResponse>('/tv/on_the_air',
+      {
+        params: {
+          page: page
+        }
+      });
+    const updatedResults = response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Tv,
     }));
+    return {
+      ...response.data,
+      results: updatedResults,
+    };
   } catch (error) {
     console.error('Error fetching on the air tv shows:', error);
     throw error;
   }
 };
 
-export const getPopularTv = async () => {
+export const getPopularTv = async (page: number = 1) => {
   try {
-    const response = await tmdbApi.get<TmdbTvShowResponse>('/tv/popular');
-    return response.data.results.map((item) => ({
+    const response = await tmdbApi.get<TmdbTvShowResponse>('/tv/popular',
+      {
+        params: {
+          page: page
+        }
+      });
+    const updatedResults = response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Tv,
     }));
+    return {
+      ...response.data,
+      results: updatedResults,
+    };
   } catch (error) {
     console.error('Error fetching popular tv shows:', error);
     throw error;
   }
 };
 
-export const getTopRatedTv = async () => {
+export const getTopRatedTv = async (page: number = 1) => {
   try {
-    const response = await tmdbApi.get<TmdbTvShowResponse>('/tv/top_rated');
-    return response.data.results.map((item) => ({
+    const response = await tmdbApi.get<TmdbTvShowResponse>('/tv/top_rated',
+      {
+        params: {
+          page: page
+        }
+      });
+    const updatedResults = response.data.results.map((item) => ({
       ...item,
       media_type: MediaType.Tv,
     }));
+    return {
+      ...response.data,
+      results: updatedResults,
+    };
   } catch (error) {
     console.error('Error fetching top rated tv shows:', error);
     throw error;

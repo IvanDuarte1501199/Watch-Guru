@@ -9,7 +9,7 @@ type InLineTitleProps = {
 
 export function InLineTitle({
   label,
-  viewMoreText = `View More ${label}`,
+  viewMoreText = `View more ${label}`,
   href = '/',
   showViewMore = true,
 }: InLineTitleProps): JSX.Element {

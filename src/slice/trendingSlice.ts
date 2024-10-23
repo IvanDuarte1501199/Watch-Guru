@@ -1,33 +1,32 @@
-import { GenericItemsState } from '@appTypes/common/genericItemProps';
+import { MediaSliceState } from '@appTypes/common/genericItemProps';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getTrendingAll } from '@services/tmdbService';
 
-const initialState: GenericItemsState = {
-  tvAndMoviesItems: [],
+const initialState: MediaSliceState = {
+  response: {
+    page: 0,
+    results: [],
+    total_results: 0,
+    total_pages: 0
+  },
   loading: false,
   error: null,
 };
 
 export const fetchTrendingAll = createAsyncThunk(
   'trendingAll/fetchTrendingAll',
-  async (_, { getState, rejectWithValue }) => {
-    const state = getState() as { trendingAll: typeof initialState };
-
-    if (state.trendingAll.tvAndMoviesItems.length > 0) {
-      return state.trendingAll.tvAndMoviesItems;
-    }
-
+  async (page: number, { rejectWithValue }) => {
     try {
-      const response = await getTrendingAll();
+      const response = await getTrendingAll(page);
       return response;
     } catch (error) {
-      return rejectWithValue('Error fetching trending items');
+      return rejectWithValue('Error fetching trending Movies andTV shows');
     }
   }
 );
 
 const trendingAllSlice = createSlice({
-  name: 'trendingAll',
+  name: 'trendingTv',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -38,7 +37,7 @@ const trendingAllSlice = createSlice({
       })
       .addCase(fetchTrendingAll.fulfilled, (state, action) => {
         state.loading = false;
-        state.tvAndMoviesItems = action.payload;
+        state.response = action.payload;
       })
       .addCase(fetchTrendingAll.rejected, (state, action) => {
         state.loading = false;
@@ -48,3 +47,4 @@ const trendingAllSlice = createSlice({
 });
 
 export default trendingAllSlice.reducer;
+

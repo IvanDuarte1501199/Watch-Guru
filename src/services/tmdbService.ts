@@ -2,12 +2,16 @@ import { TimeWindow } from '@appTypes/service/imdb';
 import tmdbApi from './tmdbApi';
 import { TmdbGenericResponse } from '@appTypes/common/tmdbResponse';
 
-export const getTrendingAll = async (time: TimeWindow = 'week') => {
+export const getTrendingAll = async (page: number = 1, time: TimeWindow = 'week') => {
   try {
     const response = await tmdbApi.get<TmdbGenericResponse>(
-      `/trending/all/${time}`
+      `/trending/all/${time}`, {
+      params: {
+        page,
+      },
+    }
     );
-    return response.data.results;
+    return response.data;
   } catch (error) {
     throw error;
   }

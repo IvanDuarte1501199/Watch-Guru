@@ -13,9 +13,11 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from './store';
 import { fetchGenres } from '@slice/genres/genresSlice';
 import MoviesBy from '@pages/MoviesBy';
+import TvShowsBy from '@pages/TvShowsBy';
+import MediaBy from '@pages/MediaBy';
 
 const AppRouter: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch(); // Tipar dispatch
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchGenres());
@@ -25,7 +27,9 @@ const AppRouter: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={true ? <Home /> : <SandBox />} />
+        <Route path="/:mediaType" element={<MediaBy />} />
         <Route path="/movies/:movieType" element={<MoviesBy />} />
+        <Route path="/tv-shows/:tvShowType" element={<TvShowsBy />} />
         <Route path="/tv-show/:id" element={<TvShowInfo />} />
         <Route path="/movie/:id" element={<MovieInfo />} />
         <Route path="/tv-shows" element={<TvShows />} />

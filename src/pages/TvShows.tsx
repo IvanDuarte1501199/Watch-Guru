@@ -9,14 +9,14 @@ import { TvShowType } from '@appTypes/tv/tvProps';
 
 const TvShows: React.FC = () => {
   const {
-    tvShows: trendingTv,
-  } = useTvShows(TvShowType.Trending);
+    media: trendingTv,
+  } = useTvShows({ tvShowType: TvShowType.Trending });
   const {
-    tvShows: popularTv,
-  } = useTvShows(TvShowType.Popular);
+    media: popularTv,
+  } = useTvShows({ tvShowType: TvShowType.Popular });
   const {
-    tvShows: topRatedTv,
-  } = useTvShows(TvShowType.TopRated);
+    media: topRatedTv,
+  } = useTvShows({ tvShowType: TvShowType.TopRated });
 
   const {
     tvGenres,
