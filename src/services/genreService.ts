@@ -1,5 +1,6 @@
 import { TmdbGenericResponse } from '@appTypes/common/tmdbResponse';
 import tmdbApi from './tmdbApi';
+import { MediaType } from '@appTypes/common/MediaType';
 
 export const getMoviesGenres = async () => {
   try {
@@ -21,7 +22,7 @@ export const getTvGenres = async () => {
   }
 };
 
-export const getDataByCategoryId = async (mediaType: 'movie' | 'tv', genreId: string, page: number = 1): Promise<TmdbGenericResponse> => {
+export const getDataByCategoryId = async (mediaType: MediaType, genreId: string, page: number = 1): Promise<TmdbGenericResponse> => {
   try {
     const response = await tmdbApi.get<TmdbGenericResponse>(`/discover/${mediaType}`, {
       params: {
@@ -36,7 +37,7 @@ export const getDataByCategoryId = async (mediaType: 'movie' | 'tv', genreId: st
   }
 };
 
-export const getDataByKeyword = async (mediaType: 'movie' | 'tv', keywordId: string, page: number = 1): Promise<TmdbGenericResponse> => {
+export const getDataByKeyword = async (mediaType: MediaType, keywordId: string, page: number = 1): Promise<TmdbGenericResponse> => {
   try {
     const response = await tmdbApi.get<TmdbGenericResponse>(`/discover/${mediaType}`, {
       params: {

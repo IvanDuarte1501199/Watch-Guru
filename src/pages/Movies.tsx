@@ -6,7 +6,7 @@ import useMovies from '@hooks/movies/useMovies';
 import { MainTitle } from '@components/common/MainTitle';
 import GenresSection from '@sections/GenresSection';
 import { MovieType } from '@appTypes/movies/movieProps';
-import useMoviesByGenreId from '@hooks/movies/useMoviesByGenreId';
+import useMediaByGenreId from '@hooks/useMediaByGenreId';
 import FeaturedGenresSection from '@sections/FeaturedGenresSection';
 
 const Movies: React.FC = () => {
@@ -26,13 +26,13 @@ const Movies: React.FC = () => {
     }
   }, [moviesGenres]);
 
-  const { movies: moviesByGenre1 } = useMoviesByGenreId({
+  const { media: moviesByGenre1 } = useMediaByGenreId({
     genreId: randomGenres[0]?.id
   });
-  const { movies: moviesByGenre2 } = useMoviesByGenreId({
+  const { media: moviesByGenre2 } = useMediaByGenreId({
     genreId: randomGenres[1]?.id
   });
-  const { movies: moviesByGenre3 } = useMoviesByGenreId({
+  const { media: moviesByGenre3 } = useMediaByGenreId({
     genreId: randomGenres[2]?.id
   });
 

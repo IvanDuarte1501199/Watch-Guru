@@ -7,6 +7,7 @@ import { MovieProps } from '@appTypes/movies/movieProps';
 import { TvProps } from '@appTypes/tv/tvProps';
 import { CardProps } from '@appTypes/common/CardProps';
 import { Fade } from 'react-awesome-reveal';
+import CircularVote from '@components/CircularVote';
 
 
 type MediaCardProps = {
@@ -81,7 +82,9 @@ export const Card: React.FC<CardProps> = ({
                   <h2 className="text-lg font-bold">{title || name}</h2>
                 </div>
               )}
-              <p className="p-guru absolute right-4 top-4">{vote_average}</p>
+              <p className="p-guru absolute right-0.5 top-0.5">
+                <CircularVote voteAverage={vote_average} />
+              </p>
             </a>
           </div>
         </article>
