@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Layout } from '@components/Layout';
 import { useParams, useLocation } from 'react-router-dom';
 import useMediaByCategoryId from '@hooks/useDataByCategoryId';
 import useGenres from '@hooks/useGenres';
 import { MainTitle } from '@components/common/MainTitle';
-import MediaGrid from '@components/mediaGrid';
-import Pagination from '@components/common/Pagination'; // Importa el nuevo componente
+import MediaGrid from '@components/MediaGrid';
+import Pagination from '@components/common/Pagination';
 
 const Genres: React.FC = () => {
   const { id } = useParams<{ id: string }>();
