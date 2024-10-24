@@ -12,8 +12,7 @@ export const getTrendingAll = async (page: number = 1, time: TimeWindow = 'week'
       params: {
         page,
       },
-    }
-    );
+    });
     return response.data;
   } catch (error) {
     throw error;

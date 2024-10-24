@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout } from '@components/Layout';
 import { GenericList } from '@components/common/GenericList';
 import { MovieType } from '@appTypes/movies/movieProps';
@@ -9,23 +9,61 @@ import useMedia from '@hooks/useMedia';
 import SuggestBox from '@components/SuggestBox';
 import { MainTitle } from '@components/common/MainTitle';
 import { MediaTypes } from '@appTypes/common/media';
+import useGenres from '@hooks/useGenres';
+import { MediaType } from '@appTypes/common/MediaType';
+import useMediaByGenreId from '@hooks/useMediaByGenreId';
 
 const Home: React.FC = () => {
   const {
     media: trending,
   } = useMedia({ mediaType: MediaTypes.Trending });
   const {
+    media: popularMovies,
+  } = useMovies({ movieType: MovieType.Popular });
+  const {
     media: trendingTv,
   } = useTvShows({ tvShowType: TvShowType.Trending });
   const {
-    media: trendingMovies,
-  } = useMovies({ movieType: MovieType.Trending });
-  const {
-    media: airingToday,
-  } = useTvShows({ tvShowType: TvShowType.AiringToday });
+    media: topRated,
+  } = useTvShows({ tvShowType: TvShowType.TopRated });
   const {
     media: upcomingMovies,
   } = useMovies({ movieType: MovieType.Upcoming });
+
+
+  const { tvGenres, moviesGenres } = useGenres();
+
+  const [randomTvShowsGenres, setRandomTvShowsGenres] = useState<any[]>([]);
+  const [randomMoviesGenres, setRandomMoviesGenres] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (tvGenres.length > 0) {
+      const shuffled = [...tvGenres].sort(() => 0.5 - Math.random());
+      setRandomTvShowsGenres(shuffled.slice(0, 2));
+    }
+    if (moviesGenres.length > 0) {
+      const shuffled = [...moviesGenres].sort(() => 0.5 - Math.random());
+      setRandomMoviesGenres(shuffled.slice(0, 2));
+    }
+  }, [tvGenres]);
+
+  const { media: tvShowsByGenre1 } = useMediaByGenreId({
+    genreId: randomTvShowsGenres[0]?.id,
+    mediaType: MediaType.Tv
+  });
+
+  const { media: tvShowsByGenre2 } = useMediaByGenreId({
+    genreId: randomTvShowsGenres[1]?.id,
+    mediaType: MediaType.Tv
+  });
+
+  const { media: moviesByGenre1 } = useMediaByGenreId({
+    genreId: randomMoviesGenres[0]?.id
+  });
+
+  const { media: moviesByGenre2 } = useMediaByGenreId({
+    genreId: randomMoviesGenres[1]?.id
+  });
 
   return (
     <Layout className='mb-4 md:mb-8'>
@@ -41,31 +79,70 @@ const Home: React.FC = () => {
       {/* trending all */}
       {trending && trending.length > 0 && (
         <GenericList
-          title="Trending Movies and Tv Shows"
+          title="Trending movies and tv Shows"
           genericList={trending}
           showViewMore href="/trending"
+          viewMoreText='View more'
+        />
+      )}
+
+      {/* popular movies */}
+      {popularMovies && popularMovies.length > 0 && (
+        <GenericList title="Popular Movies" genericList={popularMovies} showViewMore href="/movies/popular" />
+      )}
+
+      {/* moviesByGenre1 */}
+      {moviesByGenre1 && moviesByGenre1.length > 0 && (
+        <GenericList
+          title={`${randomMoviesGenres[0]?.name} movies`}
+          genericList={moviesByGenre1}
+          showViewMore href={`/genres/${randomMoviesGenres[0]?.id}`}
         />
       )}
 
       {/* trending tv shows */}
       {trendingTv && trendingTv.length > 0 && (
-        <GenericList title="Trending Tv Shows" genericList={trendingTv} showViewMore href="/tv-shows/trending" />
+        <GenericList title="Trending tv Shows" genericList={trendingTv} showViewMore href="/tv-shows/trending" />
       )}
 
-      {/* tendring movies */}
-      {trendingMovies && trendingMovies.length > 0 && (
-        <GenericList title="Trending Movies" genericList={trendingMovies} showViewMore href="/movies/trending" />
-      )}
-
-      {/* airing today */}
-      {airingToday && airingToday.length > 0 && (
-        <GenericList title="Airing Today" genericList={airingToday} showViewMore href="/tv-shows/airing-today" />
+      {/* tvShowsByGenre1 */}
+      {tvShowsByGenre1 && tvShowsByGenre1.length > 0 && (
+        <GenericList
+          title={`${randomTvShowsGenres[0]?.name} tv shows`}
+          genericList={tvShowsByGenre1}
+          showViewMore href={`/genres/${randomTvShowsGenres[0]?.id}`}
+        />
       )}
 
       {/* upcoming movies */}
       {upcomingMovies && upcomingMovies.length > 0 && (
         <GenericList title="Upcoming Movies" genericList={upcomingMovies} showViewMore href="/movies/upcoming" />
       )}
+
+
+      {/* moviesByGenre2 */}
+      {moviesByGenre2 && moviesByGenre2.length > 0 && (
+        <GenericList
+          title={`${randomMoviesGenres[1]?.name} movies`}
+          genericList={moviesByGenre2}
+          showViewMore href={`/genres/${randomMoviesGenres[1]?.id}`}
+        />
+      )}
+
+      {/* top rated tv show */}
+      {topRated && topRated.length > 0 && (
+        <GenericList title="Top rated tv Shows" genericList={topRated} showViewMore href="/tv-shows/top-rated" />
+      )}
+
+      {/* tvShowsByGenre2 */}
+      {tvShowsByGenre2 && tvShowsByGenre2.length > 0 && (
+        <GenericList
+          title={`${randomTvShowsGenres[1]?.name} tv shows`}
+          genericList={tvShowsByGenre2}
+          showViewMore href={`/genres/${randomTvShowsGenres[1]?.id}`}
+        />
+      )}
+
     </Layout>
   );
 };

@@ -3,7 +3,7 @@
 }
 
 .h2-guru {
-  @apply text-xl font-semibold text-gray;
+  @apply text-sm md:text-xl font-semibold text-gray;
 }
 
 .h3-guru {

@@ -9,17 +9,19 @@ type GenericListProps = {
   showViewMore?: boolean;
   href?: string;
   customClass?: string;
+  viewMoreText?: string
 };
 export function GenericList({
   title,
   genericList,
   showViewMore = false,
   href,
-  customClass
+  customClass,
+  viewMoreText
 }: GenericListProps): JSX.Element {
   return (
     <section className={`mb-8 md:mb-16 ${customClass}`}>
-      <InLineTitle label={title} showViewMore={showViewMore} href={href} />
+      <InLineTitle label={title} showViewMore={showViewMore} href={href} viewMoreText={viewMoreText} />
       <CarouselSlider maxItems={5}>
         {genericList.map((item: GenericItemProps, i: number) => {
           return <Card key={i} {...item} />;
