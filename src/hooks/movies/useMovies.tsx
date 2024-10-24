@@ -19,45 +19,43 @@ interface UseMoviesParams {
 const useMovies = ({ movieType, keywordId, page = 1 }: UseMoviesParams) => {
   const dispatch = useAppDispatch();
 
-  const movieStates = useSelector((state: RootState) => ({
-    popular: state.popularMovies,
-    nowPlaying: state.nowPlayingMovies,
-    topRated: state.topRatedMovies,
-    upcoming: state.upcomingMovies,
-    trending: state.trendingMovies,
-    byKeyword: state.moviesByKeywords,
-  }));
+  const popularMovies = useSelector((state: RootState) => state.popularMovies);
+  const nowPlayingMovies = useSelector((state: RootState) => state.nowPlayingMovies);
+  const topRatedMovies = useSelector((state: RootState) => state.topRatedMovies);
+  const upcomingMovies = useSelector((state: RootState) => state.upcomingMovies);
+  const trendingMovies = useSelector((state: RootState) => state.trendingMovies);
+  const moviesByKeyword = useSelector((state: RootState) => state.moviesByKeywords);
 
   useEffect(() => {
     const fetchMovies = () => {
       switch (movieType) {
         case MovieType.Popular:
-          if (movieStates.popular.response.results.length === 0 || page !== movieStates.popular.response.page) {
+          if (popularMovies.response.results.length === 0 || page !== popularMovies.response.page) {
             dispatch(fetchPopularMovies(page));
           }
           break;
         case MovieType.NowPlaying:
-          if (movieStates.nowPlaying.response.results.length === 0 || page !== movieStates.nowPlaying.response.page) {
+          if (nowPlayingMovies.response.results.length === 0 || page !== nowPlayingMovies.response.page) {
             dispatch(fetchNowPlayingMovies(page));
           }
           break;
         case MovieType.TopRated:
-          if (movieStates.topRated.response.results.length === 0 || page !== movieStates.topRated.response.page) {
+          if (topRatedMovies.response.results.length === 0 || page !== topRatedMovies.response.page) {
             dispatch(fetchTopRatedMovies(page));
           }
           break;
         case MovieType.Upcoming:
-          if (movieStates.upcoming.response.results.length === 0 || page !== movieStates.upcoming.response.page) {
+          if (upcomingMovies.response.results.length === 0 || page !== upcomingMovies.response.page) {
             dispatch(fetchUpcomingMovies(page));
           }
           break;
         case MovieType.Trending:
-          if (movieStates.trending.response.results.length === 0 || page !== movieStates.trending.response.page) {
+          if (trendingMovies.response.results.length === 0 || page !== trendingMovies.response.page) {
             dispatch(fetchTrendingMovies(page));
           }
           break;
         case MovieType.ByKeyword:
-          if (movieStates.byKeyword.response.results.length === 0 || page !== movieStates.byKeyword.response.page) {
+          if (moviesByKeyword.response.results.length === 0 || page !== moviesByKeyword.response.page) {
             dispatch(fetchMoviesByKeyword(keywordId ?? ''));
           }
           break;
@@ -67,22 +65,27 @@ const useMovies = ({ movieType, keywordId, page = 1 }: UseMoviesParams) => {
     };
 
     fetchMovies();
-  }, [dispatch, movieType, page, keywordId, movieStates]);
+  }, [dispatch, movieType, page, keywordId, popularMovies,
+    nowPlayingMovies,
+    topRatedMovies,
+    upcomingMovies,
+    trendingMovies,
+    moviesByKeyword]);
 
   const getCurrentMovieState = () => {
     switch (movieType) {
       case MovieType.Popular:
-        return movieStates.popular;
+        return popularMovies;
       case MovieType.NowPlaying:
-        return movieStates.nowPlaying;
+        return nowPlayingMovies;
       case MovieType.TopRated:
-        return movieStates.topRated;
+        return topRatedMovies;
       case MovieType.Upcoming:
-        return movieStates.upcoming;
+        return upcomingMovies;
       case MovieType.Trending:
-        return movieStates.trending;
+        return trendingMovies;
       case MovieType.ByKeyword:
-        return movieStates.byKeyword;
+        return moviesByKeyword;
       default:
         return {
           response: { results: [], page: 1, total_pages: 1 },

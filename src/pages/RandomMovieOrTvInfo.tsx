@@ -1,28 +1,18 @@
+// RandomMovieOrTvInfo.tsx
+import { MediaType } from '@appTypes/common/MediaType';
 import { MovieProps } from '@appTypes/movies/movieProps';
 import { TvProps } from '@appTypes/tv/tvProps';
 import { Layout } from '@components/Layout';
 import { useRandomMovieOrTv } from '@hooks/useRandomMovieOrTv';
-import { useTvShow } from '@hooks/tv/useTvShow';
-import { useMovie } from '@hooks/movies/useMovie';
 import MoviePageSection from '@sections/movies/MoviePageSection';
 import TvShowPageSection from '@sections/tv/TvShowPageSection';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GenericItemProps } from '@appTypes/common/genericItemProps';
 
 const RandomMovieOrTvInfo: React.FC = () => {
   const navigate = useNavigate();
-  const type = window.location.pathname.includes('random/movie') ? 'movie' : 'tv';
+  const type: MediaType = window.location.pathname.includes('random/movie') ? MediaType.Movie : MediaType.Tv;
   const { randomTvOrMovie, loading: loadingRandom, error: randomError } = useRandomMovieOrTv(type);
-
-  const {
-    data,
-    loading,
-    error
-  } = type === 'tv'
-      ? { data: useTvShow(randomTvOrMovie?.id as string).tvShow, loading: useTvShow(randomTvOrMovie?.id as string).loading, error: useTvShow(randomTvOrMovie?.id as string).error }
-      : { data: useMovie(randomTvOrMovie?.id as string).movie, loading: useMovie(randomTvOrMovie?.id as string).loading, error: useMovie(randomTvOrMovie?.id as string).error };
-
 
   useEffect(() => {
     if (randomError) {
@@ -30,14 +20,16 @@ const RandomMovieOrTvInfo: React.FC = () => {
     }
   }, [randomError, navigate]);
 
-  if (loadingRandom || loading) {
-    return <p className="text-center">Loading movie details...</p>;
-  }
+  const isLoading = loadingRandom || !randomTvOrMovie;
 
   return (
     <Layout>
-      {type === 'movie' && data && !loading && <MoviePageSection movie={data as MovieProps} />}
-      {type === 'tv' && data && !loading && <TvShowPageSection tvShow={data as TvProps} />}
+      {!isLoading && randomTvOrMovie && type === MediaType.Movie && (
+        <MoviePageSection movie={randomTvOrMovie as MovieProps} />
+      )}
+      {!isLoading && randomTvOrMovie && type === MediaType.Tv && (
+        <TvShowPageSection tvShow={randomTvOrMovie as TvProps} />
+      )}
     </Layout>
   );
 };

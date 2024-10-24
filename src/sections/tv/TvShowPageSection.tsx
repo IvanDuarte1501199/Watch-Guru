@@ -22,7 +22,6 @@ const TvShowSection = ({ tvShow }: TvShowSectionProps) => {
         : [...prevExpanded, seasonNumber]
     );
   };
-
   return (
     <div className="relative">
       <div className="container mx-auto px-4 pt-6 pb-16 text-white">
@@ -68,7 +67,7 @@ const TvShowSection = ({ tvShow }: TvShowSectionProps) => {
           ) : episodesError ? (
             <p className="text-red-500">{episodesError}</p>
           ) : (
-            tvShow?.seasons.map((season) => (
+            tvShow?.seasons?.map((season) => (
               <div key={season.id} className="mb-8">
                 <h4
                   className="text-xl font-bold mb-2 cursor-pointer hover:underline"

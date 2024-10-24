@@ -12,6 +12,7 @@ export const fetchRandomByType = createAsyncThunk(
   'random/fetchRandomByType',
   async (type: 'movie' | 'tv', { rejectWithValue }) => {
     try {
+
       const randomItem = await getRandomByType(type);
       return randomItem;
     } catch (error) {

@@ -8,6 +8,12 @@ export const useMovie = (id: string) => {
 
   useEffect(() => {
     const fetchMovie = async () => {
+      if (!id) {
+        setError('Movie ID is missing');
+        setLoading(false);
+        return;
+      }
+
       setLoading(true);
       setError(null);
       try {

@@ -5,6 +5,7 @@ interface MoviePageSectionProps {
 }
 
 const MoviePageSection = ({ movie }: MoviePageSectionProps) => {
+
   return (
     <section className="relative">
       <div className="container mx-auto px-4 py-20 text-white">

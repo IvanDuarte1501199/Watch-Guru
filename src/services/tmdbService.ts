@@ -1,6 +1,9 @@
 import { TimeWindow } from '@appTypes/service/imdb';
 import tmdbApi from './tmdbApi';
 import { TmdbGenericResponse } from '@appTypes/common/tmdbResponse';
+import { getMovieById } from './movieService';
+import { getTvById } from './tvService';
+import { GenericItemProps } from '@appTypes/common/genericItemProps';
 
 export const getTrendingAll = async (page: number = 1, time: TimeWindow = 'week') => {
   try {
@@ -26,7 +29,14 @@ export const getRandomByType = async (type: 'movie' | 'tv') => {
       },
     });
     const randomIndex = Math.floor(Math.random() * response.data.results.length);
-    return response.data.results[randomIndex];
+    const randomDataId = response.data.results[randomIndex].id;
+    let data: GenericItemProps;
+    if (type === 'movie') {
+      data = await getMovieById(randomDataId)
+    } else {
+      data = await getTvById(randomDataId)
+    }
+    return data;
   } catch (error) {
     throw error;
   }

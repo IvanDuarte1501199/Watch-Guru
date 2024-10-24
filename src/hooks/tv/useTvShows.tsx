@@ -17,39 +17,37 @@ interface UseTvParams {
 const useTvShows = ({ tvShowType, page = 1 }: UseTvParams) => {
   const dispatch = useAppDispatch();
 
-  const tvStates = useSelector((state: RootState) => ({
-    popular: state.popularTv,
-    airingToday: state.airingTodayTv,
-    onTheAir: state.onTheAirTv,
-    topRated: state.topRatedTv,
-    trending: state.trendingTv,
-  }));
+  const popularTv = useSelector((state: RootState) => state.popularTv);
+  const airingToday = useSelector((state: RootState) => state.airingTodayTv);
+  const onTheAirTv = useSelector((state: RootState) => state.onTheAirTv);
+  const topRatedTv = useSelector((state: RootState) => state.topRatedTv);
+  const trendingTv = useSelector((state: RootState) => state.trendingTv);
 
   useEffect(() => {
     const fetchTvShows = () => {
       switch (tvShowType) {
         case TvShowType.Popular:
-          if (tvStates.popular.response.results.length === 0 || page !== tvStates.popular.response.page) {
+          if (popularTv.response.results.length === 0 || page !== popularTv.response.page) {
             dispatch(fetchPopularTv(page));
           }
           break;
         case TvShowType.AiringToday:
-          if (tvStates.airingToday.response.results.length === 0 || page !== tvStates.airingToday.response.page) {
+          if (airingToday.response.results.length === 0 || page !== airingToday.response.page) {
             dispatch(fetchAiringToday(page));
           }
           break;
         case TvShowType.OnTheAir:
-          if (tvStates.onTheAir.response.results.length === 0 || page !== tvStates.onTheAir.response.page) {
+          if (onTheAirTv.response.results.length === 0 || page !== onTheAirTv.response.page) {
             dispatch(fetchOnTheAir(page));
           }
           break;
         case TvShowType.TopRated:
-          if (tvStates.topRated.response.results.length === 0 || page !== tvStates.topRated.response.page) {
+          if (topRatedTv.response.results.length === 0 || page !== topRatedTv.response.page) {
             dispatch(fetchTopRatedTv(page));
           }
           break;
         case TvShowType.Trending:
-          if (tvStates.trending.response.results.length === 0 || page !== tvStates.trending.response.page) {
+          if (trendingTv.response.results.length === 0 || page !== trendingTv.response.page) {
             dispatch(fetchTrendingTv(page));
           }
           break;
@@ -59,20 +57,20 @@ const useTvShows = ({ tvShowType, page = 1 }: UseTvParams) => {
     };
 
     fetchTvShows();
-  }, [dispatch, tvShowType, page, tvStates]);
+  }, [dispatch, tvShowType, page, popularTv, airingToday, onTheAirTv, topRatedTv, trendingTv]);
 
   const getCurrentTvState = () => {
     switch (tvShowType) {
       case TvShowType.Popular:
-        return tvStates.popular;
+        return popularTv;
       case TvShowType.AiringToday:
-        return tvStates.airingToday;
+        return airingToday;
       case TvShowType.OnTheAir:
-        return tvStates.onTheAir;
+        return onTheAirTv;
       case TvShowType.TopRated:
-        return tvStates.topRated;
+        return topRatedTv;
       case TvShowType.Trending:
-        return tvStates.trending;
+        return trendingTv;
       default:
         return {
           response: { results: [], page: 1, total_pages: 1 },

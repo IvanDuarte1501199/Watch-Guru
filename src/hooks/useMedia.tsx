@@ -13,15 +13,13 @@ interface UseMediaParams {
 const useMedia = ({ mediaType, page = 1 }: UseMediaParams) => {
   const dispatch = useAppDispatch();
 
-  const trendingAllState = useSelector((state: RootState) => ({
-    trending: state.trendingAll,
-  }));
+  const trendingAllState = useSelector((state: RootState) => state.trendingAll);
 
   useEffect(() => {
     const fetchMedia = () => {
       switch (mediaType) {
         case MediaTypes.Trending:
-          if (trendingAllState.trending.response.results.length === 0 || page !== trendingAllState.trending.response.page) {
+          if (trendingAllState.response.results.length === 0 || page !== trendingAllState.response.page) {
             dispatch(fetchTrendingAll(page));
           }
           break;
@@ -36,7 +34,7 @@ const useMedia = ({ mediaType, page = 1 }: UseMediaParams) => {
   const getCurrentMediaState = () => {
     switch (mediaType) {
       case MediaTypes.Trending:
-        return trendingAllState.trending;
+        return trendingAllState;
       default:
         return {
           response: { results: [], page: 1, total_pages: 1 },

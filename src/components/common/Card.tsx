@@ -82,9 +82,9 @@ export const Card: React.FC<CardProps> = ({
                   <h2 className="text-lg font-bold">{title || name}</h2>
                 </div>
               )}
-              <p className="p-guru absolute right-0.5 top-0.5">
+              <span className="absolute right-0.5 top-0.5">
                 <CircularVote voteAverage={vote_average} />
-              </p>
+              </span>
             </a>
           </div>
         </article>
