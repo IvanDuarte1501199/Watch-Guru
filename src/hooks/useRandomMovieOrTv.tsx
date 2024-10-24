@@ -12,13 +12,13 @@ export const useRandomMovieOrTv = (type: MediaType) => {
     (state: RootState) => state.RandomMovieOrTvInfo
   );
 
-  let loadingEffect = true;
+  /* let loadingEffect = true; */
 
   useEffect(() => {
-    if (type && !loading && !loadingEffect) {
+    if (type && !loading /* && !loadingEffect */) {
       dispatch(fetchRandomByType(type));
     }
-    loadingEffect = false
+    /* loadingEffect = false */
   }, [dispatch, type]);
 
 
