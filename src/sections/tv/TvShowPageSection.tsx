@@ -1,6 +1,6 @@
 import { TvProps } from "@appTypes/tv/tvProps";
 import { useSeasonEpisodes } from "@hooks/tv/useSeasonEpisodes";
-import { useState } from "react";
+import SeasonAccordion from "./TvShowAccordionSeasons";
 
 interface TvShowSectionProps {
   tvShow: TvProps;
@@ -13,15 +13,6 @@ const TvShowSection = ({ tvShow }: TvShowSectionProps) => {
     error: episodesError,
   } = useSeasonEpisodes(tvShow?.id as string, tvShow?.seasons || []);
 
-  const [expandedSeasons, setExpandedSeasons] = useState<number[]>([]);
-
-  const toggleSeason = (seasonNumber: number) => {
-    setExpandedSeasons((prevExpanded) =>
-      prevExpanded.includes(seasonNumber)
-        ? prevExpanded.filter((num) => num !== seasonNumber)
-        : [...prevExpanded, seasonNumber]
-    );
-  };
   return (
     <div className="relative">
       <div className="container mx-auto px-4 pt-6 pb-16 text-white">
@@ -67,40 +58,10 @@ const TvShowSection = ({ tvShow }: TvShowSectionProps) => {
           ) : episodesError ? (
             <p className="text-red-500">{episodesError}</p>
           ) : (
-            tvShow?.seasons?.map((season) => (
-              <div key={season.id} className="mb-8">
-                <h4
-                  className="text-xl font-bold mb-2 cursor-pointer hover:underline"
-                  onClick={() => toggleSeason(season.season_number)}
-                >
-                  {season.name} ({season.episode_count} episodes)
-                </h4>
-
-                <div
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${expandedSeasons.includes(season.season_number)
-                    ? 'max-h-screen'
-                    : 'max-h-0'
-                    }`}
-                >
-                  <ul className="space-y-2 ml-4">
-                    {allEpisodes[season.season_number]?.map((episode) => (
-                      <li
-                        key={episode.id}
-                        className="bg-gray-800 p-2 rounded-lg"
-                      >
-                        <h5 className="text-lg font-semibold">
-                          Episode {episode.episode_number}: {episode.name}
-                        </h5>
-                        <p className="text-sm">
-                          Air Date: {episode.air_date || 'N/A'}
-                        </p>
-                        <p className="text-sm">{episode.overview || ''}</p>
-                      </li>
-                    )) || <li>No episodes available</li>}
-                  </ul>
-                </div>
-              </div>
-            ))
+            <SeasonAccordion
+              seasons={tvShow?.seasons || []}
+              allEpisodes={allEpisodes}
+            />
           )}
         </div>
       </div>

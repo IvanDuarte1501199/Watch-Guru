@@ -31,11 +31,11 @@ const Home: React.FC = () => {
     media: upcomingMovies,
   } = useMovies({ movieType: MovieType.Upcoming });
 
-  /*  const { people } = usePeople();
- 
-   useEffect(() => {
-     console.log('people', people);
-   }, [people]); */
+  const { people } = usePeople();
+
+  useEffect(() => {
+    console.log('people', people);
+  }, [people]);
   const { tvGenres, moviesGenres } = useGenres();
 
   const [randomTvShowsGenres, setRandomTvShowsGenres] = useState<any[]>([]);
