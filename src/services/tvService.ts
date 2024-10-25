@@ -129,3 +129,14 @@ export const getTopRatedTv = async (page: number = 1) => {
     throw error;
   }
 };
+
+export const getRecommendatiosTvShowsById = async (tvShowId: string) => {
+  try {
+    const response = await tmdbApi.get<TmdbTvShowResponse>(`/tv/${tvShowId}/recommendations`);
+    console.log(response)
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching recommended tv shows:', error);
+    throw error;
+  }
+};

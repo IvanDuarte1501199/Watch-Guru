@@ -28,8 +28,10 @@ const MovieInfo: React.FC = () => {
   return (
     <Layout>
       <MoviePageSection movie={movie} />
-      <h2 className='h2-guru text-center uppercase mb-8 md:mb-12'>Recommended movies</h2>
-      <MediaGrid media={recommendedMovies.slice(0, 10)} />
+      {
+        recommendedMovies && recommendedMovies.length > 0 && <><h2 className='h2-guru text-center uppercase mb-8 md:mb-12'>Recommended movies</h2>
+          <MediaGrid media={recommendedMovies.slice(0, 10)} /></>
+      }
     </Layout>
   );
 };

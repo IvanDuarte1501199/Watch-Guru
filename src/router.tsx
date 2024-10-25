@@ -15,6 +15,7 @@ import { fetchGenres } from '@slice/genres/genresSlice';
 import MoviesBy from '@pages/MoviesBy';
 import TvShowsBy from '@pages/TvShowsBy';
 import MediaBy from '@pages/MediaBy';
+import PersonInfo from '@pages/PersonInfo';
 
 const AppRouter: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -30,6 +31,7 @@ const AppRouter: React.FC = () => {
         <Route path="/:mediaType" element={<MediaBy />} />
         <Route path="/movies/:movieType" element={<MoviesBy />} />
         <Route path="/tv-shows/:tvShowType" element={<TvShowsBy />} />
+        <Route path="/person/:id" element={<PersonInfo />} />
         <Route path="/tv-show/:id" element={<TvShowInfo />} />
         <Route path="/movie/:id" element={<MovieInfo />} />
         <Route path="/tv-shows" element={<TvShows />} />

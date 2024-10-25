@@ -24,7 +24,7 @@ export function GenericList({
       <InLineTitle label={title} showViewMore={showViewMore} href={href} viewMoreText={viewMoreText} />
       <CarouselSlider maxItems={5}>
         {genericList.map((item: GenericItemProps, i: number) => {
-          return <Card key={i} {...item} />;
+          return <Card key={`item-${item.media_type}-${item.id}`} {...item} />;
         })}
       </CarouselSlider>
     </section>

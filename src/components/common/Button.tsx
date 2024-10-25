@@ -13,11 +13,11 @@ const Button: React.FC<ButtonProps> = ({
   type = 'button',
   variant = 'primary',
 }) => {
-  const baseStyles = 'px-4 py-2 rounded-md font-semibold';
+  const baseStyles = 'px-6 py-2 rounded font-semibold mx-auto block mt-4 mb-6 lg:mb-12';
   const variantStyles =
     variant === 'primary'
       ? 'bg-primary text-white hover:bg-secondary'
-      : 'bg-secondary text-gray-800 hover:bg-primary';
+      : 'bg-tertiary text-white hover:bg-secondary';
 
   return (
     <button

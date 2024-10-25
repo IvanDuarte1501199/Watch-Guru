@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import { getTvById } from '@services/tvService'; // Asegúrate de tener este servicio implementado
+import { getRecommendatiosTvShowsById, getTvById } from '@services/tvService';
+import { GenericItemProps } from '@appTypes/common/genericItemProps';
 
-export const useTvShow = (id: string) => {
+export const useTvShow = (id: string, getRecommendedTvShows: boolean = false) => {
   const [tvShow, setTvShow] = useState<any | null>(null);
+  const [recommendedTvShows, setRecommendedTvShows] = useState<GenericItemProps[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,10 +19,14 @@ export const useTvShow = (id: string) => {
       setLoading(true);
       setError(null);
       try {
-        const movieData = await getTvById(id);
-        setTvShow(movieData);
+        const tvShowData = await getTvById(id);
+        if (getRecommendedTvShows && tvShowData) {
+          const similarMovies = await getRecommendatiosTvShowsById(id);
+          setRecommendedTvShows(similarMovies.results);
+        }
+        setTvShow(tvShowData);
       } catch (error) {
-        setError('Failed to fetch movie details');
+        setError('Failed to fetch tv shows details');
       } finally {
         setLoading(false);
       }
@@ -29,5 +35,5 @@ export const useTvShow = (id: string) => {
     fetchMovie();
   }, [id]);
 
-  return { tvShow, loading, error };
+  return { tvShow, recommendedTvShows, loading, error };
 };

@@ -12,6 +12,7 @@ import { MediaTypes } from '@appTypes/common/media';
 import useGenres from '@hooks/useGenres';
 import { MediaType } from '@appTypes/common/MediaType';
 import useMediaByGenreId from '@hooks/useMediaByGenreId';
+import usePeople from '@hooks/person/usePeople';
 
 const Home: React.FC = () => {
   const {
@@ -30,7 +31,11 @@ const Home: React.FC = () => {
     media: upcomingMovies,
   } = useMovies({ movieType: MovieType.Upcoming });
 
-
+  /*  const { people } = usePeople();
+ 
+   useEffect(() => {
+     console.log('people', people);
+   }, [people]); */
   const { tvGenres, moviesGenres } = useGenres();
 
   const [randomTvShowsGenres, setRandomTvShowsGenres] = useState<any[]>([]);
