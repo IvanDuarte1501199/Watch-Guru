@@ -25,7 +25,7 @@ const TvShowSection = ({ tvShow }: TvShowSectionProps) => {
   return (
     <div className="relative">
       <div className="container mx-auto px-4 pt-6 pb-16 text-white">
-        <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col md:flex-row animate-fade-in-right">
           {/* Poster image */}
           {tvShow?.poster_path && (
             <img
@@ -37,7 +37,7 @@ const TvShowSection = ({ tvShow }: TvShowSectionProps) => {
           )}
 
           {/* Details */}
-          <div className="md:ml-10 mt-6 md:mt-0">
+          <div className="md:ml-10 mt-6 md:mt-0 animate-fade-in-left">
             <h1 className="text-4xl font-bold mb-4">{tvShow?.name}</h1>
             <p className="text-lg mb-6">{tvShow?.overview}</p>
             {/* Genres */}

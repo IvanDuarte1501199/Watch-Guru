@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
+    "@midudev/tailwind-animations": "^0.1.0",
     "@reduxjs/toolkit": "^2.2.7",
     "axios": "^1.7.7",
     "react": "^18.3.1",

@@ -11,7 +11,7 @@ const Search: React.FC<SearchProps> = ({ type }) => {
   const [query, setQuery] = useState<string>('');
   const { results, loading, error } = useSearch(query, type);
   return (
-    <div className='relative'>
+    <div className='hidden md:block relative'>
 
       <div className="relative">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

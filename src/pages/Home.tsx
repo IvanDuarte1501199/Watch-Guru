@@ -71,8 +71,8 @@ const Home: React.FC = () => {
 
       <h2 className='h2-guru mb-4 text-center'>Suggest me a random movie or tv show</h2>
       <section className='flex flex-col md:flex-row align-middle justify-center gap-10 mb-12 '>
-        <SuggestBox placeholder='Random MOVIE suggest' icon='movie' href='/random/movie' />
-        <SuggestBox placeholder='Random TV SHOW suggest' icon='tv-shows' href='/random/tv-show' />
+        <SuggestBox placeholder='Random MOVIE suggest' icon='movie' href='/random/movie' customClass='animate-fade-in-right' />
+        <SuggestBox placeholder='Random TV SHOW suggest' icon='tv-shows' href='/random/tv-show' customClass='animate-fade-in-left' />
       </section>
 
 

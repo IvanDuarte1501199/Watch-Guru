@@ -5,17 +5,19 @@ interface SuggestBoxProps {
   placeholder?: string;
   icon?: 'movie' | 'tv-shows';
   href?: string;
+  customClass?: string;
 }
 
 const SuggestBox: React.FC<SuggestBoxProps> = ({
   placeholder,
   icon = 'movie',
   href = '/',
+  customClass
 }) => {
   return (
     <Link
       to={href}
-      className="flex flex-col items-center justify-center"
+      className={`flex flex-col items-center justify-center ${customClass}`}
     >
       <article
         className='w-64 h-32 relative p-2 flex items-center justify-center text-white font-semibold rounded-lg

@@ -15,11 +15,11 @@ const MoviePageSection = ({ movie }: MoviePageSectionProps) => {
               loading="lazy"
               src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
               alt={movie.title}
-              className="w-full md:w-1/3 rounded-lg shadow-lg object-contain"
+              className="w-full md:w-1/3 rounded-lg shadow-lg object-contain animate-fade-in-right"
             />
           )}
 
-          <div className="md:ml-10 mt-6 md:mt-0">
+          <div className="md:ml-10 mt-6 md:mt-0 animate-fade-in-left">
             <h1 className="text-4xl font-bold mb-4">{movie?.title}</h1>
 
             {movie?.tagline && (
