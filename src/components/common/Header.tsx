@@ -37,7 +37,7 @@ export function Header({ showSearch = false, searchType }: HeaderProps): JSX.Ele
           to="/"
           className="nav-link-guru hover:underline transition duration-200 ease-in-out"
         >
-          <img src="/logo.png" alt="Watch Guru Logo" className="w-10 h-10" />
+          <img src="/logo.svg" alt="Watch Guru Logo" className="w-10 h-10" />
         </NavLink>
         {showSearch && <Search type={searchType} />}
         <nav className="flex items-center gap-12">
