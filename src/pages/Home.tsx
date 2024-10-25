@@ -79,7 +79,7 @@ const Home: React.FC = () => {
       {/* trending all */}
       {trending && trending.length > 0 && (
         <GenericList
-          title="Trending movies and tv Shows"
+          title="Trending movies and tv shows"
           genericList={trending}
           showViewMore href="/trending"
           viewMoreText='View more'
@@ -88,7 +88,7 @@ const Home: React.FC = () => {
 
       {/* popular movies */}
       {popularMovies && popularMovies.length > 0 && (
-        <GenericList title="Popular Movies" genericList={popularMovies} showViewMore href="/movies/popular" />
+        <GenericList title="Popular movies" genericList={popularMovies} showViewMore href="/movies/popular" />
       )}
 
       {/* moviesByGenre1 */}
@@ -102,7 +102,7 @@ const Home: React.FC = () => {
 
       {/* trending tv shows */}
       {trendingTv && trendingTv.length > 0 && (
-        <GenericList title="Trending tv Shows" genericList={trendingTv} showViewMore href="/tv-shows/trending" />
+        <GenericList title="Trending tv shows" genericList={trendingTv} showViewMore href="/tv-shows/trending" />
       )}
 
       {/* tvShowsByGenre1 */}
@@ -116,7 +116,7 @@ const Home: React.FC = () => {
 
       {/* upcoming movies */}
       {upcomingMovies && upcomingMovies.length > 0 && (
-        <GenericList title="Upcoming Movies" genericList={upcomingMovies} showViewMore href="/movies/upcoming" />
+        <GenericList title="Upcoming movies" genericList={upcomingMovies} showViewMore href="/movies/upcoming" />
       )}
 
 
@@ -131,7 +131,7 @@ const Home: React.FC = () => {
 
       {/* top rated tv show */}
       {topRated && topRated.length > 0 && (
-        <GenericList title="Top rated tv Shows" genericList={topRated} showViewMore href="/tv-shows/top-rated" />
+        <GenericList title="Top rated tv shows" genericList={topRated} showViewMore href="/tv-shows/top-rated" />
       )}
 
       {/* tvShowsByGenre2 */}

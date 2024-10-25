@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
-import { getMovieById } from '@services/movieService';
+import { getMovieById, getRecommendatiosMoviesById } from '@services/movieService';
+import { MovieProps } from '@appTypes/movies/movieProps';
+import { GenericItemProps } from '@appTypes/common/genericItemProps';
 
-export const useMovie = (id: string) => {
-  const [movie, setMovie] = useState<any | null>(null);
+export const useMovie = (id: string, getRecommendedMovies: boolean = false) => {
+  const [movie, setMovie] = useState<MovieProps>({} as MovieProps);
+  const [recommendedMovies, setRecommendedMovies] = useState<GenericItemProps[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,6 +21,10 @@ export const useMovie = (id: string) => {
       setError(null);
       try {
         const movieData = await getMovieById(id);
+        if (getRecommendedMovies && movieData) {
+          const similarMovies = await getRecommendatiosMoviesById(id);
+          setRecommendedMovies(similarMovies.results);
+        }
         setMovie(movieData);
       } catch (error) {
         setError('Failed to fetch movie details');
@@ -29,5 +36,5 @@ export const useMovie = (id: string) => {
     fetchMovie();
   }, [id]);
 
-  return { movie, loading, error };
+  return { movie, recommendedMovies, loading, error };
 };

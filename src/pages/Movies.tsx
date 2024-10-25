@@ -8,6 +8,7 @@ import GenresSection from '@sections/GenresSection';
 import { MovieType } from '@appTypes/movies/movieProps';
 import useMediaByGenreId from '@hooks/useMediaByGenreId';
 import FeaturedGenresSection from '@sections/FeaturedGenresSection';
+import { MediaType } from '@appTypes/common/MediaType';
 
 const Movies: React.FC = () => {
   const { media: trendingMovies } = useMovies({ movieType: MovieType.Trending });
@@ -70,7 +71,7 @@ const Movies: React.FC = () => {
   };
 
   return (
-    <Layout className='mb-4 md:mb-8'>
+    <Layout className='mb-4 md:mb-8' searchType={MediaType.Movie}>
       <MainTitle>MOVIES</MainTitle>
 
       {/* movies genres */}

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import Search from './Search';
+import { MediaType } from '@appTypes/common/MediaType';
 
 type HeaderProps = {
-  width?: number;
-  height?: number;
-  color?: 'white' | 'black';
+  showSearch?: boolean;
+  searchType?: MediaType;
 };
 
 const LINKS = [
@@ -12,7 +13,7 @@ const LINKS = [
   { name: 'Movies', href: '/movies' },
 ];
 
-export function Header({ }: HeaderProps): JSX.Element {
+export function Header({ showSearch = false, searchType }: HeaderProps): JSX.Element {
   const [isOpaque, setIsOpaque] = useState(false);
 
   const handleScroll = () => {
@@ -38,6 +39,7 @@ export function Header({ }: HeaderProps): JSX.Element {
         >
           <img src="/logo.png" alt="Watch Guru Logo" className="w-10 h-10" />
         </NavLink>
+        {showSearch && <Search type={searchType} />}
         <nav className="flex items-center gap-12">
           {LINKS.map((link) => (
             <NavLink

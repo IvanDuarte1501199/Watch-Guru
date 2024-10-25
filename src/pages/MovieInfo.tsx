@@ -1,4 +1,5 @@
 import { Layout } from '@components/Layout';
+import MediaGrid from '@components/MediaGrid';
 import { useMovie } from '@hooks/movies/useMovie';
 import MoviePageSection from '@sections/movies/MoviePageSection';
 import React, { useEffect } from 'react';
@@ -14,7 +15,7 @@ const MovieInfo: React.FC = () => {
     }
   }, [id, navigate]);
 
-  const { movie, loading, error } = useMovie(id!);
+  const { movie, recommendedMovies, loading, error } = useMovie(id!, true);
 
   useEffect(() => {
     if (error) {
@@ -27,6 +28,8 @@ const MovieInfo: React.FC = () => {
   return (
     <Layout>
       <MoviePageSection movie={movie} />
+      <h2 className='h2-guru text-center uppercase mb-8 md:mb-12'>Recommended movies</h2>
+      <MediaGrid media={recommendedMovies.slice(0, 10)} />
     </Layout>
   );
 };

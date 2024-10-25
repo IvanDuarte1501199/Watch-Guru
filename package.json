@@ -22,7 +22,8 @@
     "react-router-dom": "^6.26.1",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
-    "tv-shows-recommendations": "file:"
+    "tv-shows-recommendations": "file:",
+    "use-debounce": "^10.0.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

@@ -74,7 +74,7 @@ const TvShows: React.FC = () => {
   };
 
   return (
-    <Layout className='mb-4 md:mb-8'>
+    <Layout className='mb-4 md:mb-8' searchType={MediaType.Tv}>
       <MainTitle>TV SHOWS</MainTitle>
       <GenresSection genres={tvGenres} />
 

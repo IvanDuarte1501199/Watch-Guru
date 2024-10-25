@@ -1,8 +1,10 @@
+import { PersonProps } from '@appTypes/person/personProps';
 import { MovieProps } from '../movies/movieProps';
 import { TvProps } from '../tv/tvProps';
 import { TmdbGenericResponse } from './tmdbResponse';
 
 export type GenericItemProps = TvProps | MovieProps;
+export type MultiGenericItemProps = TvProps | MovieProps | PersonProps;
 
 export interface GenericItemsState {
   tvAndMoviesItems: GenericItemProps[];

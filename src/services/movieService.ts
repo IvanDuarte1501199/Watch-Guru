@@ -126,3 +126,13 @@ export const getUpcomingMovies = async (page: number = 1) => {
     throw error;
   }
 };
+
+export const getRecommendatiosMoviesById = async (movieId: string) => {
+  try {
+    const response = await tmdbApi.get<TmdbGenericResponse>(`/movie/${movieId}/recommendations`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching recommendatios movies for movie ID: ${movieId}`, error);
+    throw error;
+  }
+};
