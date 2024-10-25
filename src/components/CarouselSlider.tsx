@@ -61,7 +61,7 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
           centerPadding: 0,
           slidesToShow: 2,
           slidesToScroll: 2,
-          centerMode: true,
+          centerMode: false,
           arrows: false,
           dots: false,
         },
