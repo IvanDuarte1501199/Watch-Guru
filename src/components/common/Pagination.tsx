@@ -38,17 +38,18 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, path }
 
     if (totalPages <= 1) return null;
 
-    if (currentPage > 1) {
-      pages.push(
-        <button
-          key="previous"
-          onClick={() => updateQuery(currentPage - 1)}
-          className='mx-1 p-guru mr-8 hover:font-bold'
-        >
-          Previous
-        </button>
-      );
-    }
+    pages.push(
+      <button
+        key="previous"
+        onClick={() => currentPage > 1 && updateQuery(currentPage - 1)}
+        className={`mx-1 p-guru mr-8 hover:font-bold ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+        disabled={currentPage === 1}
+      >
+        <img src="/chevron-left.svg" alt="Previous" className="w-4 h-4" />
+      </button>
+    );
+
+
 
     if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) {
@@ -78,17 +79,16 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, path }
       }
     }
 
-    if (currentPage < totalPages) {
-      pages.push(
-        <button
-          key="next"
-          onClick={() => updateQuery(currentPage + 1)}
-          className='mx-1 p-guru ml-8 hover:font-bold'
-        >
-          Next
-        </button>
-      );
-    }
+    pages.push(
+      <button
+        key="next"
+        onClick={() => currentPage < totalPages && updateQuery(currentPage + 1)}
+        className={`mx-1 p-guru ml-8 hover:font-bold ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
+        disabled={currentPage === totalPages}
+      >
+        <img src="/chevron-right.svg" alt="Next" className="w-4 h-4" />
+      </button>
+    );
 
     return pages;
   };

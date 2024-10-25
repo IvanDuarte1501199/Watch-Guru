@@ -8,17 +8,23 @@ import { fetchTrendingPeople } from '@slice/person/trendingPeopleSlice';
 const usePeople = () => {
   const dispatch = useAppDispatch();
 
-  const { people, loading, error } = useSelector(
+  const { response, loading, error } = useSelector(
     (state: RootState) => state.trendingPeople
   );
 
   useEffect(() => {
-    if (people.length === 0 && loading === false) {
+    if (response.results.length === 0 && loading === false) {
       dispatch(fetchTrendingPeople());
     }
-  }, [dispatch, people.length, loading]);
+  }, [dispatch, response.results.length, loading]);
 
-  return { people, loading, error };
+  return {
+    people: response.results,
+    loading,
+    error,
+    currentPage: response.page,
+    totalPages: response.total_pages,
+  };
 };
 
 export default usePeople;

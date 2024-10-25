@@ -1,7 +1,7 @@
 import { PersonProps } from '@appTypes/person/personProps';
 import { MovieProps } from '../movies/movieProps';
 import { TvProps } from '../tv/tvProps';
-import { TmdbGenericResponse } from './tmdbResponse';
+import { TmdbGenericResponse, PeoplePropsResponse } from './tmdbResponse';
 
 export type GenericItemProps = TvProps | MovieProps;
 export type MultiGenericItemProps = TvProps | MovieProps | PersonProps;
@@ -19,6 +19,12 @@ export interface GenericRandomItemState {
 }
 export interface MediaSliceState {
   response: TmdbGenericResponse;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface PeopleSliceState {
+  response: PeoplePropsResponse;
   loading: boolean;
   error: string | null;
 }

@@ -33,14 +33,14 @@ const PersonInfo: React.FC = () => {
       <MediaGrid media={displayMovies} />
       {moviesCredits.length > 10 && !showAllMovies && (
         <Button onClick={() => setShowAllMovies(true)} variant="secondary">
-          Ver Más
+          View more
         </Button>
       )}
       <h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Known for TV Shows</h2>
       <MediaGrid media={displayTvShows} />
       {tvCredits.length > 10 && !showAllTvShows && (
         <Button onClick={() => setShowAllTvShows(true)} variant="secondary">
-          Ver Más
+          View more
         </Button>
       )}
     </Layout>

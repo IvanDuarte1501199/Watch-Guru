@@ -12,7 +12,7 @@ const PersonSection = ({ person }: PersonSectionProps) => {
   };
 
   return (
-    <div className="relative bg-gray-900 text-white p-8">
+    <div className="relative bg-gray-900 text-white pt-4 md:pt-12">
       <div className="container mx-auto flex flex-col md:flex-row items-start gap-8">
         {/* Poster Image */}
         <div className="w-full md:w-1/3">
@@ -21,7 +21,7 @@ const PersonSection = ({ person }: PersonSectionProps) => {
               loading="lazy"
               src={`https://image.tmdb.org/t/p/w500${person.profile_path}`}
               alt={person.name}
-              className="rounded-lg shadow-lg"
+              className="rounded-lg shadow-lg w-full object-cover"
             />
           ) : (
             <div className="w-full h-96 bg-gray-800 flex items-center justify-center rounded-lg">
@@ -31,10 +31,10 @@ const PersonSection = ({ person }: PersonSectionProps) => {
         </div>
 
         {/* Person Details */}
-        <div className="w-full md:w-2/3">
+        <div className="w-full md:w-2/3 pb-8 md:pb--">
           <h1 className="text-4xl font-bold mb-4">{person?.name}</h1>
 
-          <p className="p-guru mb-6">{person?.biography || "Biography not available."}</p>
+          {person?.biography && <p className="p-guru mb-6">{person?.biography}</p>}
 
           {/* Birthdate and Place of Birth */}
           {person.birthday && person.place_of_birth && <div className="mb-4">

@@ -13,6 +13,7 @@ import useGenres from '@hooks/useGenres';
 import { MediaType } from '@appTypes/common/MediaType';
 import useMediaByGenreId from '@hooks/useMediaByGenreId';
 import usePeople from '@hooks/person/usePeople';
+import FeaturedPeopleSection from '@sections/person/FeaturedPeopleSection';
 
 const Home: React.FC = () => {
   const {
@@ -31,11 +32,8 @@ const Home: React.FC = () => {
     media: upcomingMovies,
   } = useMovies({ movieType: MovieType.Upcoming });
 
-  const { people } = usePeople();
+  const { people: featuredPeople } = usePeople();
 
-  useEffect(() => {
-    console.log('people', people);
-  }, [people]);
   const { tvGenres, moviesGenres } = useGenres();
 
   const [randomTvShowsGenres, setRandomTvShowsGenres] = useState<any[]>([]);
@@ -105,6 +103,9 @@ const Home: React.FC = () => {
         />
       )}
 
+      {/* Featured People part 1*/}
+      <FeaturedPeopleSection people={featuredPeople.slice(0, (featuredPeople.length / 2))} />
+
       {/* trending tv shows */}
       {trendingTv && trendingTv.length > 0 && (
         <GenericList title="Trending tv shows" genericList={trendingTv} showViewMore href="/tv-shows/trending" />
@@ -118,6 +119,9 @@ const Home: React.FC = () => {
           showViewMore href={`/genres/${randomTvShowsGenres[0]?.id}`}
         />
       )}
+
+      {/* Featured People part 2*/}
+      <FeaturedPeopleSection people={featuredPeople.slice((featuredPeople.length / 2), featuredPeople.length)} />
 
       {/* upcoming movies */}
       {upcomingMovies && upcomingMovies.length > 0 && (

@@ -1,6 +1,7 @@
 import { MovieProps } from '@appTypes/movies/movieProps';
 import { TvProps } from '@appTypes/tv/tvProps';
-import { GenericItemProps } from './genericItemProps';
+import { GenericItemProps, MultiGenericItemProps } from './genericItemProps';
+import { PersonProps } from '@appTypes/person/personProps';
 
 export interface TmdbMovieResponse {
   page: number;
@@ -22,3 +23,11 @@ export interface TmdbGenericResponse {
   total_results: number;
   total_pages: number;
 }
+
+export interface PeoplePropsResponse {
+  page: number;
+  results: PersonProps[];
+  total_results: number;
+  total_pages: number;
+}
+

@@ -24,12 +24,18 @@ const PrevArrow: React.FC<SliderArrowProps> = ({ className, onClick }) => (
 
 interface CarouselSliderProps {
   maxItems?: number;
+  slideItems?: number;
+  mobileMaxItems?: number;
+  mobileSlideItems?: number;
   children?: React.ReactNode;
 }
 
 const CarouselSlider: React.FC<CarouselSliderProps> = ({
   maxItems = 5,
+  slideItems = 1,
   children,
+  mobileMaxItems = 1,
+  mobileSlideItems = 1,
 }) => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const slider = useRef<any>(null);
@@ -43,7 +49,8 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
     arrows: true,
     speed: 500,
     slidesToShow: maxItems,
-    slidesToScroll: 1,
+    slidesToScroll: slideItems,
+
     afterChange: (current: number) => setCurrentSlide(current),
     infinite: false,
     responsive: [
@@ -52,7 +59,6 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          arrows: true,
         },
       },
       {
@@ -70,8 +76,8 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
         breakpoint: 480,
         settings: {
           centerPadding: 0,
-          slidesToShow: 1,
-          slidesToScroll: 1,
+          slidesToShow: mobileMaxItems,
+          slidesToScroll: mobileSlideItems,
           arrows: false,
           dots: false,
         },
@@ -87,5 +93,4 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
     </section>
   );
 };
-
 export default CarouselSlider;

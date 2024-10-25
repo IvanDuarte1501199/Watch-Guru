@@ -1,15 +1,14 @@
-import { PersonProps } from '@appTypes/person/personProps';
+import { PeopleSliceState } from '@appTypes/common/genericItemProps';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getTrendingPeople } from '@services/personService';
 
-interface PeopleState {
-  people: PersonProps[];
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: PeopleState = {
-  people: [],
+const initialState: PeopleSliceState = {
+  response: {
+    page: 0,
+    results: [],
+    total_results: 0,
+    total_pages: 0
+  },
   loading: false,
   error: null,
 };
@@ -34,7 +33,7 @@ const trendingPeopleSlice = createSlice({
       })
       .addCase(fetchTrendingPeople.fulfilled, (state, action) => {
         state.loading = false;
-        state.people = action.payload;
+        state.response = action.payload;
       })
       .addCase(fetchTrendingPeople.rejected, (state, action) => {
         state.loading = false;
