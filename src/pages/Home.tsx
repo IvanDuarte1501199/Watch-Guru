@@ -14,6 +14,7 @@ import { MediaType } from '@appTypes/common/MediaType';
 import useMediaByGenreId from '@hooks/useMediaByGenreId';
 import usePeople from '@hooks/person/usePeople';
 import FeaturedPeopleSection from '@sections/person/FeaturedPeopleSection';
+import { PeopleTypes } from '@appTypes/person/peopleTypes';
 
 const Home: React.FC = () => {
   const {
@@ -32,7 +33,7 @@ const Home: React.FC = () => {
     media: upcomingMovies,
   } = useMovies({ movieType: MovieType.Upcoming });
 
-  const { people: featuredPeople } = usePeople();
+  const { people: featuredPeople } = usePeople({ peopleType: PeopleTypes.Trending });
 
   const { tvGenres, moviesGenres } = useGenres();
 
