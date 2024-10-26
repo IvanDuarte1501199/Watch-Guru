@@ -8,9 +8,9 @@ interface MediaGridProps {
 const MediaGrid = ({ media }: MediaGridProps) => {
 
   return (
-    <span className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6 lg:mb-12'>
-      {media.map((media) => (
-        <Card key={media.id} {...media} />
+    <span className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 mb-6 lg:mb-12'>
+      {media.map((media, idx) => (
+        <Card key={`${media.id} - ${idx}`} {...media} />
       ))}
     </span>
   );

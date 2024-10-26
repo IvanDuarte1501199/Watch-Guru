@@ -56,7 +56,7 @@ export const Card: React.FC<CardProps> = ({
                   } text-white text-center p-4`}
                 title={title || name}
               >
-                <h2 className="text-lg max-w-56 font-bold">{title || name}</h2>
+                <h2 className="text-lg max-w-32 md:max-w-56 font-bold">{title || name}</h2>
               </div>
             )}
           </a>
