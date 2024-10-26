@@ -1,12 +1,16 @@
 import { TvProps } from "@appTypes/tv/tvProps";
 import { useSeasonEpisodes } from "@hooks/tv/useSeasonEpisodes";
 import SeasonAccordion from "./TvShowAccordionSeasons";
+import Credits from "@components/Credits";
+import { CreditsProps } from "@appTypes/credits/credits";
+import GenresList from "@components/GenreList";
 
 interface TvShowSectionProps {
   tvShow: TvProps;
+  credits?: CreditsProps
 }
 
-const TvShowSection = ({ tvShow }: TvShowSectionProps) => {
+const TvShowSection = ({ tvShow, credits }: TvShowSectionProps) => {
   const {
     allEpisodes,
     loading: loadingEpisodes,
@@ -32,27 +36,15 @@ const TvShowSection = ({ tvShow }: TvShowSectionProps) => {
             <h1 className="text-4xl font-bold mb-4">{tvShow?.name}</h1>
             <p className="text-lg mb-6">{tvShow?.overview}</p>
             {/* Genres */}
-            {tvShow?.genres && tvShow.genres.length > 0 && (
-              <div className="mb-6">
-                <h3 className="text-xl font-semibold mb-2">Genres</h3>
-                <div className="flex flex-wrap gap-2">
-                  {tvShow.genres.map((genre: any) => (
-                    <span
-                      key={genre.id}
-                      className="bg-green-600 px-3 py-1 rounded-full text-sm font-semibold"
-                    >
-                      {genre.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
+            {tvShow?.genres && <GenresList genres={tvShow.genres} />}
+
+            <Credits credits={credits} />
           </div>
         </div>
 
         {/* Seasons and Episodes */}
         <div className="mt-10">
-          <h3 className="text-2xl font-semibold mb-4">Seasons and Episodes</h3>
+          <h3 className="text-2xl font-semibold mb-4">Seasons and Episodes ({tvShow?.seasons.length} seasons)</h3>
           {loadingEpisodes ? (
             <p>Loading all episodes...</p>
           ) : episodesError ? (

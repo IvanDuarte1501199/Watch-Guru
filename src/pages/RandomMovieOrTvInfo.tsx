@@ -1,4 +1,3 @@
-// RandomMovieOrTvInfo.tsx
 import { MediaType } from '@appTypes/common/MediaType';
 import { MovieProps } from '@appTypes/movies/movieProps';
 import { TvProps } from '@appTypes/tv/tvProps';
@@ -14,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 const RandomMovieOrTvInfo: React.FC = () => {
   const navigate = useNavigate();
   const type: MediaType = window.location.pathname.includes('random/movie') ? MediaType.Movie : MediaType.Tv;
-  const { randomItem: randomTvOrMovie, recommendedItems, loading: loadingRandom, error: randomError } = useRandomMovieOrTv(type);
+  const { randomItem: randomTvOrMovie, recommendedItems, itemsCredits, loading: loadingRandom, error: randomError } = useRandomMovieOrTv(type, true, true);
   const [showAllRecommendedItems, setShowAllRecommendedItems] = useState(false);
 
   useEffect(() => {
@@ -30,10 +29,10 @@ const RandomMovieOrTvInfo: React.FC = () => {
   return (
     <Layout>
       {!isLoading && randomTvOrMovie && type === MediaType.Movie && (
-        <MoviePageSection movie={randomTvOrMovie as MovieProps} />
+        <MoviePageSection movie={randomTvOrMovie as MovieProps} credits={itemsCredits} />
       )}
       {!isLoading && randomTvOrMovie && type === MediaType.Tv && (
-        <TvShowPageSection tvShow={randomTvOrMovie as TvProps} />
+        <TvShowPageSection tvShow={randomTvOrMovie as TvProps} credits={itemsCredits} />
       )}
       {
         displayRecommendedItems && displayRecommendedItems.length > 0 && <><h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Recommended similars</h2>

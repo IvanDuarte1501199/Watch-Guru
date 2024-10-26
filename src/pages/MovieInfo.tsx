@@ -17,30 +17,32 @@ const MovieInfo: React.FC = () => {
     }
   }, [id, navigate]);
 
-  const { movie, recommendedMovies, loading, error } = useMovie(id!, true);
-  const displayRecommendedMovies = showAllRecommendedMovies ? recommendedMovies : recommendedMovies.slice(0, 10);
+  const { movie, movieCredits, recommendedMovies, loading, error } = useMovie(id!, true, true);
 
   useEffect(() => {
     if (error) {
+      /* this should redirect to 500 page */
       navigate('/404');
     }
   }, [error, navigate]);
 
-  useEffect(() => { console.log('movie', movie) }, [movie])
+  const displayRecommendedMovies = showAllRecommendedMovies ? recommendedMovies : recommendedMovies.slice(0, 10);
 
-  /* improve loading and create 505 page */
-  if (loading) return <p className="text-center">Loading movie details...</p>;
   return (
     <Layout>
-      <MoviePageSection movie={movie} />
-      {
-        displayRecommendedMovies && displayRecommendedMovies.length > 0 && <><h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Recommended similars movies</h2>
-          <MediaGrid media={displayRecommendedMovies} />
-          {recommendedMovies.length > 10 && !showAllRecommendedMovies && (
-            <Button onClick={() => setShowAllRecommendedMovies(true)} variant="secondary">
-              View more
-            </Button>
-          )}</>
+      {loading ? <></> :
+        <>
+          <MoviePageSection movie={movie} credits={movieCredits} />
+          {
+            displayRecommendedMovies && displayRecommendedMovies.length > 0 && <><h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Recommended similars movies</h2>
+              <MediaGrid media={displayRecommendedMovies} />
+              {recommendedMovies.length > 10 && !showAllRecommendedMovies && (
+                <Button onClick={() => setShowAllRecommendedMovies(true)} variant="secondary">
+                  View more
+                </Button>
+              )}</>
+          }
+        </>
       }
     </Layout>
   );

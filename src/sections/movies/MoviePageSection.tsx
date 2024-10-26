@@ -1,15 +1,18 @@
+import { CreditsProps } from "@appTypes/credits/credits";
 import { MovieProps } from "@appTypes/movies/movieProps";
+import Credits from "@components/Credits";
+import GenresList from "@components/GenreList";
 
 interface MoviePageSectionProps {
   movie: MovieProps
+  credits?: CreditsProps
 }
 
-const MoviePageSection = ({ movie }: MoviePageSectionProps) => {
-
+const MoviePageSection = ({ movie, credits }: MoviePageSectionProps) => {
   return (
     <section className="relative">
       <div className="container mx-auto px-4 pt-4 md:pt-12 pb-8 md:pb-12 text-white">
-        <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col md:flex-row items-start">
           {movie?.poster_path && (
             <img
               loading="lazy"
@@ -28,25 +31,13 @@ const MoviePageSection = ({ movie }: MoviePageSectionProps) => {
               </p>
             )}
 
-            <p className="text-lg mb-6">{movie?.overview}</p>
+            <p className="text-lg mb-4">{movie?.overview}</p>
 
-            {movie?.genres && movie.genres.length > 0 && (
-              <div className="mb-6">
-                <h3 className="text-xl font-semibold mb-2">Genres</h3>
-                <div className="flex flex-wrap gap-2">
-                  {movie.genres.map((genre: any) => (
-                    <span
-                      key={genre.id}
-                      className="bg-blue-600 px-3 py-1 rounded-full text-sm font-semibold"
-                    >
-                      {genre.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
 
-            <div className="flex flex-col md:flex-row md:items-center gap-4">
+            {movie?.genres && <GenresList genres={movie.genres} />}
+
+
+            <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
               {movie?.release_date && <p className="text-lg">
                 <strong>Release Date:</strong> {new Date(movie.release_date).toLocaleDateString()}
               </p>}
@@ -57,6 +48,10 @@ const MoviePageSection = ({ movie }: MoviePageSectionProps) => {
                 <strong>Runtime:</strong> {movie?.runtime} minutes
               </p>
             </div>
+
+
+            <Credits credits={credits} />
+
           </div>
         </div>
       </div>
