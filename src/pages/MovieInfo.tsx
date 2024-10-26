@@ -26,6 +26,8 @@ const MovieInfo: React.FC = () => {
     }
   }, [error, navigate]);
 
+  useEffect(() => { console.log('movie', movie) }, [movie])
+
   /* improve loading and create 505 page */
   if (loading) return <p className="text-center">Loading movie details...</p>;
   return (

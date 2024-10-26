@@ -12,7 +12,7 @@ const PersonSection = ({ person }: PersonSectionProps) => {
   };
 
   return (
-    <div className="relative bg-gray-900 text-white pt-4 md:pt-12">
+    <div className="relative bg-gray-900 text-white pt-4 md:pt-12 pb-8 md:pb-12">
       <div className="container mx-auto flex flex-col md:flex-row items-start gap-8">
         {/* Poster Image */}
         <div className="w-full md:w-1/3">

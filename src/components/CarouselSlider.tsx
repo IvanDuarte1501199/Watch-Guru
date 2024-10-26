@@ -1,26 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Slider from 'react-slick';
 
-/* TODO: add custom arrows and dots */
-/* import IconArrowRight from '/icon-arrow-right.svg';
-import IconArrowLeft from '/icon-arrow-left.svg';
+import IconArrowRight from '/chevron-right.svg';
+import IconArrowLeft from '/chevron-left.svg';
 
 interface SliderArrowProps {
-    onClick?: () => void;
-    className?: string;
+  onClick?: () => void;
+  className?: string;
 }
 
 const NextArrow: React.FC<SliderArrowProps> = ({ className, onClick }) => (
-    <div className={`${className} absolute right-0 z-10`} onClick={onClick}>
-        <img src={IconArrowRight} alt="Next slide" />
-    </div>
+  <div className={`${className} absolute right-0 z-10`} onClick={onClick}>
+    <img src={IconArrowRight} alt="Next slide" />
+  </div>
 );
 
 const PrevArrow: React.FC<SliderArrowProps> = ({ className, onClick }) => (
-    <div className={`${className} absolute left-0 z-10`} onClick={onClick}>
-        <img src={IconArrowLeft} alt="Previous slide" />
-    </div>
-); */
+  <div className={`${className} absolute left-0 z-10`} onClick={onClick}>
+    <img src={IconArrowLeft} alt="Previous slide" />
+  </div>
+);
 
 interface CarouselSliderProps {
   maxItems?: number;
@@ -28,6 +27,7 @@ interface CarouselSliderProps {
   mobileMaxItems?: number;
   mobileSlideItems?: number;
   children?: React.ReactNode;
+  infinite?: boolean;
 }
 
 const CarouselSlider: React.FC<CarouselSliderProps> = ({
@@ -36,6 +36,7 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
   children,
   mobileMaxItems = 1,
   mobileSlideItems = 1,
+  infinite = false
 }) => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const slider = useRef<any>(null);
@@ -50,9 +51,10 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
     speed: 500,
     slidesToShow: maxItems,
     slidesToScroll: slideItems,
-
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
     afterChange: (current: number) => setCurrentSlide(current),
-    infinite: false,
+    infinite: infinite,
     responsive: [
       {
         breakpoint: 1024,

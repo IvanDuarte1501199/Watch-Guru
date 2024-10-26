@@ -4,6 +4,7 @@ import { TmdbGenericResponse } from '@appTypes/common/tmdbResponse';
 import { getMovieById } from './movieService';
 import { getTvById } from './tvService';
 import { GenericItemProps } from '@appTypes/common/genericItemProps';
+import { MediaType } from '@appTypes/common/MediaType';
 
 export const getTrendingAll = async (page: number = 1, time: TimeWindow = 'week') => {
   try {
@@ -19,7 +20,7 @@ export const getTrendingAll = async (page: number = 1, time: TimeWindow = 'week'
   }
 };
 
-export const getRandomByType = async (type: 'movie' | 'tv') => {
+export const getRandomByType = async (type: MediaType) => {
   const page = Math.floor(Math.random() * 10) + 1;
   try {
     const response = await tmdbApi.get(`/discover/${type}`, {
@@ -32,8 +33,10 @@ export const getRandomByType = async (type: 'movie' | 'tv') => {
     let data: GenericItemProps;
     if (type === 'movie') {
       data = await getMovieById(randomDataId)
-    } else {
+    } else if (type) {
       data = await getTvById(randomDataId)
+    } else {
+      throw new Error('Invalid type');
     }
     return data;
   } catch (error) {

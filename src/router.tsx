@@ -28,6 +28,7 @@ const AppRouter: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={true ? <Home /> : <SandBox />} />
+        <Route path="/404" element={<PageNotFound />} />
         <Route path="/:mediaType" element={<MediaBy />} />
         <Route path="/movies/:movieType" element={<MoviesBy />} />
         <Route path="/tv-shows/:tvShowType" element={<TvShowsBy />} />

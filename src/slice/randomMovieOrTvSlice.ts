@@ -1,4 +1,5 @@
 import { GenericItemProps, GenericRandomItemState } from '@appTypes/common/genericItemProps';
+import { MediaType } from '@appTypes/common/MediaType';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getRandomByType } from '@services/tmdbService';
 
@@ -10,9 +11,8 @@ const initialState: GenericRandomItemState = {
 
 export const fetchRandomByType = createAsyncThunk(
   'random/fetchRandomByType',
-  async (type: 'movie' | 'tv', { rejectWithValue }) => {
+  async (type: MediaType, { rejectWithValue }) => {
     try {
-
       const randomItem = await getRandomByType(type);
       return randomItem;
     } catch (error) {

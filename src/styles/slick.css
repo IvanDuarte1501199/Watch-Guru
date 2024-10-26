@@ -43,6 +43,32 @@
   }
 }
 
+
 .slick-dots {
   bottom: -40px !important;
+}
+
+.slick-arrow.slick-next {
+  right: -9px !important;
+
+  &::before {
+    content: '';
+  }
+
+  img {
+    min-width: 64px;
+  }
+}
+
+.slick-arrow.slick-prev {
+  left: -64px !important;
+
+  &::before {
+    content: '';
+
+  }
+
+  img {
+    min-width: 64px;
+  }
 }
