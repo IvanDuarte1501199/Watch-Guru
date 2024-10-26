@@ -20,7 +20,6 @@ const usePeople = ({ peopleType, keywordId, page = 1 }: UsePeopleParams) => {
     const fetchPeople = () => {
       switch (peopleType) {
         case PeopleTypes.Trending:
-          console.log(trendingPeople);
           if (trendingPeople.response.results.length === 0 || page !== trendingPeople.response.page) {
             dispatch(fetchTrendingPeople());
           }

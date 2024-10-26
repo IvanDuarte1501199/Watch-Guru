@@ -7,7 +7,6 @@ type CreditsPropsComponent = {
 };
 
 const Credits: React.FC<CreditsPropsComponent> = ({ credits }) => {
-  console.log(credits);
   if (!credits || !credits.cast || credits.cast.length === 0) {
     return null;
   }
