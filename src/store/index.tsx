@@ -12,7 +12,6 @@ import topRatedTvReducer from '@slice/tv/topRatedTvSlice';
 import trendingTvReducer from '@slice/tv/trendingTvSlice';
 import trendingAllReducer from '@slice/trendingSlice';
 import DataByGenreIdReducer from '@slice/genres/DataByGenreIdSlice';
-import RandomMovieOrTvInfoReducer from '@slice/randomMovieOrTvSlice';
 import moviesByKeywordsReducer from '@slice/movies/moviesByKeywordsSlice';
 import trendingPeopleReducer from '@slice/person/trendingPeopleSlice';
 
@@ -31,7 +30,6 @@ export const store = configureStore({
     trendingTv: trendingTvReducer,
     trendingAll: trendingAllReducer,
     mediaByCategory: DataByGenreIdReducer,
-    RandomMovieOrTvInfo: RandomMovieOrTvInfoReducer,
     moviesByKeywords: moviesByKeywordsReducer,
     trendingPeople: trendingPeopleReducer,
   },
