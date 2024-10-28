@@ -1,4 +1,5 @@
 import { MediaSliceState } from "@appTypes/common/genericItemProps";
+import { MediaType } from "@appTypes/common/MediaType";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getDataByKeyword } from "@services/genreService";
 
@@ -16,15 +17,9 @@ const initialState: MediaSliceState = {
 
 export const fetchMoviesByKeyword = createAsyncThunk(
   'moviesByKeyword/fetchMoviesByKeyword',
-  async (keywordId: string, { getState, rejectWithValue }) => {
-    const state = getState() as { moviesByKeywords: MediaSliceState };
-
-    if (state.moviesByKeywords.response.results.length > 0) {
-      return state.moviesByKeywords.response;
-    }
-
+  async (keywordId: string, { rejectWithValue }) => {
     try {
-      const response = await getDataByKeyword('movie', keywordId);
+      const response = await getDataByKeyword(MediaType.Movie, keywordId);
       return response;
     } catch (error) {
       return rejectWithValue('Error fetching movies by keyword');

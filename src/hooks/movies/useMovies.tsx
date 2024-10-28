@@ -65,12 +65,18 @@ const useMovies = ({ movieType, keywordId, page = 1 }: UseMoviesParams) => {
     };
 
     fetchMovies();
-  }, [dispatch, movieType, page, keywordId, popularMovies,
+  }, [
+    dispatch,
+    movieType,
+    page,
+    keywordId,
+    popularMovies,
     nowPlayingMovies,
     topRatedMovies,
     upcomingMovies,
     trendingMovies,
-    moviesByKeyword]);
+    moviesByKeyword,
+  ]);
 
   const getCurrentMovieState = () => {
     switch (movieType) {

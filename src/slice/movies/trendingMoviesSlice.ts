@@ -16,13 +16,7 @@ const initialState: MediaSliceState = {
 
 export const fetchTrendingMovies = createAsyncThunk(
   'trendingMovies/fetchTrendingMovies',
-  async (page: number, { getState, rejectWithValue }) => {
-    const state = getState() as { trendingMovies: MediaSliceState };
-
-    if (state.trendingMovies.response.results.length > 0) {
-      return state.trendingMovies.response;
-    }
-
+  async (page: number, { rejectWithValue }) => {
     try {
       const response = await getTrendingMovies(page);
       return response;

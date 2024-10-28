@@ -16,7 +16,7 @@ export function InLineTitle({
   return (
     <header className="flex pb-4 justify-between items-center">
       <h2 className="h2-guru">{label}</h2>
-      {showViewMore && <a className="text-default underline text-xs md:text-lg" href={href}>{viewMoreText} &gt;</a>}
+      {showViewMore && <a className="text-default underline text-xs md:text-lg hover:text-secondary" href={href}>{viewMoreText} &gt;</a>}
     </header>
   );
 }

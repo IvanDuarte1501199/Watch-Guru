@@ -4,7 +4,7 @@ import { TmdbGenericResponse, TmdbMovieResponse } from '@appTypes/common/tmdbRes
 import { MediaType } from '@appTypes/common/MediaType';
 import { CreditsProps } from '@appTypes/credits/credits';
 
-export const getTrendingMovies = async (page, time: TimeWindow = 'week') => {
+export const getTrendingMovies = async (page: number = 1, time: TimeWindow = 'week') => {
   try {
     const response = await tmdbApi.get<TmdbMovieResponse>(
       `/trending/movie/${time}`,

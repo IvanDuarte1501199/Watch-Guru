@@ -28,9 +28,9 @@ export interface TvShowsState {
 }
 
 export enum TvShowType {
-  AiringToday = 'airingToday',
-  OnTheAir = 'onTheAir',
+  AiringToday = 'airing-Today',
+  OnTheAir = 'on-The-Air',
   Popular = 'popular',
-  TopRated = 'topRated',
+  TopRated = 'top-Rated',
   Trending = 'trending',
 }

@@ -15,13 +15,7 @@ const initialState: MediaSliceState = {
 
 export const fetchTopRatedMovies = createAsyncThunk(
   'topRatedMovies/fetchTopRatedMovies',
-  async (page: number, { getState, rejectWithValue }) => {
-    const state = getState() as { topRatedMovies: MediaSliceState };
-
-    if (state.topRatedMovies.response.results.length > 0) {
-      return state.topRatedMovies.response;
-    }
-
+  async (page: number, { rejectWithValue }) => {
     try {
       const response = await getTopRatedMovies(page);
       return response;
