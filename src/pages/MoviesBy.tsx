@@ -25,15 +25,27 @@ const MoviesBy: React.FC = () => {
 
   return (
     <Layout>
-      {loading ? <></> : (media && media.length > 0 && <><h1 className='h1-guru uppercase text-center pt-4 md:pt-8 pb-4 md:pb-8'>{movieType?.replace('-', ' ')} Movies</h1>
-        <section className='mb-4 md:mb-8'>
-          <MediaGrid media={media} />
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            path={`/movies/${movieType}`}
-          />
-        </section></>)}
+      {loading ? (
+        <p className="text-center text-lg py-8">Loading...</p>
+      ) : error ? (
+        <p className="text-center text-lg text-red-500 py-8">An error occurred. Please try again later.</p>
+      ) : media && media.length > 0 ? (
+        <>
+          <h1 className="h1-guru uppercase text-center pt-4 md:pt-8 pb-4 md:pb-8">
+            {movieType?.replace('-', ' ')} Movies
+          </h1>
+          <section className="mb-4 md:mb-8">
+            <MediaGrid media={media} />
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              path={`/movies/${movieType}`}
+            />
+          </section>
+        </>
+      ) : (
+        <p className="text-center text-lg py-8">No movies available at the moment.</p>
+      )}
     </Layout>
   );
 };

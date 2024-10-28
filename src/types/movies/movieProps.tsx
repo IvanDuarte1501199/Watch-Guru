@@ -30,8 +30,8 @@ export interface MoviesState {
 
 export enum MovieType {
   Popular = 'popular',
-  NowPlaying = 'nowPlaying',
-  TopRated = 'topRated',
+  NowPlaying = 'now-Playing',
+  TopRated = 'top-Rated',
   Upcoming = 'upcoming',
   Trending = 'trending',
   ByCategory = 'byCategory',
