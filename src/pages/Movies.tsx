@@ -41,12 +41,6 @@ const Movies: React.FC = () => {
       keywords: MovieAndTvKeywords.MARVEL,
     }); */
 
-  useEffect(() => {
-    if (moviesGenres) {
-      console.log('moviesGenres', moviesGenres);
-    }
-  }, [moviesGenres]);
-
   const getGenreImageUrl = (genreName: string) => {
     const formattedGenreName = genreName.toLowerCase().replace(/\s+/g, '-');
     return `/genres/${formattedGenreName}.jpg`;
