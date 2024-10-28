@@ -15,7 +15,7 @@ const MovieInfo: React.FC = () => {
 
   useEffect(() => {
     if (!id) {
-      navigate('/404');
+      navigate('/500');
     }
   }, [id, navigate]);
 
@@ -23,8 +23,7 @@ const MovieInfo: React.FC = () => {
 
   useEffect(() => {
     if (error) {
-      /* TODO: this should redirect to 500 page */
-      navigate('/404');
+      navigate('/500');
     }
   }, [error, navigate]);
 

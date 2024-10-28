@@ -15,7 +15,7 @@ const TvShowInfo: React.FC = () => {
 
   useEffect(() => {
     if (!id) {
-      navigate('/404');
+      navigate('/500');
     }
   }, [id, navigate]);
 
@@ -29,8 +29,7 @@ const TvShowInfo: React.FC = () => {
 
   useEffect(() => {
     if (error) {
-      /* this should redirect to 500 page */
-      navigate('/404');
+      navigate('/500');
     }
   }, [error, navigate]);
 

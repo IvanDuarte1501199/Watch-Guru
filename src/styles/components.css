@@ -10,7 +10,7 @@
 .bgtop {
   position: absolute;
   left: 50%;
-  top: 0;
+  top: 70px;
   width: 100vw;
   height: 70vh;
   transform: translateX(-50%);

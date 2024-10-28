@@ -18,7 +18,7 @@ const RandomMovieOrTvInfo: React.FC = () => {
 
   useEffect(() => {
     if (randomError) {
-      navigate('/404');
+      navigate('/500');
     }
   }, [randomError, navigate]);
 
