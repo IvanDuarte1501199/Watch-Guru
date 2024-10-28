@@ -24,17 +24,17 @@ const SearchItem: React.FC<any> = ({ item }) => {
       const { poster_path } = item as MovieProps | TvProps;
       return poster_path
         ? `https://image.tmdb.org/t/p/w500${poster_path}`
-        : '/path/to/default-movie-tv-image.jpg';
+        : '/movie-primary.svg';
     }
 
     if (item.media_type === MediaType.Person) {
       const { profile_path } = item as PersonProps;
       return profile_path
         ? `https://image.tmdb.org/t/p/w500${profile_path}`
-        : '/path/to/default-person-silhouette.jpg';
+        : '/user.svg';
     }
 
-    return '/path/to/default-fallback-image.jpg';
+    return '/movie.svg';
   };
 
   const getItemLink = () => {
