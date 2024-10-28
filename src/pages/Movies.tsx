@@ -41,33 +41,15 @@ const Movies: React.FC = () => {
       keywords: MovieAndTvKeywords.MARVEL,
     }); */
 
-
-  /* this is a temporally solution to get the genre images */
-  const genreColorMap: { [key: string]: string } = {
-    Action: 'ff0000',
-    Adventure: '00ff00',
-    Animation: 'ff6600',
-    Comedy: 'ffff00',
-    Crime: '8b0000',
-    Documentary: '2f4f4f',
-    Drama: '0000ff',
-    Family: 'ffb6c1',
-    Fantasy: 'dda0dd',
-    History: 'cd853f',
-    Horror: '000000',
-    Music: 'ff1493',
-    Mystery: '4b0082',
-    Romance: 'ff69b4',
-    'Science Fiction': '4682b4',
-    'TV Movie': 'ffc0cb',
-    Thriller: '708090',
-    War: 'a52a2a',
-    Western: 'deb887',
-  };
+  useEffect(() => {
+    if (moviesGenres) {
+      console.log('moviesGenres', moviesGenres);
+    }
+  }, [moviesGenres]);
 
   const getGenreImageUrl = (genreName: string) => {
-    const color = genreColorMap[genreName] || 'cccccc';
-    return `https://fakeimg.pl/200x200/${color}/?text=%20`;
+    const formattedGenreName = genreName.toLowerCase().replace(/\s+/g, '-');
+    return `/genres/${formattedGenreName}.jpg`;
   };
 
   return (

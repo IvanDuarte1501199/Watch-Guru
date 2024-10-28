@@ -21,7 +21,7 @@ const GenreCard = ({ id, name, image, path }: GenreCardProps) => {
       <Link
         key={id}
         to={path}
-        className={`relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 transform ${isHovered ? 'scale-105' : ''}`}
+        className='relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 transform'
       >
         <img
           loading="lazy"
@@ -30,10 +30,10 @@ const GenreCard = ({ id, name, image, path }: GenreCardProps) => {
           className="w-full h-full object-cover transition-transform duration-300"
         />
         <div
-          className={`absolute inset-0 bg-black transition-opacity duration-300 ${isHovered ? 'opacity-0' : 'opacity-50'}`}
+          className={`absolute inset-0 bg-black transition-opacity duration-300 ${isHovered ? 'opacity-60' : 'opacity-30'}`}
         ></div>
-        <div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-50">
-          <h3 className={`p-guru text-center transition-transform duration-300 transform ${isHovered ? 'scale-125' : ''} `}>
+        <div className="absolute inset-0 flex items-center justify-center text-white ">
+          <h3 className={`p-guru text-xl text-center transition-transform duration-300 transform ${isHovered ? 'scale-125' : ''} `}>
             {name}
           </h3>
         </div>
