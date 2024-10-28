@@ -4,18 +4,28 @@ import SeasonAccordion from "./TvShowAccordionSeasons";
 import Credits from "@components/Credits";
 import { CreditsProps } from "@appTypes/credits/credits";
 import GenresList from "@components/GenreList";
+import { useEffect, useState } from "react";
 
 interface TvShowSectionProps {
   tvShow: TvProps;
-  credits?: CreditsProps
+  credits?: CreditsProps;
+  showSeasons?: boolean;
 }
 
-const TvShowSection = ({ tvShow, credits }: TvShowSectionProps) => {
+const TvShowSection = ({ tvShow, credits, showSeasons = true }: TvShowSectionProps) => {
+  const [shouldFetchEpisodes, setShouldFetchEpisodes] = useState(showSeasons);
+
+  // Si showSeasons cambia, actualizar el estado
+  useEffect(() => {
+    setShouldFetchEpisodes(showSeasons);
+  }, [showSeasons]);
+
   const {
     allEpisodes,
     loading: loadingEpisodes,
     error: episodesError,
-  } = useSeasonEpisodes(tvShow?.id as string, tvShow?.seasons || []);
+  } = shouldFetchEpisodes ? useSeasonEpisodes(tvShow?.id as string, tvShow?.seasons || []) : { allEpisodes: [], loading: false, error: null };
+
 
   return (
     <div className="relative">
@@ -43,7 +53,7 @@ const TvShowSection = ({ tvShow, credits }: TvShowSectionProps) => {
         </div>
 
         {/* Seasons and Episodes */}
-        <div className="mt-10">
+        {showSeasons && <div className="mt-10">
           <h3 className="text-2xl font-semibold mb-4">Seasons and Episodes ({tvShow?.seasons.length} seasons)</h3>
           {loadingEpisodes ? (
             <p>Loading all episodes...</p>
@@ -55,7 +65,7 @@ const TvShowSection = ({ tvShow, credits }: TvShowSectionProps) => {
               allEpisodes={allEpisodes}
             />
           )}
-        </div>
+        </div>}
       </div>
     </div>
   );

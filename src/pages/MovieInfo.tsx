@@ -1,7 +1,9 @@
+import { MediaType } from '@appTypes/common/MediaType';
+import { MovieProps } from '@appTypes/movies/movieProps';
 import Button from '@components/common/Button';
 import { Layout } from '@components/Layout';
 import MediaGrid from '@components/MediaGrid';
-import { useMovie } from '@hooks/movies/useMovie';
+import { useMedia } from '@hooks/useMedia';
 import MoviePageSection from '@sections/movies/MoviePageSection';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -17,11 +19,11 @@ const MovieInfo: React.FC = () => {
     }
   }, [id, navigate]);
 
-  const { movie, movieCredits, recommendedMovies, loading, error } = useMovie(id!, true, true);
+  const { media: movie, mediaCredits: movieCredits, recommendedItems: recommendedMovies, loading, error } = useMedia({ type: MediaType.Movie, id: id!, getCredits: true, getRecommended: true });
 
   useEffect(() => {
     if (error) {
-      /* this should redirect to 500 page */
+      /* TODO: this should redirect to 500 page */
       navigate('/404');
     }
   }, [error, navigate]);
@@ -32,7 +34,7 @@ const MovieInfo: React.FC = () => {
     <Layout>
       {loading ? <></> :
         <>
-          <MoviePageSection movie={movie} credits={movieCredits} />
+          <MoviePageSection movie={movie as MovieProps} credits={movieCredits} />
           {
             displayRecommendedMovies && displayRecommendedMovies.length > 0 && <><h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Recommended similars movies</h2>
               <MediaGrid media={displayRecommendedMovies} />

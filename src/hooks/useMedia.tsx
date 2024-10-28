@@ -1,58 +1,65 @@
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '@store/index';
-import { useAppDispatch } from '@hooks/store';
-import { fetchTrendingAll } from '@slice/trendingSlice';
-import { MediaTypes } from '@appTypes/common/media';
+import { useEffect, useState } from 'react';
+import { getMovieById, getMovieCredits, getRecommendatiosMoviesById } from '@services/movieService';
+import { getTvById, getTvShowCredits, getRecommendatiosTvShowsById } from '@services/tvService';
+import { getRandomByType } from '@services/tmdbService';
+import { MovieProps } from '@appTypes/movies/movieProps';
+import { GenericItemProps } from '@appTypes/common/genericItemProps';
+import { CreditsProps } from '@appTypes/credits/credits';
+import { MediaType } from '@appTypes/common/MediaType';
 
-interface UseMediaParams {
-  mediaType: MediaTypes;
-  page?: number;
+interface UseMediaOptions {
+  type: MediaType;
+  id?: string;
+  getRecommended?: boolean;
+  getCredits?: boolean;
 }
 
-const useMedia = ({ mediaType, page = 1 }: UseMediaParams) => {
-  const dispatch = useAppDispatch();
-
-  const trendingAllState = useSelector((state: RootState) => state.trendingAll);
+export const useMedia = ({ type, id, getRecommended = false, getCredits = false }: UseMediaOptions) => {
+  const [media, setMedia] = useState<GenericItemProps>({} as GenericItemProps);
+  const [recommendedItems, setRecommendedItems] = useState<GenericItemProps[]>([]);
+  const [mediaCredits, setMediaCredits] = useState<CreditsProps>({} as CreditsProps);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchMedia = () => {
-      switch (mediaType) {
-        case MediaTypes.Trending:
-          if (trendingAllState.response.results.length === 0 || page !== trendingAllState.response.page) {
-            dispatch(fetchTrendingAll(page));
+    const fetchMedia = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        let mediaData: MovieProps | GenericItemProps = {} as GenericItemProps;
+
+        if (id) {
+          mediaData = type === MediaType.Movie ? await getMovieById(id) : await getTvById(id);
+        } else {
+          mediaData = await getRandomByType(type);
+        }
+
+        setMedia(mediaData);
+
+        if (mediaData?.id) {
+          if (getRecommended) {
+            const recommendations = type === MediaType.Movie
+              ? await getRecommendatiosMoviesById(mediaData.id)
+              : await getRecommendatiosTvShowsById(mediaData.id);
+            setRecommendedItems(recommendations.results);
           }
-          break;
-        default:
-          break;
+          if (getCredits) {
+            const credits = type === MediaType.Movie
+              ? await getMovieCredits(mediaData.id)
+              : await getTvShowCredits(mediaData.id);
+            setMediaCredits(credits);
+          }
+        }
+      } catch (err) {
+        setError('Failed to fetch media details');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchMedia();
-  }, [dispatch, mediaType, page, trendingAllState]);
+  }, [type, id, getRecommended, getCredits]);
 
-  const getCurrentMediaState = () => {
-    switch (mediaType) {
-      case MediaTypes.Trending:
-        return trendingAllState;
-      default:
-        return {
-          response: { results: [], page: 1, total_pages: 1 },
-          loading: false,
-          error: null,
-        };
-    }
-  };
-
-  const { response, loading, error } = getCurrentMediaState();
-
-  return {
-    media: response.results,
-    loading,
-    error,
-    currentPage: response.page,
-    totalPages: response.total_pages,
-  };
+  return { media, recommendedItems, mediaCredits, loading, error };
 };
-
-export default useMedia;

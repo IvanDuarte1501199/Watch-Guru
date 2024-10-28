@@ -5,7 +5,7 @@ import { MovieType } from '@appTypes/movies/movieProps';
 import useMovies from '@hooks/movies/useMovies';
 import useTvShows from '@hooks/tv/useTvShows';
 import { TvShowType } from '@appTypes/tv/tvProps';
-import useMedia from '@hooks/useMedia';
+import useMedias from '@hooks/useMedias';
 import SuggestBox from '@components/SuggestBox';
 import { MainTitle } from '@components/common/MainTitle';
 import { MediaTypes } from '@appTypes/common/media';
@@ -19,7 +19,7 @@ import { PeopleTypes } from '@appTypes/person/peopleTypes';
 const Home: React.FC = () => {
   const {
     media: trending,
-  } = useMedia({ mediaType: MediaTypes.Trending });
+  } = useMedias({ mediaType: MediaTypes.Trending });
   const {
     media: popularMovies,
   } = useMovies({ movieType: MovieType.Popular });
