@@ -13,7 +13,7 @@ const Credits: React.FC<CreditsPropsComponent> = ({ credits }) => {
 
   return (
     <>
-      <h2 className="h2-guru font-semibold mb-2">Cast</h2>
+      <h2 className="h2-guru text-xl font-semibold mb-2">Cast</h2>
       <ul className="flex flex-row flex-wrap gap-4">
         {credits.cast.slice(0, 10).map((castMember) => (
           <li key={castMember.id} className="bg-tertiary px-4 py-1 rounded-lg hover:bg-tertiary-80">

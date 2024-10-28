@@ -29,7 +29,7 @@ export const Card: React.FC<CardProps> = ({
       <article
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="relative h-80 flex justify-center rounded-md bg-transparent shadow-md overflow-hidden"
+        className="relative h-full min-h-80 flex justify-center rounded-md bg-transparent shadow-md overflow-hidden"
       >
         <a href={`/${url}/${id}`} className="block h-full w-full relative">
           <div
@@ -45,7 +45,7 @@ export const Card: React.FC<CardProps> = ({
               />
             ) : (
               <div
-                className={`flex h-full min-h-80 items-center justify-center rounded-md transition-colors duration-300 ease-in-out ${isHover
+                className={`flex h-full min-h-[336px] items-center justify-center rounded-md transition-colors duration-300 ease-in-out ${isHover
                   ? 'bg-gradient-to-br from-indigo-500 to-purple-600'
                   : 'bg-gradient-to-br from-purple-600 to-indigo-500'
                   } text-white text-center p-4`}

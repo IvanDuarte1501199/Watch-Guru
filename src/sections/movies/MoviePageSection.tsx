@@ -1,62 +1,39 @@
 import { CreditsProps } from "@appTypes/credits/credits";
 import { MovieProps } from "@appTypes/movies/movieProps";
+import BackgroudImg from "@components/BackgroudImg";
 import Credits from "@components/Credits";
-import GenresList from "@components/GenreList";
+import MovieDetails from "@components/movies/MovieDetails";
+import MovieMetadata from "@components/movies/MovieMetadata";
+import MoviePoster from "@components/movies/MoviePoster";
 
 interface MoviePageSectionProps {
-  movie: MovieProps
-  credits?: CreditsProps
+  movie: MovieProps;
+  credits?: CreditsProps;
 }
 
-const MoviePageSection = ({ movie, credits }: MoviePageSectionProps) => {
-  return (
-    <section className="relative">
-      <div className="container mx-auto px-4 pt-4 md:pt-12 pb-8 md:pb-12 text-white">
-        <div className="flex flex-col md:flex-row items-start">
-          {movie?.poster_path && (
-            <img
-              loading="lazy"
-              src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-              alt={movie.title}
-              className="w-full md:w-1/3 rounded-lg shadow-lg object-contain animate-fade-in-right"
-            />
-          )}
+const MoviePageSection = ({ movie, credits }: MoviePageSectionProps) => (
+  <section className="relative">
+    <div className="container mx-auto pt-4 md:pt-12 pb-8 md:pb-12 text-white">
+      {movie.backdrop_path && (
+        <BackgroudImg src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`} />
+      )}
+      <div className="flex flex-col md:flex-row items-start gap-10 justify-between">
+        {movie?.poster_path && (
+          <MoviePoster src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.title} />
+        )}
+        <div className="flex flex-col items-start">
+          <MovieDetails movie={movie} />
+          <MovieMetadata
+            releaseDate={movie?.release_date}
+            rating={movie?.vote_average}
+            runtime={movie?.runtime}
+          />
+          <Credits credits={credits} />
 
-          <div className="md:ml-10 mt-6 md:mt-0 animate-fade-in-left">
-            <h1 className="text-4xl font-bold mb-4">{movie?.title}</h1>
-
-            {movie?.tagline && (
-              <p className="italic text-lg text-gray-300 mb-4">
-                "{movie.tagline}"
-              </p>
-            )}
-
-            <p className="text-lg mb-4">{movie?.overview}</p>
-
-
-            {movie?.genres && <GenresList genres={movie.genres} />}
-
-
-            <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
-              {movie?.release_date && <p className="text-lg">
-                <strong>Release Date:</strong> {new Date(movie.release_date).toLocaleDateString()}
-              </p>}
-              <p className="text-lg">
-                <strong>Rating:</strong> {movie?.vote_average} / 10
-              </p>
-              <p className="text-lg">
-                <strong>Runtime:</strong> {movie?.runtime} minutes
-              </p>
-            </div>
-
-
-            <Credits credits={credits} />
-
-          </div>
         </div>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default MoviePageSection;

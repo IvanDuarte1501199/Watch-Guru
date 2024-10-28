@@ -10,7 +10,7 @@ const GenresList: React.FC<GenresListProps> = ({ genres }) => {
 
   return (
     <div className="mb-6">
-      <h3 className="text-xl font-semibold mb-2">Genres</h3>
+      <h2 className="h2-guru text-xl font-semibold mb-2">Genres</h2>
       <div className="flex flex-wrap gap-2">
         {genres.map((genre) => (
           <span

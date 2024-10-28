@@ -6,3 +6,43 @@
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
 }
+
+.bgtop {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 100vw;
+  height: 70vh;
+  transform: translateX(-50%);
+  -o-object-fit: cover;
+  object-fit: cover;
+
+  img {
+    width: 100%;
+    opacity: 0.5;
+    height: 70vh;
+    object-fit: cover;
+    object-position: 50% 20%;
+    animation: fade-background 1s;
+  }
+
+  &::after {
+    content: "";
+    background: linear-gradient(rgba(0, 0, 0, 0) 0%, #08042c 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@keyframes fade-background {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
+}

@@ -5,7 +5,12 @@ import { PersonProps } from '@appTypes/person/personProps';
 import { TvProps } from '@appTypes/tv/tvProps';
 import { Link } from 'react-router-dom';
 
-const SearchItem: React.FC<any> = ({ item }) => {
+interface SearchItemProps {
+  item: MultiGenericItemProps;
+  onClick?: () => void;
+}
+
+const SearchItem: React.FC<SearchItemProps> = ({ item, onClick }) => {
   const getMediaTypeFullName = (mediaType: string) => {
     switch (mediaType) {
       case 'movie':
@@ -51,15 +56,15 @@ const SearchItem: React.FC<any> = ({ item }) => {
   };
 
   return (
-    <li className='flex items-center gap-4 hover:bg-gray dark:hover:bg-gray-700'>
+    <li className='flex items-center gap-4 hover:bg-gray dark:hover:bg-gray-700' onClick={onClick}>
       <Link to={getItemLink()} className='p-2 flex items-center gap-4 w-full'>
         <img
           src={getSrcPath(item)}
-          alt={item.name || item.title}
+          alt={((item as MovieProps).title) || (item as TvProps | PersonProps).name}
           className='w-10 h-12 object-cover'
         />
         <div>
-          <h3 className='text-md font-semibold line-clamp-1'>{item.name || item.title}</h3>
+          <h3 className='text-md font-semibold line-clamp-1'>{((item as MovieProps).title) || (item as TvProps | PersonProps).name}</h3>
           <p className='text-sm text-tertiary dark:text-gray-400'>
             {getMediaTypeFullName(item.media_type)}
           </p>
