@@ -41,7 +41,7 @@ const MovieInfo: React.FC = () => {
       {loading ? <></> :
         <>
           <MoviePageSection movie={movie as MovieProps} credits={movieCredits} />
-          <TeaserList teasers={mediaTeasers} />
+          {mediaTeasers && mediaTeasers.length > 0 && <TeaserList teasers={mediaTeasers} />}
           {
             displayRecommendedMovies && displayRecommendedMovies.length > 0 && <><h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Recommended similars movies</h2>
               <MediaGrid media={displayRecommendedMovies} />

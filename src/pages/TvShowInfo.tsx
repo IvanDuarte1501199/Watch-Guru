@@ -41,7 +41,7 @@ const TvShowInfo: React.FC = () => {
     <Layout>
       {loadingShow ? <><p className="text-center">Loading TV show details...</p></>
         : <><TvShowSection tvShow={tvShow as TvProps} credits={tvShowCredits} />
-          <TeaserList teasers={mediaTeasers} />
+          {mediaTeasers && mediaTeasers.length > 0 && <TeaserList teasers={mediaTeasers} />}
 
           {
             displayRecommendedTvShows && displayRecommendedTvShows.length > 0 && <><h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Recommended similars tv shows</h2>
