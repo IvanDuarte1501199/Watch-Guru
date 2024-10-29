@@ -34,6 +34,8 @@ interface CarouselSliderProps {
   infinite?: boolean;
   dots?: boolean;
   mobileDots?: boolean;
+  autoplay?: boolean;
+  autoplaySpeed?: number;
 }
 
 const CarouselSlider: React.FC<CarouselSliderProps> = ({
@@ -48,7 +50,9 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
   laptopMaxItems = 3,
   infinite = false,
   dots = true,
-  mobileDots = true
+  mobileDots = true,
+  autoplay = false,
+  autoplaySpeed = 3000
 }) => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const slider = useRef<any>(null);
@@ -56,6 +60,19 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
   useEffect(() => {
     setCurrentSlide(0);
   }, []);
+
+  useEffect(() => {
+    if (autoplay) {
+      const interval = setInterval(() => {
+        if (slider.current) {
+          slider.current.slickNext(); // Avanzar a la siguiente diapositiva
+        }
+      }, autoplaySpeed);
+
+      return () => clearInterval(interval); // Limpiar el intervalo en desmontaje
+    }
+  }, [autoplay, autoplaySpeed]);
+
   const itemCount = React.Children.count(children);
   const settings = {
     dots: dots && itemCount > maxItems,
