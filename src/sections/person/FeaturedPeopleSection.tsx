@@ -1,7 +1,7 @@
 import React from 'react';
 import { PersonProps } from '@appTypes/person/personProps';
 import { Link } from 'react-router-dom';
-import CarouselSlider from '@components/CarouselSlider';
+import CarouselSlider from '@components/common/CarouselSlider';
 
 interface FeaturedPeopleSectionProps {
   people: FeaturedPersonProps[];

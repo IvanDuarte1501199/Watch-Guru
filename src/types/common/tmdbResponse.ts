@@ -2,6 +2,7 @@ import { MovieProps } from '@appTypes/movies/movieProps';
 import { TvProps } from '@appTypes/tv/tvProps';
 import { GenericItemProps, MultiGenericItemProps } from './genericItemProps';
 import { PersonProps } from '@appTypes/person/personProps';
+import { TeaserProps } from '@appTypes/teaser/teasers';
 
 export interface TmdbMovieResponse {
   page: number;
@@ -31,3 +32,7 @@ export interface PeoplePropsResponse {
   total_pages: number;
 }
 
+export interface TeaserResponse {
+  id: number;
+  results: TeaserProps[];
+}

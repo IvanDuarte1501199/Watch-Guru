@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Layout } from '@components/Layout';
+import { Layout } from '@components/common/Layout';
 import { GenericList } from '@components/common/GenericList';
 import { MovieType } from '@appTypes/movies/movieProps';
 import useMovies from '@hooks/movies/useMovies';
 import useTvShows from '@hooks/tv/useTvShows';
 import { TvShowType } from '@appTypes/tv/tvProps';
 import useMedias from '@hooks/useMedias';
-import SuggestBox from '@components/SuggestBox';
+import SuggestBox from '@components/shared/SuggestBox';
 import { MainTitle } from '@components/common/MainTitle';
 import { MediaTypes } from '@appTypes/common/media';
 import useGenres from '@hooks/useGenres';

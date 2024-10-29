@@ -1,10 +1,10 @@
 import { TvShowType } from '@appTypes/tv/tvProps';
 import Pagination from '@components/common/Pagination';
-import { Layout } from '@components/Layout';
-import MediaGrid from '@components/MediaGrid';
+import { Layout } from '@components/common/Layout';
 import useTvShows from '@hooks/tv/useTvShows';
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+import MediaGrid from '@components/shared/MediaGrid';
 
 const TvShowsBy: React.FC = () => {
   const { tvShowType } = useParams<{ tvShowType: string }>();

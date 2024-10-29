@@ -1,8 +1,9 @@
 import { TimeWindow } from '@appTypes/service/imdb';
 import tmdbApi from './tmdbApi';
-import { TmdbMovieResponse, TmdbTvShowResponse } from '@appTypes/common/tmdbResponse';
+import { TeaserResponse, TmdbMovieResponse, TmdbTvShowResponse } from '@appTypes/common/tmdbResponse';
 import { MediaType } from '@appTypes/common/MediaType';
 import { CreditsProps } from '@appTypes/credits/credits';
+import { TeaserProps } from '@appTypes/teaser/teasers';
 
 export const getTrendingTv = async (page: number = 1, time: TimeWindow = 'week') => {
   try {
@@ -147,6 +148,16 @@ export const getTvShowCredits = async (tvShowId: string) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching tv show credits:', error);
+    throw error;
+  }
+};
+
+export const getTvShowTeasers = async (tvShowId: string) => {
+  try {
+    const response = await tmdbApi.get<TeaserResponse>(`/tv/${tvShowId}/videos`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching tv show teasers:', error);
     throw error;
   }
 };

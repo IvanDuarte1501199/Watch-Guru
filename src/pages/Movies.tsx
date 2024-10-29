@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Layout } from '@components/Layout';
+import { Layout } from '@components/common/Layout';
 import { GenericList } from '@components/common/GenericList';
 import useGenres from '@hooks/useGenres';
 import useMovies from '@hooks/movies/useMovies';

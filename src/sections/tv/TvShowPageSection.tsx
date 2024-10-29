@@ -1,9 +1,9 @@
 import { TvProps } from "@appTypes/tv/tvProps";
 import { useSeasonEpisodes } from "@hooks/tv/useSeasonEpisodes";
-import Credits from "@components/Credits";
+import Credits from "@components/shared/Credits";
 import { CreditsProps } from "@appTypes/credits/credits";
 import { useEffect, useState } from "react";
-import BackgroudImg from "@components/BackgroudImg";
+import BackgroudImg from "@components/shared/BackgroudImg";
 import SeasonsAndEpisodes from "@components/tv/TvShowSection";
 import TvShowPoster from "../../components/tv/TvShowPoster";
 import TvShowDetails from "../../components/tv/TvShowDetails";

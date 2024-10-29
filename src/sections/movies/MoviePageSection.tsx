@@ -1,7 +1,7 @@
 import { CreditsProps } from "@appTypes/credits/credits";
 import { MovieProps } from "@appTypes/movies/movieProps";
-import BackgroudImg from "@components/BackgroudImg";
-import Credits from "@components/Credits";
+import BackgroudImg from "@components/shared/BackgroudImg";
+import Credits from "@components/shared/Credits";
 import MovieDetails from "@components/movies/MovieDetails";
 import MovieMetadata from "@components/movies/MovieMetadata";
 import MoviePoster from "@components/movies/MoviePoster";

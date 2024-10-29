@@ -44,30 +44,33 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
   useEffect(() => {
     setCurrentSlide(0);
   }, []);
-
+  const itemCount = React.Children.count(children);
   const settings = {
-    dots: true,
-    arrows: true,
+    dots: itemCount > maxItems,
+    arrows: itemCount > maxItems,
     speed: 500,
-    slidesToShow: maxItems,
+    slidesToShow: Math.min(maxItems, itemCount),
     slidesToScroll: slideItems,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     afterChange: (current: number) => setCurrentSlide(current),
     infinite: infinite,
+    centerMode: false,
+    centerpadding: 0,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
+          slidesToShow: Math.min(3, itemCount),
+          slidesToScroll: slideItems,
+          centerMode: true,
         },
       },
       {
         breakpoint: 768,
         settings: {
           centerPadding: 0,
-          slidesToShow: 2,
+          slidesToShow: Math.min(2, itemCount),
           slidesToScroll: 2,
           centerMode: false,
           arrows: false,
@@ -78,10 +81,10 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
         breakpoint: 480,
         settings: {
           centerPadding: 0,
-          slidesToShow: mobileMaxItems,
+          slidesToShow: Math.min(mobileMaxItems, itemCount),
           slidesToScroll: mobileSlideItems,
+          dots: itemCount > mobileMaxItems,
           arrows: false,
-          dots: false,
         },
       },
     ],

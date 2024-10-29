@@ -1,11 +1,12 @@
 import React from 'react';
-import { Layout } from '@components/Layout';
+import { Layout } from '@components/common/Layout';
 import { useParams, useLocation } from 'react-router-dom';
 import useMediaByCategoryId from '@hooks/useDataByCategoryId';
 import useGenres from '@hooks/useGenres';
 import { MainTitle } from '@components/common/MainTitle';
-import MediaGrid from '@components/MediaGrid';
 import Pagination from '@components/common/Pagination';
+import MediaGrid from '@components/shared/MediaGrid';
+import BackgroudImg from '@components/shared/BackgroudImg';
 
 const Genres: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,8 +24,14 @@ const Genres: React.FC = () => {
     return genreObj?.name;
   };
 
+  const getGenrePath = (genreId: string) => {
+    const genreObj = moviesGenres.find((g) => g.id == genreId) || tvGenres.find((g) => g.id == genreId);
+    return genreObj?.name.toLowerCase().replace(/\s+/g, '-');
+  };
+
   return (
     <Layout>
+      {id && <BackgroudImg src={`/genres/${getGenrePath(id)}.jpg`} />}
       {loading ? (
         <></>
       ) : (

@@ -1,10 +1,10 @@
 import { MediaTypes } from '@appTypes/common/media';
 import Pagination from '@components/common/Pagination';
-import { Layout } from '@components/Layout';
-import MediaGrid from '@components/MediaGrid';
+import { Layout } from '@components/common/Layout';
 import useMedias from '@hooks/useMedias';
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+import MediaGrid from '@components/shared/MediaGrid';
 
 const MediaBy: React.FC = () => {
   const { mediaType } = useParams<{ mediaType: string }>();

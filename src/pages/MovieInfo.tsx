@@ -1,8 +1,9 @@
 import { MediaType } from '@appTypes/common/MediaType';
 import { MovieProps } from '@appTypes/movies/movieProps';
 import Button from '@components/common/Button';
-import { Layout } from '@components/Layout';
-import MediaGrid from '@components/MediaGrid';
+import { Layout } from '@components/common/Layout';
+import MediaGrid from '@components/shared/MediaGrid';
+import TeaserList from '@components/shared/TesaerList';
 import { useMedia } from '@hooks/useMedia';
 import MoviePageSection from '@sections/movies/MoviePageSection';
 import React, { useEffect, useState } from 'react';
@@ -19,7 +20,8 @@ const MovieInfo: React.FC = () => {
     }
   }, [id, navigate]);
 
-  const { media: movie, mediaCredits: movieCredits, recommendedItems: recommendedMovies, loading, error } = useMedia({ type: MediaType.Movie, id: id!, getCredits: true, getRecommended: true });
+  const { media: movie, mediaCredits: movieCredits, recommendedItems: recommendedMovies, mediaTeasers, loading, error } =
+    useMedia({ type: MediaType.Movie, id: id!, getCredits: true, getRecommended: true, getTeasers: true });
 
   useEffect(() => {
     if (error) {
@@ -29,11 +31,17 @@ const MovieInfo: React.FC = () => {
 
   const displayRecommendedMovies = showAllRecommendedMovies ? recommendedMovies : recommendedMovies.slice(0, 10);
 
+  useEffect(() => {
+    if (mediaTeasers) {
+      console.log('mediaTeasers', mediaTeasers);
+    }
+  }, [mediaTeasers]);
   return (
     <Layout>
       {loading ? <></> :
         <>
           <MoviePageSection movie={movie as MovieProps} credits={movieCredits} />
+          <TeaserList teasers={mediaTeasers} />
           {
             displayRecommendedMovies && displayRecommendedMovies.length > 0 && <><h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Recommended similars movies</h2>
               <MediaGrid media={displayRecommendedMovies} />

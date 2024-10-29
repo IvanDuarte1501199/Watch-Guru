@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CardProps } from '@appTypes/common/CardProps';
 import { Fade } from 'react-awesome-reveal';
 import { MediaType } from '@appTypes/common/MediaType';
-import CircularVote from '@components/CircularVote';
+import CircularVote from '@components/shared/CircularVote';
 
 export const Card: React.FC<CardProps> = ({
   id,

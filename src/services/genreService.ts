@@ -30,7 +30,13 @@ export const getDataByCategoryId = async (mediaType: MediaType, genreId: string,
         page,
       },
     });
-    return response.data;
+
+    const modifiedResults = response.data.results.map(item => ({
+      ...item,
+      media_type: mediaType,
+    }));
+
+    return { ...response.data, results: modifiedResults };
   } catch (error) {
     console.error('Error fetching data by category:', error);
     throw error;

@@ -1,5 +1,5 @@
 import { GenericItemProps } from "@appTypes/common/genericItemProps";
-import { Card } from "./common/Card";
+import { Card } from "@components/common/Card";
 
 interface MediaGridProps {
   media: GenericItemProps[]

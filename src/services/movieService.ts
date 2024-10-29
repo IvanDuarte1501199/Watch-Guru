@@ -1,8 +1,9 @@
 import { TimeWindow } from '@appTypes/service/imdb';
 import tmdbApi from './tmdbApi';
-import { TmdbGenericResponse, TmdbMovieResponse } from '@appTypes/common/tmdbResponse';
+import { TeaserResponse, TmdbGenericResponse, TmdbMovieResponse } from '@appTypes/common/tmdbResponse';
 import { MediaType } from '@appTypes/common/MediaType';
 import { CreditsProps } from '@appTypes/credits/credits';
+import { TeaserProps } from '@appTypes/teaser/teasers';
 
 export const getTrendingMovies = async (page: number = 1, time: TimeWindow = 'week') => {
   try {
@@ -144,6 +145,16 @@ export const getMovieCredits = async (movieId: string) => {
     return response.data;
   } catch (error) {
     console.error(`Error fetching movie credits for movie ID: ${movieId}`, error);
+    throw error;
+  }
+};
+
+export const getMovieTeasers = async (movieId: string) => {
+  try {
+    const response = await tmdbApi.get<TeaserResponse>(`/movie/${movieId}/videos`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching movie teasers for movie ID: ${movieId}`, error);
     throw error;
   }
 };

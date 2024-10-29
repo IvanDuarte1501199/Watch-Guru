@@ -1,4 +1,5 @@
 import { MediaSliceState } from '@appTypes/common/genericItemProps';
+import { MediaType } from '@appTypes/common/MediaType';
 import { Genre } from '@appTypes/genres/genre';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getDataByCategoryId } from '@services/genreService';
@@ -20,7 +21,7 @@ export const fetchMediaByCategoryId = createAsyncThunk(
     const { genres } = getState() as { genres: { moviesGenres: Genre[], tvGenres: Genre[] } };
     const movieGenreObj = genres.moviesGenres.find((g) => g.id == categoryId);
     const tvShowGenreObj = genres.tvGenres.find((g) => g.id == categoryId);
-    const mediaType = movieGenreObj ? 'movie' : 'tv';
+    const mediaType = movieGenreObj ? MediaType.Movie : MediaType.Tv;
     if (!movieGenreObj && !tvShowGenreObj) {
       throw new Error(`Genre with id "${categoryId}" not found`);
     }

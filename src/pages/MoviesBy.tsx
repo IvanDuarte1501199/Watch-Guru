@@ -1,10 +1,10 @@
 import { MovieType } from '@appTypes/movies/movieProps';
 import Pagination from '@components/common/Pagination';
-import { Layout } from '@components/Layout';
-import MediaGrid from '@components/MediaGrid';
+import { Layout } from '@components/common/Layout';
 import useMovies from '@hooks/movies/useMovies';
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+import MediaGrid from '@components/shared/MediaGrid';
 
 const MoviesBy: React.FC = () => {
   const { movieType } = useParams<{ movieType: string }>();

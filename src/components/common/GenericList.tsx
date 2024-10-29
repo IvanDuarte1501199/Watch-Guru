@@ -1,7 +1,7 @@
 import { GenericItemProps } from '@appTypes/common/genericItemProps';
 import { InLineTitle } from './InLineTitle';
 import { Card } from './Card';
-import CarouselSlider from '@components/CarouselSlider';
+import CarouselSlider from '@components/common/CarouselSlider';
 
 type GenericListProps = {
   title: string;

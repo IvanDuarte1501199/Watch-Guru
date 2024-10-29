@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { usePerson } from '@hooks/person/usePerson';
 import { useParams } from 'react-router-dom';
-import { Layout } from '@components/Layout';
+import { Layout } from '@components/common/Layout';
 import PersonSection from '@sections/person/PersonPageSection';
-import MediaGrid from '@components/MediaGrid';
 import Button from '@components/common/Button';
+import MediaGrid from '@components/shared/MediaGrid';
 
 const PersonInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
