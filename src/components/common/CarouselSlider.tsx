@@ -26,8 +26,14 @@ interface CarouselSliderProps {
   slideItems?: number;
   mobileMaxItems?: number;
   mobileSlideItems?: number;
+  tabletSlideItems?: number;
+  tabletMaxItems?: number;
+  laptopSlideItems?: number;
+  laptopMaxItems?: number;
   children?: React.ReactNode;
   infinite?: boolean;
+  dots?: boolean;
+  mobileDots?: boolean;
 }
 
 const CarouselSlider: React.FC<CarouselSliderProps> = ({
@@ -36,7 +42,13 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
   children,
   mobileMaxItems = 1,
   mobileSlideItems = 1,
-  infinite = false
+  tabletSlideItems = 2,
+  tabletMaxItems = 2,
+  laptopSlideItems = 3,
+  laptopMaxItems = 3,
+  infinite = false,
+  dots = true,
+  mobileDots = true
 }) => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const slider = useRef<any>(null);
@@ -46,7 +58,7 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
   }, []);
   const itemCount = React.Children.count(children);
   const settings = {
-    dots: itemCount > maxItems,
+    dots: dots && itemCount > maxItems,
     arrows: itemCount > maxItems,
     speed: 500,
     slidesToShow: Math.min(maxItems, itemCount),
@@ -61,8 +73,8 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: Math.min(3, itemCount),
-          slidesToScroll: slideItems,
+          slidesToShow: Math.min(laptopMaxItems, itemCount),
+          slidesToScroll: laptopSlideItems,
           centerMode: true,
         },
       },
@@ -70,8 +82,8 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
         breakpoint: 768,
         settings: {
           centerPadding: 0,
-          slidesToShow: Math.min(2, itemCount),
-          slidesToScroll: 2,
+          slidesToShow: Math.min(tabletMaxItems, itemCount),
+          slidesToScroll: tabletSlideItems,
           centerMode: false,
           arrows: false,
           dots: false,
@@ -83,7 +95,7 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
           centerPadding: 0,
           slidesToShow: Math.min(mobileMaxItems, itemCount),
           slidesToScroll: mobileSlideItems,
-          dots: itemCount > mobileMaxItems,
+          dots: mobileDots && itemCount > mobileMaxItems,
           arrows: false,
         },
       },

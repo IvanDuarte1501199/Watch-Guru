@@ -15,6 +15,7 @@ import useMediaByGenreId from '@hooks/useMediaByGenreId';
 import usePeople from '@hooks/person/usePeople';
 import FeaturedPeopleSection from '@sections/person/FeaturedPeopleSection';
 import { PeopleTypes } from '@appTypes/person/peopleTypes';
+import PopularCarousel from '@components/shared/PopularCarousel';
 
 const Home: React.FC = () => {
   const {
@@ -69,9 +70,39 @@ const Home: React.FC = () => {
     genreId: randomMoviesGenres[1]?.id
   });
 
+  useEffect(() => {
+    if (trending) {
+      console.log('trending', trending);
+    }
+  }, [trending]);
+
   return (
     <Layout className='mb-4 md:mb-8'>
       <MainTitle>Welcome to your next binge-worthy recommendation!</MainTitle>
+
+      <PopularCarousel
+        items={trending.map((item) => {
+          const genres = item.genre_ids
+            ? item.genre_ids.map(id =>
+              item.media_type === 'tv'
+                ? tvGenres.find((genre) => genre.id === id)?.name
+                : moviesGenres.find((genre) => genre.id === id)?.name
+            ).filter(Boolean)
+            : [];
+
+          return {
+            backdrop_path: item.backdrop_path,
+            id: item.id,
+            title: item.name || item.title,
+            release_date: item.release_date,
+            vote_average: item.vote_average,
+            overview: item.overview,
+            media_type: item.media_type,
+            genres: genres.slice(0, 3) as string[],
+          };
+        })}
+        customClass="mb:8 mb-12"
+      />
 
       <h2 className='h2-guru mb-4 text-center'>Suggest me a random movie or tv show</h2>
       <section className='flex flex-col md:flex-row align-middle justify-center gap-10 mb-12 '>

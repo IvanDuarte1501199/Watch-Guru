@@ -11,19 +11,19 @@ const MovieMetadata = ({ releaseDate, rating, runtime }: MovieMetadataProps) => 
     {releaseDate && (
       <p className="flex items-center text-lg">
         <img src="/calendar.svg" alt="Release Date" className="w-5 h-5 mr-2" />
-        {new Date(releaseDate).toLocaleDateString()}
+        {new Date(releaseDate).toLocaleDateString('en-US', { month: '2-digit', year: 'numeric' })}
       </p>
     )}
     {rating && (
       <p className="flex items-center text-lg">
         <img src="/star.svg" alt="Rating" className="w-5 h-5 mr-2" />
-        {rating} / 10
+        {rating.toFixed(1)} / 10
       </p>
     )}
     {runtime && (
       <p className="flex items-center text-lg">
         <img src="/clock.svg" alt="Runtime" className="w-5 h-5 mr-2" />
-        {runtime} minutes
+        {Math.floor(runtime / 60)}h {runtime % 60}m
       </p>
     )}
   </div>
