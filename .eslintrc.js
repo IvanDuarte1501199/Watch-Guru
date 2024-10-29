@@ -22,9 +22,9 @@ module.exports = {
     'import/namespace': 'error',
     'padding-line-between-statements': [
       'error',
-      { blankLine: 'always', prev: '*', next: '*' }, // Asegura que haya una línea en blanco entre bloques de código
-      { blankLine: 'never', prev: 'import', next: 'import' }, // No permite líneas en blanco entre importaciones
-      { blankLine: 'always', prev: 'import', next: '*' }, // Asegura que haya una línea en blanco entre las importaciones y el código
+      { blankLine: 'always', prev: '*', next: '*' },
+      { blankLine: 'never', prev: 'import', next: 'import' },
+      { blankLine: 'always', prev: 'import', next: '*' },
     ],
   },
 };

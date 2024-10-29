@@ -24,9 +24,7 @@ const PersonSection = ({ person }: PersonSectionProps) => {
               className="rounded-lg shadow-lg w-full object-cover"
             />
           ) : (
-            <div className="w-full h-96 bg-gray-800 flex items-center justify-center rounded-lg">
-              <span className="text-gray-500">No Image Available</span>
-            </div>
+            <></>
           )}
         </div>
 

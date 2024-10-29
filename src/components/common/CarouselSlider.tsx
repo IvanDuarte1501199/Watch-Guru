@@ -65,11 +65,11 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
     if (autoplay) {
       const interval = setInterval(() => {
         if (slider.current) {
-          slider.current.slickNext(); // Avanzar a la siguiente diapositiva
+          slider.current.slickNext();
         }
       }, autoplaySpeed);
 
-      return () => clearInterval(interval); // Limpiar el intervalo en desmontaje
+      return () => clearInterval(interval);
     }
   }, [autoplay, autoplaySpeed]);
 

@@ -30,19 +30,19 @@ const PersonInfo: React.FC = () => {
     <Layout>
       <PersonSection person={person} />
       <h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Known for Movies</h2>
-      <MediaGrid media={displayMovies} />
-      {moviesCredits.length > 10 && !showAllMovies && (
-        <Button onClick={() => setShowAllMovies(true)} variant="secondary">
-          View more
-        </Button>
-      )}
-      <h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Known for TV Shows</h2>
-      <MediaGrid media={displayTvShows} />
-      {tvCredits.length > 10 && !showAllTvShows && (
-        <Button onClick={() => setShowAllTvShows(true)} variant="secondary">
-          View more
-        </Button>
-      )}
+      {moviesCredits && moviesCredits.length > 0 && <><MediaGrid media={displayMovies} />
+        {moviesCredits.length > 10 && !showAllMovies && (
+          <Button onClick={() => setShowAllMovies(true)} variant="secondary">
+            View more
+          </Button>
+        )}</>}
+      {tvCredits && tvCredits.length > 0 && <><h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Known for TV Shows</h2>
+        <MediaGrid media={displayTvShows} />
+        {tvCredits.length > 10 && !showAllTvShows && (
+          <Button onClick={() => setShowAllTvShows(true)} variant="secondary">
+            View more
+          </Button>
+        )}</>}
     </Layout>
   );
 };
