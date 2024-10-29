@@ -67,7 +67,7 @@ const PopularCarouselItem: React.FC<PopularCarouselItemProps> = ({
         {genres && genres.length > 0 && (
           <div className="p-guru text-white text-sm flex flex-wrap gap-1 xl:gap-6 mx-4 absolute top-24 xl:top-48">
             {genres.map((genre) => (
-              <span key={genre} className="bg-gray-700 bg-opacity-60 bg-primary p-2 rounded-md">
+              <span key={genre} className="bg-gray-700 bg-opacity-60 bg-secondary p-2 rounded-md">
                 {genre}
               </span>
             ))}

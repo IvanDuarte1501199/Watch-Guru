@@ -46,8 +46,17 @@ const Movies: React.FC = () => {
     return `/genres/${formattedGenreName}.jpg`;
   };
 
+  const [backgroundImg, setBackgroundImg] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (trendingMovies.length > 0 && backgroundImg === undefined) {
+      const randomIndex = Math.floor(Math.random() * trendingMovies.length);
+      setBackgroundImg(`https://image.tmdb.org/t/p/original/${trendingMovies[randomIndex]?.backdrop_path}`);
+    }
+  }, [trendingMovies]);
+
   return (
-    <Layout className='mb-4 md:mb-8' searchType={MediaType.Movie}>
+    <Layout headerColor='transparent' backgroundSrc={backgroundImg} className='mb-4 md:mb-8' searchType={MediaType.Movie}>
       <MainTitle>MOVIES</MainTitle>
 
       {/* movies genres */}

@@ -38,7 +38,7 @@ const TvShowInfo: React.FC = () => {
   const displayRecommendedTvShows = showAllRecommendedTvShows ? recommendedTvShows : recommendedTvShows.slice(0, 10);
 
   return (
-    <Layout>
+    <Layout headerColor='transparent' backgroundSrc={tvShow?.backdrop_path ? `https://image.tmdb.org/t/p/original/${tvShow.backdrop_path}` : undefined}>
       {loadingShow ? <><p className="text-center">Loading TV show details...</p></>
         : <><TvShowSection tvShow={tvShow as TvProps} credits={tvShowCredits} />
           {mediaTeasers && mediaTeasers.length > 0 && <TeaserList teasers={mediaTeasers} />}

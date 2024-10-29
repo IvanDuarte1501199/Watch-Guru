@@ -6,7 +6,6 @@ import useGenres from '@hooks/useGenres';
 import { MainTitle } from '@components/common/MainTitle';
 import Pagination from '@components/common/Pagination';
 import MediaGrid from '@components/shared/MediaGrid';
-import BackgroudImg from '@components/shared/BackgroudImg';
 
 const Genres: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,8 +29,7 @@ const Genres: React.FC = () => {
   };
 
   return (
-    <Layout>
-      {id && <BackgroudImg src={`/genres/${getGenrePath(id)}.jpg`} />}
+    <Layout headerColor='transparent' backgroundSrc={id ? `/genres/${getGenrePath(id)}.jpg` : undefined}>
       {loading ? (
         <></>
       ) : (

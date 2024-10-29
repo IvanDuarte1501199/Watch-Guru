@@ -31,13 +31,8 @@ const MovieInfo: React.FC = () => {
 
   const displayRecommendedMovies = showAllRecommendedMovies ? recommendedMovies : recommendedMovies.slice(0, 10);
 
-  useEffect(() => {
-    if (mediaTeasers) {
-      console.log('mediaTeasers', mediaTeasers);
-    }
-  }, [mediaTeasers]);
   return (
-    <Layout>
+    <Layout headerColor={loading || movie?.backdrop_path ? 'transparent' : 'tertiary'} backgroundSrc={movie?.backdrop_path ? `https://image.tmdb.org/t/p/original/${movie.backdrop_path}` : undefined}>
       {loading ? <></> :
         <>
           <MoviePageSection movie={movie as MovieProps} credits={movieCredits} />

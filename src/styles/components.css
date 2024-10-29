@@ -8,11 +8,11 @@
 }
 
 .bgtop {
-  position: absolute;
+  position: fixed;
   left: 50%;
-  top: 70px;
+  top: 0;
   width: 100vw;
-  height: 70vh;
+  height: 100vh;
   transform: translateX(-50%);
   -o-object-fit: cover;
   object-fit: cover;
@@ -33,8 +33,13 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 70vh;
   }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes fade-background {

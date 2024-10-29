@@ -50,8 +50,18 @@ const TvShows: React.FC = () => {
     return `/genres/${formattedGenreName}.jpg`;
   };
 
+  const [backgroundImg, setBackgroundImg] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (trendingTv.length > 0 && backgroundImg === undefined) {
+      const randomIndex = Math.floor(Math.random() * trendingTv.length);
+      setBackgroundImg(`https://image.tmdb.org/t/p/original/${trendingTv[randomIndex]?.backdrop_path}`);
+    }
+  }, [trendingTv]);
+
+
   return (
-    <Layout className='mb-4 md:mb-8' searchType={MediaType.Tv}>
+    <Layout headerColor='transparent' backgroundSrc={backgroundImg} className='mb-4 md:mb-8' searchType={MediaType.Tv}>
       <MainTitle>TV SHOWS</MainTitle>
       <GenresSection genres={tvGenres} />
 

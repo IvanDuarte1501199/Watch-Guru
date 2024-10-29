@@ -6,6 +6,7 @@ import { MediaType } from '@appTypes/common/MediaType';
 type HeaderProps = {
   showSearch?: boolean;
   searchType?: MediaType;
+  color?: 'transparent' | 'primary' | 'secondary' | 'tertiary';
 };
 
 const LINKS = [
@@ -13,7 +14,7 @@ const LINKS = [
   { name: 'Movies', href: '/movies' },
 ];
 
-export function Header({ showSearch = false, searchType }: HeaderProps): JSX.Element {
+export function Header({ showSearch = false, searchType, color = 'tertiary' }: HeaderProps): JSX.Element {
   const [isOpaque, setIsOpaque] = useState(false);
 
   const handleScroll = () => {
@@ -30,7 +31,7 @@ export function Header({ showSearch = false, searchType }: HeaderProps): JSX.Ele
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 shadow-md transition-opacity duration-300 ${isOpaque ? 'bg-tertiary-80 backdrop-blur-md' : 'bg-tertiary'}`}
+      className={`fixed top-0 left-0 w-full z-50 ${(color != 'transparent') ? 'shadow-md' : ''} transition-opacity duration-300 ${isOpaque ? `bg-${color}-80 backdrop-blur-md` : `bg-${color}`}`}
     >
       <div className="flex items-center justify-between max-w-7xl mx-auto py-4 px-4 md:px-8 lg:px-12">
         <NavLink

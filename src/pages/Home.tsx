@@ -70,14 +70,23 @@ const Home: React.FC = () => {
     genreId: randomMoviesGenres[1]?.id
   });
 
+  const [backgroundImg, setBackgroundImg] = useState<string | undefined>(undefined);
+
   useEffect(() => {
-    if (trending) {
-      console.log('trending', trending);
+    if (trending.length > 0) {
+      const randomIndex = Math.floor(Math.random() * trending.length);
+      setBackgroundImg(`https://image.tmdb.org/t/p/original/${trending[randomIndex]?.backdrop_path}`);
     }
   }, [trending]);
 
   return (
-    <Layout className='mb-4 md:mb-8'>
+    <Layout className='mb-4 md:mb-8'
+      backgroundSrc={
+        trending.length > 0
+          ? backgroundImg
+          : undefined
+      }
+    >
       <MainTitle>Welcome to your next binge-worthy recommendation!</MainTitle>
 
       <PopularCarousel
@@ -109,17 +118,6 @@ const Home: React.FC = () => {
         <SuggestBox placeholder='Random MOVIE suggest' icon='movie' href='/random/movie' customClass='animate-fade-in-right' />
         <SuggestBox placeholder='Random TV SHOW suggest' icon='tv-shows' href='/random/tv-show' customClass='animate-fade-in-left' />
       </section>
-
-
-      {/* trending all */}
-      {trending && trending.length > 0 && (
-        <GenericList
-          title="Trending movies and tv shows"
-          genericList={trending}
-          showViewMore href="/trending"
-          viewMoreText='View more'
-        />
-      )}
 
       {/* popular movies */}
       {popularMovies && popularMovies.length > 0 && (
