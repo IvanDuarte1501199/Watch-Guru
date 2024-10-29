@@ -42,11 +42,24 @@ const PopularCarouselItem: React.FC<PopularCarouselItemProps> = ({
 
   const handleMouseEnter = () => setIsHover(true);
   const handleMouseLeave = () => setIsHover(false);
-  const handleRedirect = () => navigate(`/${media_type}/${id}`);
+
+  const getUrlByMediaType = () => {
+    switch (media_type) {
+      case MediaType.Movie:
+        return `/movie/${id}`;
+      case MediaType.Tv:
+        return `/tv-show/${id}`;
+      case MediaType.Person:
+        return `/person/${id}`;
+      default:
+        return '#';
+    }
+  };
+  const handleRedirect = () => navigate(getUrlByMediaType());
 
   return (
     <div
-      className="relative cursor-pointer"
+      className="relative cursor-pointer animate-slide-up-fade"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={handleRedirect}

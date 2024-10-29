@@ -16,7 +16,7 @@ export function MovieCard(movie: MovieCardProps): JSX.Element {
     <article
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative shadow-sm transform overflow-hidden rounded-lg bg-white shadow-md transition-transform duration-300 ease-in-out ${isHover ? 'scale-105' : ''}`}
+      className={`relative shadow-sm transform overflow-hidden rounded-lg bg-white transition-transform duration-300 ease-in-out ${isHover ? 'scale-105' : ''}`}
     >
       <a href={`/movie/${movie.id}`}>
         <img
