@@ -3,8 +3,10 @@ import { MovieProps } from '@appTypes/movies/movieProps';
 import { TvProps } from '@appTypes/tv/tvProps';
 import Button from '@components/common/Button';
 import { Layout } from '@components/common/Layout';
+import Credits from '@components/shared/Credits';
 import MediaGrid from '@components/shared/MediaGrid';
 import { useMedia } from '@hooks/useMedia';
+import useMediaProvider from '@hooks/useMediaProvider';
 import MoviePageSection from '@sections/movies/MoviePageSection';
 import TvShowPageSection from '@sections/tv/TvShowPageSection';
 import React, { useEffect, useState } from 'react';
@@ -15,6 +17,12 @@ const RandomMovieOrTvInfo: React.FC = () => {
   const type: MediaType = window.location.pathname.includes('random/movie') ? MediaType.Movie : MediaType.Tv;
   const { media: randomTvOrMovie, recommendedItems, mediaCredits, loading: loadingRandom, error: randomError } = useMedia({ type, getCredits: true, getRecommended: true });
   const [showAllRecommendedItems, setShowAllRecommendedItems] = useState(false);
+
+  const { mediaProviders } = useMediaProvider({
+    id: randomTvOrMovie?.id! ?? 0,
+    type: MediaType.Tv,
+    country: 'CA'
+  });
 
   useEffect(() => {
     if (randomError) {
@@ -29,11 +37,14 @@ const RandomMovieOrTvInfo: React.FC = () => {
   return (
     <Layout>
       {!isLoading && randomTvOrMovie && type === MediaType.Movie && (
-        <MoviePageSection movie={randomTvOrMovie as MovieProps} credits={mediaCredits} />
+        <MoviePageSection movie={randomTvOrMovie as MovieProps} providers={mediaProviders} />
       )}
       {!isLoading && randomTvOrMovie && type === MediaType.Tv && (
-        <TvShowPageSection tvShow={randomTvOrMovie as TvProps} credits={mediaCredits} showSeasons={false} />
+        <TvShowPageSection tvShow={randomTvOrMovie as TvProps} showSeasons={false} providers={mediaProviders} />
       )}
+      {mediaCredits &&
+        <Credits credits={mediaCredits} />
+      }
       {
         displayRecommendedItems && displayRecommendedItems.length > 0 && <><h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Recommended similars</h2>
           <MediaGrid media={displayRecommendedItems} />

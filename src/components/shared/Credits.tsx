@@ -13,9 +13,9 @@ const Credits: React.FC<CreditsPropsComponent> = ({ credits }) => {
 
   return (
     <>
-      <h2 className="h2-guru text-xl font-semibold mb-2">Cast</h2>
-      <ul className="flex flex-row flex-wrap gap-4">
-        {credits.cast.slice(0, 10).map((castMember) => (
+      <h2 className="h2-guru text-xl font-semibold text-center mb-2 md:mb-4">Cast</h2>
+      <ul className="flex flex-row flex-wrap gap-4 mb-4 md:mb-8">
+        {credits.cast.slice(0, 20).map((castMember) => (
           <li key={castMember.id} className="bg-tertiary px-4 py-1 rounded-lg hover:bg-tertiary-80">
             <Link to={`/person/${castMember.id}`}>
               <h3 className="p-guru text-lg font-semibold">{castMember.name}</h3>

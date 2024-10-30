@@ -1,16 +1,16 @@
-import { CreditsProps } from "@appTypes/credits/credits";
 import { MovieProps } from "@appTypes/movies/movieProps";
-import Credits from "@components/shared/Credits";
 import MovieDetails from "@components/movies/MovieDetails";
 import MovieMetadata from "@components/movies/MovieMetadata";
 import MoviePoster from "@components/movies/MoviePoster";
+import { CountryProviders } from "@appTypes/provider/provider";
+import ProvidersInfo from "@components/provider/ProvidersInfo";
 
 interface MoviePageSectionProps {
   movie: MovieProps;
-  credits?: CreditsProps;
+  providers?: CountryProviders;
 }
 
-const MoviePageSection = ({ movie, credits }: MoviePageSectionProps) => (
+const MoviePageSection = ({ movie, providers }: MoviePageSectionProps) => (
   <>
     <section className="relative">
       <div className="container mx-auto pt-4 md:pt-12 pb-8 md:pb-12 text-white">
@@ -25,8 +25,16 @@ const MoviePageSection = ({ movie, credits }: MoviePageSectionProps) => (
               rating={movie?.vote_average}
               runtime={movie?.runtime}
             />
-            <Credits credits={credits} />
-
+            {/* Enlace de visualización */}
+            {providers && providers.link && (
+              <p className="p-guru mb-4">
+                Watch here:{" "}
+                <a href={providers.link} target="_blank" rel="noopener noreferrer" className="text-secondary hover:text-tertiary underline">
+                  {providers.link}
+                </a>
+              </p>
+            )}
+            <ProvidersInfo providers={providers || {} as CountryProviders} />
           </div>
         </div>
       </div>

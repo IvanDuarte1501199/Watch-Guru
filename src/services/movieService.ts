@@ -3,7 +3,6 @@ import tmdbApi from './tmdbApi';
 import { TeaserResponse, TmdbGenericResponse, TmdbMovieResponse } from '@appTypes/common/tmdbResponse';
 import { MediaType } from '@appTypes/common/MediaType';
 import { CreditsProps } from '@appTypes/credits/credits';
-import { TeaserProps } from '@appTypes/teaser/teasers';
 
 export const getTrendingMovies = async (page: number = 1, time: TimeWindow = 'week') => {
   try {

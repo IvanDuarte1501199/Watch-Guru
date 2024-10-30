@@ -14,9 +14,10 @@ interface UseMediaOptions {
   getRecommended?: boolean;
   getCredits?: boolean;
   getTeasers?: boolean;
+  getProviders?: boolean;
 }
 
-export const useMedia = ({ type, id, getRecommended = false, getCredits = false, getTeasers = false }: UseMediaOptions) => {
+export const useMedia = ({ type, id, getRecommended = false, getCredits = false, getTeasers = false, getProviders = false }: UseMediaOptions) => {
   const [media, setMedia] = useState<GenericItemProps>({} as GenericItemProps);
   const [recommendedItems, setRecommendedItems] = useState<GenericItemProps[]>([]);
   const [mediaCredits, setMediaCredits] = useState<CreditsProps>({} as CreditsProps);

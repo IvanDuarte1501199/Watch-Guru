@@ -8,6 +8,8 @@ import { MediaType } from '@appTypes/common/MediaType';
 import { TvProps } from '@appTypes/tv/tvProps';
 import MediaGrid from '@components/shared/MediaGrid';
 import TeaserList from '@components/shared/TesaerList';
+import useMediaProvider from '@hooks/useMediaProvider';
+import Credits from '@components/shared/Credits';
 
 const TvShowInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,6 +31,12 @@ const TvShowInfo: React.FC = () => {
     error,
   } = useMedia({ type: MediaType.Tv, id: id!, getCredits: true, getRecommended: true, getTeasers: true });
 
+  const { mediaProviders } = useMediaProvider({
+    id: id!,
+    type: MediaType.Tv,
+    country: 'CA'
+  });
+
   useEffect(() => {
     if (error) {
       navigate('/500');
@@ -40,7 +48,8 @@ const TvShowInfo: React.FC = () => {
   return (
     <Layout backgroundSrc={tvShow?.backdrop_path ? `https://image.tmdb.org/t/p/original/${tvShow.backdrop_path}` : undefined}>
       {loadingShow ? <><p className="text-center">Loading TV show details...</p></>
-        : <><TvShowSection tvShow={tvShow as TvProps} credits={tvShowCredits} />
+        : <><TvShowSection tvShow={tvShow as TvProps} providers={mediaProviders} />
+          <Credits credits={tvShowCredits} />
           {mediaTeasers && mediaTeasers.length > 0 && <TeaserList teasers={mediaTeasers} />}
 
           {
