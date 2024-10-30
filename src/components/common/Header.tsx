@@ -14,7 +14,7 @@ const LINKS = [
   { name: 'Movies', href: '/movies' },
 ];
 
-export function Header({ showSearch = false, searchType, color = 'tertiary' }: HeaderProps): JSX.Element {
+export function Header({ showSearch = false, searchType, color = 'transparent' }: HeaderProps): JSX.Element {
   const [isOpaque, setIsOpaque] = useState(false);
 
   const handleScroll = () => {

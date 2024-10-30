@@ -29,7 +29,7 @@ const Genres: React.FC = () => {
   };
 
   return (
-    <Layout headerColor='transparent' backgroundSrc={id ? `/genres/${getGenrePath(id)}.jpg` : undefined}>
+    <Layout>
       {loading ? (
         <></>
       ) : (

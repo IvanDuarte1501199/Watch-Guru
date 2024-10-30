@@ -56,7 +56,7 @@ const Movies: React.FC = () => {
   }, [trendingMovies]);
 
   return (
-    <Layout headerColor='transparent' backgroundSrc={backgroundImg} className='mb-4 md:mb-8' searchType={MediaType.Movie}>
+    <Layout backgroundSrc={backgroundImg} className='mb-4 md:mb-8' searchType={MediaType.Movie}>
       <MainTitle>MOVIES</MainTitle>
 
       {/* movies genres */}

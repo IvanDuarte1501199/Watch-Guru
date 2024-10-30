@@ -61,7 +61,7 @@ const TvShows: React.FC = () => {
 
 
   return (
-    <Layout headerColor='transparent' backgroundSrc={backgroundImg} className='mb-4 md:mb-8' searchType={MediaType.Tv}>
+    <Layout backgroundSrc={backgroundImg} className='mb-4 md:mb-8' searchType={MediaType.Tv}>
       <MainTitle>TV SHOWS</MainTitle>
       <GenresSection genres={tvGenres} />
 
