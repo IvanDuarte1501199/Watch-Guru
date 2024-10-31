@@ -1,16 +1,16 @@
 import { TvProps } from "@appTypes/tv/tvProps";
 import { useSeasonEpisodes } from "@hooks/tv/useSeasonEpisodes";
-import { CreditsProps } from "@appTypes/credits/credits";
 import { useEffect, useState } from "react";
 import SeasonsAndEpisodes from "@components/tv/TvShowSection";
 import TvShowPoster from "../../components/tv/TvShowPoster";
 import TvShowDetails from "../../components/tv/TvShowDetails";
 import ProvidersInfo from "@components/provider/ProvidersInfo";
+import { MovieAvailability } from "@appTypes/provider/provider";
 
 interface TvShowSectionProps {
   tvShow: TvProps;
   showSeasons?: boolean;
-  providers?: any;
+  providers?: MovieAvailability;
 }
 
 const TvShowSection = ({ tvShow, showSeasons = true, providers }: TvShowSectionProps) => {
@@ -38,7 +38,7 @@ const TvShowSection = ({ tvShow, showSeasons = true, providers }: TvShowSectionP
             )}
             <div>
               <TvShowDetails tvShow={tvShow} />
-              <ProvidersInfo providers={providers} />
+              <ProvidersInfo providers={providers || {} as MovieAvailability} />
             </div>
           </div>
 

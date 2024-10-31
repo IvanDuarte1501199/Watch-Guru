@@ -14,6 +14,7 @@ import trendingAllReducer from '@slice/trendingSlice';
 import DataByGenreIdReducer from '@slice/genres/DataByGenreIdSlice';
 import moviesByKeywordsReducer from '@slice/movies/moviesByKeywordsSlice';
 import trendingPeopleReducer from '@slice/person/trendingPeopleSlice';
+import countryReducer from '@slice/country/countrySlice';
 
 export const store = configureStore({
   reducer: {
@@ -32,6 +33,7 @@ export const store = configureStore({
     mediaByCategory: DataByGenreIdReducer,
     moviesByKeywords: moviesByKeywordsReducer,
     trendingPeople: trendingPeopleReducer,
+    countries: countryReducer,
   },
 });
 

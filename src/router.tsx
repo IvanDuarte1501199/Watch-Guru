@@ -16,12 +16,14 @@ import MoviesBy from '@pages/MoviesBy';
 import TvShowsBy from '@pages/TvShowsBy';
 import MediaBy from '@pages/MediaBy';
 import PersonInfo from '@pages/PersonInfo';
+import { fetchCountries } from '@slice/country/countrySlice';
 
 const AppRouter: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchGenres());
+    dispatch(fetchCountries());
   }, [dispatch]);
 
   return (

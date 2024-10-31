@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 import { getMediaProvidersByCountry } from '@services/providerService';
 import { MediaType } from '@appTypes/common/MediaType';
-import { CountryProviders } from '@appTypes/provider/provider';
+import { MovieAvailability } from '@appTypes/provider/provider';
 
 interface UseMediaProviderParams {
   id: string;
   type: MediaType;
-  country?: string;
 }
 
-const useMediaProvider = ({ id, type, country = 'US' }: UseMediaProviderParams) => {
-  const [mediaProviders, setMediaProviders] = useState<CountryProviders>({} as CountryProviders);
+const useMediaProvider = ({ id, type }: UseMediaProviderParams) => {
+  const [mediasProviders, setMediasProviders] = useState<MovieAvailability>({} as MovieAvailability);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,8 +19,8 @@ const useMediaProvider = ({ id, type, country = 'US' }: UseMediaProviderParams) 
       setError(null);
 
       try {
-        const mediaProvidersData = await getMediaProvidersByCountry(id, type, country);
-        setMediaProviders(mediaProvidersData || []);
+        const mediaProvidersData = await getMediaProvidersByCountry({ id, type });
+        setMediasProviders(mediaProvidersData || {} as MovieAvailability);
       } catch (error) {
         setError(`Failed to fetch media providers by id: ${id}`);
       } finally {
@@ -30,9 +29,9 @@ const useMediaProvider = ({ id, type, country = 'US' }: UseMediaProviderParams) 
     };
 
     fetchMediaProviders();
-  }, [id, type, country]);
+  }, [id, type]);
 
-  return { mediaProviders, loading, error };
+  return { mediasProviders, loading, error };
 };
 
 export default useMediaProvider;

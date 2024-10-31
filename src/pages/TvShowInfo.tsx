@@ -31,10 +31,9 @@ const TvShowInfo: React.FC = () => {
     error,
   } = useMedia({ type: MediaType.Tv, id: id!, getCredits: true, getRecommended: true, getTeasers: true });
 
-  const { mediaProviders } = useMediaProvider({
+  const { mediasProviders } = useMediaProvider({
     id: id!,
     type: MediaType.Tv,
-    country: 'CA'
   });
 
   useEffect(() => {
@@ -48,7 +47,7 @@ const TvShowInfo: React.FC = () => {
   return (
     <Layout backgroundSrc={tvShow?.backdrop_path ? `https://image.tmdb.org/t/p/original/${tvShow.backdrop_path}` : undefined}>
       {loadingShow ? <><p className="text-center">Loading TV show details...</p></>
-        : <><TvShowSection tvShow={tvShow as TvProps} providers={mediaProviders} />
+        : <><TvShowSection tvShow={tvShow as TvProps} providers={mediasProviders} />
           <Credits credits={tvShowCredits} />
           {mediaTeasers && mediaTeasers.length > 0 && <TeaserList teasers={mediaTeasers} />}
 

@@ -5,10 +5,15 @@ export interface ProviderProps {
   display_priority?: number;
 }
 
-export interface CountryProviders {
+export type CountryAvailability = {
   link: string;
   flatrate?: ProviderProps[];
-  buy?: ProviderProps[];
   rent?: ProviderProps[];
-  ads?: ProviderProps[];
-}
+  buy?: ProviderProps[];
+};
+
+
+export type MovieAvailability = {
+  id: number;
+  results: Record<string, CountryAvailability>;
+};

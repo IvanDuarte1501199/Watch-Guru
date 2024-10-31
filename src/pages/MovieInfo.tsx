@@ -25,10 +25,9 @@ const MovieInfo: React.FC = () => {
   const { media: movie, mediaCredits: movieCredits, recommendedItems: recommendedMovies, mediaTeasers, loading, error } =
     useMedia({ type: MediaType.Movie, id: id!, getCredits: true, getRecommended: true, getTeasers: true });
 
-  const { mediaProviders } = useMediaProvider({
+  const { mediasProviders } = useMediaProvider({
     id: id!,
     type: MediaType.Movie,
-    country: 'AR'
   });
 
   useEffect(() => {
@@ -42,7 +41,7 @@ const MovieInfo: React.FC = () => {
     <Layout backgroundSrc={movie?.backdrop_path ? `https://image.tmdb.org/t/p/original/${movie.backdrop_path}` : undefined}>
       {loading ? <></> :
         <>
-          <MoviePageSection movie={movie as MovieProps} providers={mediaProviders} />
+          <MoviePageSection movie={movie as MovieProps} providers={mediasProviders} />
           <Credits credits={movieCredits} />
           {mediaTeasers && mediaTeasers.length > 0 && <TeaserList teasers={mediaTeasers} />}
           {

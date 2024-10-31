@@ -18,10 +18,9 @@ const RandomMovieOrTvInfo: React.FC = () => {
   const { media: randomTvOrMovie, recommendedItems, mediaCredits, loading: loadingRandom, error: randomError } = useMedia({ type, getCredits: true, getRecommended: true });
   const [showAllRecommendedItems, setShowAllRecommendedItems] = useState(false);
 
-  const { mediaProviders } = useMediaProvider({
+  const { mediasProviders } = useMediaProvider({
     id: randomTvOrMovie?.id! ?? 0,
     type: MediaType.Tv,
-    country: 'CA'
   });
 
   useEffect(() => {
@@ -37,10 +36,10 @@ const RandomMovieOrTvInfo: React.FC = () => {
   return (
     <Layout>
       {!isLoading && randomTvOrMovie && type === MediaType.Movie && (
-        <MoviePageSection movie={randomTvOrMovie as MovieProps} providers={mediaProviders} />
+        <MoviePageSection movie={randomTvOrMovie as MovieProps} providers={mediasProviders} />
       )}
       {!isLoading && randomTvOrMovie && type === MediaType.Tv && (
-        <TvShowPageSection tvShow={randomTvOrMovie as TvProps} showSeasons={false} providers={mediaProviders} />
+        <TvShowPageSection tvShow={randomTvOrMovie as TvProps} showSeasons={false} providers={mediasProviders} />
       )}
       {mediaCredits &&
         <Credits credits={mediaCredits} />
