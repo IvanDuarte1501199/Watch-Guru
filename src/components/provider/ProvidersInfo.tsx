@@ -23,7 +23,8 @@ const ProvidersInfo = ({ providers }: { providers: MovieAvailability }) => {
   };
 
   const provider = providers?.results[selectedCountry];
-
+  const hasResults = Object.keys(providers.results).length > 0;
+  if (!hasResults) return <></>;
   return (
     <>
       <div className="mb-4">
