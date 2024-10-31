@@ -8,7 +8,6 @@ import ToggleSwitch from '@components/shared/ToggleSwitch';
 
 const PersonInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [isMoviesSelected, setIsMoviesSelected] = useState(true);
   const {
     person,
     moviesCredits,
@@ -19,17 +18,13 @@ const PersonInfo: React.FC = () => {
 
   useEffect(() => {
     if (moviesCredits.length > 0) {
-      const randomIndex = Math.floor(Math.random() * 5);
+      const randomIndex = Math.floor(Math.random() * Math.min(moviesCredits.length, 5));
       setBackgroundImg(`https://image.tmdb.org/t/p/original/${moviesCredits[randomIndex]?.backdrop_path}`);
     }
   }, [moviesCredits]);
 
   return (
-    <Layout backgroundSrc={
-      moviesCredits.length > 0
-        ? backgroundImg
-        : undefined
-    }>
+    <Layout backgroundSrc={moviesCredits.length > 0 ? backgroundImg : undefined}>
       {loadingPerson ? <></> :
         <>
           <PersonSection person={person} />
