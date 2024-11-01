@@ -13,16 +13,17 @@ type FeaturedPersonProps = Pick<PersonProps, 'id' | 'name' | 'profile_path' | 'k
 const FeaturedPeopleSection: React.FC<FeaturedPeopleSectionProps> = ({ people, customClass }) => {
   return (
     <section className={`mb-12 md:mb-16 ${customClass}`}>
-      <CarouselSlider maxItems={5} slideItems={5} mobileMaxItems={2}
+      <h2 className='h2-guru mb-4 text-center'>Featured People</h2>
+      <CarouselSlider maxItems={5} slideItems={5} mobileMaxItems={2} dots={false}
         mobileSlideItems={2}>
         {people.map((person) => (
-          <Link to={`/person/${person.id}`} key={person.id}>
-            <div className="bg-gray-800 rounded-lg shadow-lg transition-transform ">
+          <Link to={`/person/${person.id}`} key={person.id} className='pt-2'>
+            <div>
               <img
                 loading="lazy"
-                src={`https://image.tmdb.org/t/p/w500/${person.profile_path}`}
+                src={person.profile_path ? `https://image.tmdb.org/t/p/w500/${person.profile_path}` : '/user.svg'}
                 alt={person.name}
-                className="rounded-lg mb-2"
+                className={` mb-2 w-full h-full bg-white transition-transform overflow-visible hover:scale-105 ${person.profile_path ? 'object-cover' : 'py-14'}`}
               />
               <h3 className="text-lg h2-guru font-semibold">{person.name}</h3>
               <p className="text-sm p-guru text-secondary text-gray-400">{person.known_for_department}</p>

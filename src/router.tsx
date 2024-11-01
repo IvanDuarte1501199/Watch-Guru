@@ -17,6 +17,7 @@ import TvShowsBy from '@pages/TvShowsBy';
 import MediaBy from '@pages/MediaBy';
 import PersonInfo from '@pages/PersonInfo';
 import { fetchCountries } from '@slice/country/countrySlice';
+import AdvancedSearchPage from '@pages/AdvancedSearch';
 
 const AppRouter: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -30,6 +31,7 @@ const AppRouter: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={true ? <Home /> : <SandBox />} />
+        <Route path="/search" element={<AdvancedSearchPage />} />
         <Route path="/404" element={<PageNotFound />} />
         <Route path="/:mediaType" element={<MediaBy />} />
         <Route path="/movies/:movieType" element={<MoviesBy />} />

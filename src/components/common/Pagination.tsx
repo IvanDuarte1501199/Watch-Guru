@@ -5,9 +5,10 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   path: string;
+  customClass?: string;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, path }) => {
+const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, path, customClass }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -94,7 +95,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, path }
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className={`flex items-center justify-center ${customClass}`}>
       {renderPagination()}
     </div>
   );
