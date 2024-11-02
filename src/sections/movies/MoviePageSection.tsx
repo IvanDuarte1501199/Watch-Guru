@@ -14,7 +14,7 @@ const MoviePageSection = ({ movie, providers }: MoviePageSectionProps) => (
   <>
     <section className="relative">
       <div className="container mx-auto pt-4 md:pt-12 pb-8 md:pb-12 text-white">
-        <div className="flex flex-col md:flex-row items-start gap-10 justify-between">
+        <div className="flex flex-col md:flex-row items-start gap-10">
           {movie?.poster_path && (
             <MoviePoster src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.title} />
           )}
