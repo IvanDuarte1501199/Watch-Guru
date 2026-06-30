@@ -5,4 +5,6 @@ export type CardProps = {
   title?: string;
   name?: string;
   media_type: string;
+  release_date?: string;
+  first_air_date?: string;
 };

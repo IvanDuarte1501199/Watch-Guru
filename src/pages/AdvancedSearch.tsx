@@ -8,33 +8,133 @@ import useGenres from '@hooks/useGenres';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Select, { ActionMeta, SingleValue } from 'react-select';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { translations } from '../i18n/translations';
 
-const sortByMoviesOptions = [
-  { value: "popularity", label: "Popularity" },
-  { value: "release_date", label: "Release Date" },
-  { value: "vote_average", label: "Vote Average" },
-  { value: "revenue", label: "Revenue" },
-  { value: "vote_count", label: "Vote Count" },
-];
-
-const sortByTvShowsOptions = [
-  { value: "popularity", label: "Popularity" },
-  { value: "release_date", label: "Release Date" },
-  { value: "vote_average", label: "Vote Average" },
-  { value: "vote_count", label: "Vote Count" },
-];
-
-const orderOptions = [
-  { value: "desc", label: "Descending" },
-  { value: "asc", label: "Ascending" },
-];
-
-const MediaTypesSwitch = {
-  Tv: 'TV Shows',
-  Movie: 'Movies',
+const customSelectStyles = {
+  control: (provided: any, state: any) => ({
+    ...provided,
+    backgroundColor: 'rgba(15, 23, 42, 0.75)',
+    backdropFilter: 'blur(12px)',
+    borderColor: state.isFocused ? '#5fb3cd' : 'rgba(73, 131, 182, 0.2)',
+    boxShadow: state.isFocused ? '0 0 0 1px #5fb3cd' : 'none',
+    color: '#ffffff',
+    '&:hover': {
+      borderColor: '#5fb3cd',
+    },
+    borderRadius: '0.5rem',
+    padding: '2px',
+    borderWidth: '1px',
+  }),
+  menu: (provided: any) => ({
+    ...provided,
+    backgroundColor: '#090530',
+    border: '1px solid rgba(73, 131, 182, 0.15)',
+    boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.7)',
+    borderRadius: '0.5rem',
+    zIndex: 50,
+  }),
+  option: (provided: any, state: any) => ({
+    ...provided,
+    backgroundColor: state.isSelected 
+      ? '#5fb3cd' 
+      : state.isFocused 
+        ? 'rgba(95, 179, 205, 0.15)' 
+        : 'transparent',
+    color: state.isSelected ? '#08042c' : '#ffffff',
+    cursor: 'pointer',
+    '&:active': {
+      backgroundColor: '#5fb3cd',
+      color: '#08042c',
+    },
+    padding: '10px 14px',
+    fontSize: '0.875rem',
+  }),
+  multiValue: (provided: any) => ({
+    ...provided,
+    backgroundColor: 'rgba(95, 179, 205, 0.15)',
+    border: '1px solid rgba(95, 179, 205, 0.25)',
+    borderRadius: '0.375rem',
+  }),
+  multiValueLabel: (provided: any) => ({
+    ...provided,
+    color: '#5fb3cd',
+    fontWeight: '600',
+    fontSize: '0.75rem',
+  }),
+  multiValueRemove: (provided: any) => ({
+    ...provided,
+    color: '#5fb3cd',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: '#5fb3cd',
+      color: '#08042c',
+    },
+  }),
+  singleValue: (provided: any) => ({
+    ...provided,
+    color: '#ffffff',
+    fontSize: '0.875rem',
+  }),
+  input: (provided: any) => ({
+    ...provided,
+    color: '#ffffff',
+  }),
+  placeholder: (provided: any) => ({
+    ...provided,
+    color: 'rgba(255, 255, 255, 0.4)',
+    fontSize: '0.875rem',
+  }),
+  dropdownIndicator: (provided: any) => ({
+    ...provided,
+    color: 'rgba(255, 255, 255, 0.5)',
+    '&:hover': {
+      color: '#5fb3cd',
+    },
+  }),
+  clearIndicator: (provided: any) => ({
+    ...provided,
+    color: 'rgba(255, 255, 255, 0.5)',
+    '&:hover': {
+      color: '#ef4444',
+    },
+  }),
+  indicatorSeparator: (provided: any) => ({
+    ...provided,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  }),
 };
 
 const AdvancedSearchPage = () => {
+  const currentLanguage = useSelector((state: RootState) => state.language.currentLanguage);
+  const t = translations[currentLanguage];
+
+  const sortByMoviesOptions = [
+    { value: "popularity", label: t.popularity },
+    { value: "release_date", label: t.releaseDate },
+    { value: "vote_average", label: t.voteAverage },
+    { value: "revenue", label: t.revenue },
+    { value: "vote_count", label: t.voteCount },
+  ];
+
+  const sortByTvShowsOptions = [
+    { value: "popularity", label: t.popularity },
+    { value: "release_date", label: t.releaseDate },
+    { value: "vote_average", label: t.voteAverage },
+    { value: "vote_count", label: t.voteCount },
+  ];
+
+  const orderOptions = [
+    { value: "desc", label: t.descending },
+    { value: "asc", label: t.ascending },
+  ];
+
+  const MediaTypesSwitch = {
+    Tv: t.tvShows,
+    Movie: t.movies,
+  };
+
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const newPage = Number(query.get('page')) || 1;
@@ -101,13 +201,14 @@ const AdvancedSearchPage = () => {
   };
 
   const handleGenreChange = (selectedOption: any | null) => {
-    if (selectedOption) {
-      setFilters((prev) => ({
-        ...prev,
-        with_genres: selectedOption.map((op) => op.value),
-      }));
-      goToPage(1);
-    }
+    const genreValues = selectedOption && selectedOption.length > 0 
+      ? selectedOption.map((op: any) => op.value).join(',') 
+      : '';
+    setFilters((prev) => ({
+      ...prev,
+      with_genres: genreValues,
+    }));
+    goToPage(1);
   };
 
   const { results, isLoading, page, total_pages, setPage } = useAdvancedSearch({
@@ -121,7 +222,7 @@ const AdvancedSearchPage = () => {
 
   return (
     <Layout>
-      <h1 className='h1-guru text-center mt-20 mb-6'>Advanced Search</h1>
+      <h1 className='h1-guru text-center mt-20 mb-6'>{t.advancedSearch}</h1>
       <form className='flex flex-col gap-10'>
         <div className='flex m-auto'>
           {Object.keys(MediaTypesSwitch).map((media) => {
@@ -140,32 +241,37 @@ const AdvancedSearchPage = () => {
         </div>
         <span className='flex flex-col gap-4 lg:flex-row items-start lg:items-center justify-between mb-4 md:mb-8'>
           <span>
-            <h2 className='h2-guru text-base mb-2 lg:mb-0'>Filter by genre</h2>
+            <h2 className='h2-guru text-base mb-2 lg:mb-0'>{t.filterByGenre}</h2>
             <Select
               options={filterGenres.map(genre => ({ value: genre.id.toString(), label: genre.name }))}
               onChange={handleGenreChange}
               isClearable
               isMulti
               isSearchable
-              className='rounded-sm w-80'
+              styles={customSelectStyles}
+              className='w-80'
+              placeholder={currentLanguage === 'es' ? "Seleccionar género..." : "Select genre..."}
+              noOptionsMessage={() => currentLanguage === 'es' ? "No hay opciones" : "No options"}
             />
           </span>
           <span className='flex gap-2 items-start lg:items-center flex-col lg:flex-row'>
-            <h2 className='h2-guru text-base lg:mr-4'>Order by</h2>
+            <h2 className='h2-guru text-base lg:mr-4'>{t.orderBy}</h2>
             <span className='flex gap-2 lg:gap-4 items-center'>
               <Select
                 options={(mediaType === MediaType.Movie) ? sortByMoviesOptions : sortByTvShowsOptions}
                 isSearchable={false}
                 onChange={handleSortChange}
                 defaultValue={(mediaType === MediaType.Movie) ? sortByMoviesOptions[0] : sortByTvShowsOptions[0]}
-                className='rounded-sm w-32 lg:w-40'
+                styles={customSelectStyles}
+                className='w-32 lg:w-40'
               />
               <Select
                 options={orderOptions}
                 isSearchable={false}
                 onChange={handleOrderChange}
                 defaultValue={orderOptions[0]}
-                className='rounded-sm w-36 min-w-36 max-w-36'
+                styles={customSelectStyles}
+                className='w-36 min-w-36 max-w-36'
               />
             </span>
           </span>

@@ -10,11 +10,17 @@ import useMediaProvider from '@hooks/useMediaProvider';
 import MoviePageSection from '@sections/movies/MoviePageSection';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { translations } from '../i18n/translations';
+import Loader from '@components/common/Loader';
 
 const MovieInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [showAllRecommendedMovies, setShowAllRecommendedMovies] = useState(false);
+  const currentLanguage = useSelector((state: RootState) => state.language.currentLanguage);
+  const t = translations[currentLanguage];
 
   useEffect(() => {
     if (!id) {
@@ -39,21 +45,23 @@ const MovieInfo: React.FC = () => {
 
   return (
     <Layout backgroundSrc={movie?.backdrop_path ? `https://image.tmdb.org/t/p/original/${movie.backdrop_path}` : undefined}>
-      {loading ? <></> :
-        <>
+      {loading ? <Loader /> :
+        <div className="animate-fade-in-page">
           <MoviePageSection movie={movie as MovieProps} providers={mediasProviders} />
           <Credits credits={movieCredits} />
           {mediaTeasers && mediaTeasers.length > 0 && <TeaserList teasers={mediaTeasers} />}
           {
-            displayRecommendedMovies && displayRecommendedMovies.length > 0 && <><h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Recommended similars movies</h2>
+            displayRecommendedMovies && displayRecommendedMovies.length > 0 && <>
+              <h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>{t.recommendedMovies}</h2>
               <MediaGrid media={displayRecommendedMovies} />
               {recommendedMovies.length > 10 && !showAllRecommendedMovies && (
                 <Button onClick={() => setShowAllRecommendedMovies(true)} variant="secondary">
-                  View more
+                  {t.viewMore}
                 </Button>
-              )}</>
+              )}
+            </>
           }
-        </>
+        </div>
       }
     </Layout>
   );

@@ -30,7 +30,7 @@ const AppRouter: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={true ? <Home /> : <SandBox />} />
+        <Route path="/" element={<Home />} />
         <Route path="/search" element={<AdvancedSearchPage />} />
         <Route path="/404" element={<PageNotFound />} />
         <Route path="/:mediaType" element={<MediaBy />} />

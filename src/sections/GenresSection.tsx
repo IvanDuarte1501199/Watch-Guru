@@ -1,15 +1,21 @@
 import { Genre } from '@appTypes/genres/genre';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { translations } from '../i18n/translations';
 
 type GenresSectionProps = {
   genres: Genre[];
 };
 
 const GenresSection: React.FC<GenresSectionProps> = ({ genres }) => {
+  const currentLanguage = useSelector((state: RootState) => state.language.currentLanguage);
+  const t = translations[currentLanguage];
+
   return (
     <section className="mb-4 md:mb-8">
-      <h2 className="h2-guru pb-4 text-center">Genres</h2>
+      <h2 className="h2-guru pb-4 text-center">{t.genresKey}</h2>
       <ul className="flex overflow-x-scroll pb-2 md:pb-0 md:overflow-x-hidden md:flex-wrap gap-4 md:justify-center">
         {genres &&
           genres.map((genre) => (

@@ -4,6 +4,9 @@ import { MovieProps } from '@appTypes/movies/movieProps';
 import { PersonProps } from '@appTypes/person/personProps';
 import { TvProps } from '@appTypes/tv/tvProps';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { translations } from '../../i18n/translations';
 
 interface SearchItemProps {
   item: MultiGenericItemProps;
@@ -11,14 +14,17 @@ interface SearchItemProps {
 }
 
 const SearchItem: React.FC<SearchItemProps> = ({ item, onClick }) => {
+  const currentLanguage = useSelector((state: RootState) => state.language.currentLanguage);
+  const t = translations[currentLanguage];
+
   const getMediaTypeFullName = (mediaType: string) => {
     switch (mediaType) {
       case 'movie':
-        return 'Movie';
+        return t.movie;
       case 'tv':
-        return 'TV Show';
+        return t.tvShow;
       case 'person':
-        return 'Person';
+        return t.person;
       default:
         return '';
     }
@@ -56,16 +62,18 @@ const SearchItem: React.FC<SearchItemProps> = ({ item, onClick }) => {
   };
 
   return (
-    <li className='flex items-center gap-4 hover:bg-gray dark:hover:bg-gray-700' onClick={onClick}>
-      <Link to={getItemLink()} className='p-2 flex items-center gap-4 w-full'>
+    <li className="hover:bg-slate-900 transition-colors duration-200 cursor-pointer" onClick={onClick}>
+      <Link to={getItemLink()} className="p-2.5 flex items-center gap-4 w-full">
         <img
           src={getSrcPath(item)}
           alt={((item as MovieProps).title) || (item as TvProps | PersonProps).name}
-          className='w-10 h-12 object-cover'
+          className="w-10 h-14 object-cover rounded shadow-sm border border-slate-800"
         />
-        <div>
-          <h3 className='text-md font-semibold line-clamp-1'>{((item as MovieProps).title) || (item as TvProps | PersonProps).name}</h3>
-          <p className='text-sm text-tertiary dark:text-gray-400'>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-sm font-semibold text-white truncate">
+            {((item as MovieProps).title) || (item as TvProps | PersonProps).name}
+          </h3>
+          <p className="text-xs text-slate-400 font-medium mt-0.5">
             {getMediaTypeFullName(item.media_type)}
           </p>
         </div>

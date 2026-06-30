@@ -5,9 +5,9 @@ type CircularVoteProps = {
 };
 
 const getColor = (percentage: number) => {
-  const r = percentage < 50 ? 255 : Math.floor(255 - (percentage * 2 - 100) * 255 / 100);
-  const g = percentage > 50 ? 255 : Math.floor((percentage * 2) * 255 / 100);
-  return `rgb(${r},${g},0)`;
+  if (percentage >= 70) return '#22c55e'; // Green
+  if (percentage >= 50) return '#eab308'; // Yellow
+  return '#ef4444'; // Red
 };
 
 const CircularVote: React.FC<CircularVoteProps> = ({ voteAverage }) => {
@@ -15,37 +15,30 @@ const CircularVote: React.FC<CircularVoteProps> = ({ voteAverage }) => {
   const roundedVote = vote.toFixed(1);
   const percentage = (vote / 10) * 100;
 
-  const radius = 18;
-  const outerRadius = radius + 2;
+  const radius = 16;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (vote / 10) * circumference;
 
   const dynamicColor = getColor(percentage);
 
   return (
-    <div className="relative">
-      <svg height="80" width="80" className="transform -rotate-90">
+    <div className="relative flex items-center justify-center w-11 h-11 rounded-full bg-slate-950/80 backdrop-blur-md border border-slate-800/80 shadow-md">
+      <svg height="40" width="40" className="transform -rotate-90">
+        {/* Track circle */}
         <circle
-          cx="40"
-          cy="40"
-          r={outerRadius}
-          strokeWidth="2"
-          stroke="black"
-          fill="black"
-        />
-        <circle
-          cx="40"
-          cy="40"
+          cx="20"
+          cy="20"
           r={radius}
-          strokeWidth="2"
-          stroke="#e0e0e0"
-          fill="black"
+          strokeWidth="2.5"
+          stroke="#1e293b"
+          fill="transparent"
         />
+        {/* Progress circle */}
         <circle
-          cx="40"
-          cy="40"
+          cx="20"
+          cy="20"
           r={radius}
-          strokeWidth="2"
+          strokeWidth="2.5"
           stroke={dynamicColor}
           fill="transparent"
           strokeDasharray={circumference}
@@ -53,7 +46,7 @@ const CircularVote: React.FC<CircularVoteProps> = ({ voteAverage }) => {
           strokeLinecap="round"
         />
       </svg>
-      <div className="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">
+      <div className="absolute inset-0 flex items-center justify-center text-white text-[11px] font-black tracking-tighter">
         {roundedVote}
       </div>
     </div>

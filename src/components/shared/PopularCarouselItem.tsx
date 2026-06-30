@@ -13,20 +13,6 @@ export interface PopularCarouselItemProps {
   genres?: string[];
 }
 
-interface InfoBadgeProps {
-  content: string;
-  isHover: boolean;
-}
-
-const InfoBadge: React.FC<InfoBadgeProps> = ({ content, isHover }) => (
-  <p
-    className={`p-guru text-white bg-gray bg-opacity-30 px-2 py-1 rounded-sm transition-transform duration-300 ease-in-out transform
-      ${isHover ? 'translate-y-0' : 'xl:translate-y-full'}`}
-  >
-    {content}
-  </p>
-);
-
 const PopularCarouselItem: React.FC<PopularCarouselItemProps> = ({
   id,
   backdrop_path,
@@ -37,11 +23,7 @@ const PopularCarouselItem: React.FC<PopularCarouselItemProps> = ({
   media_type,
   genres
 }) => {
-  const [isHover, setIsHover] = React.useState(false);
   const navigate = useNavigate();
-
-  const handleMouseEnter = () => setIsHover(true);
-  const handleMouseLeave = () => setIsHover(false);
 
   const getUrlByMediaType = () => {
     switch (media_type) {
@@ -59,52 +41,71 @@ const PopularCarouselItem: React.FC<PopularCarouselItemProps> = ({
 
   return (
     <div
-      className="relative cursor-pointer animate-slide-up-fade"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className="relative rounded-2xl overflow-hidden cursor-pointer group shadow-2xl border border-slate-900 bg-slate-950 mx-2 my-4"
       onClick={handleRedirect}
     >
-      <img
-        loading="lazy"
-        src={`https://image.tmdb.org/t/p/w500${backdrop_path}`}
-        title={title}
-        alt={title}
-        className={`h-full w-full rounded-md object-cover filter brightness-50 transition-all duration-300 ease-in-out ${isHover ? 'grayscale blur-sm' : 'grayscale-0'}`}
-      />
-      <div>
-        <p className={`p-guru text-lg xl:text-2xl absolute top-2 xl:top-6 left-4 text-white transition-all ${isHover ? 'text-4xl' : ''}`}>
-          {title}
-        </p>
-        <p className="p-guru line-clamp-2 xl:line-clamp-4 mx-4 absolute top-10 xl:top-16">{overview}</p>
-
+      {/* Background Image Container */}
+      <div className="h-[280px] sm:h-[380px] md:h-[450px] lg:h-[500px] overflow-hidden relative">
+        {backdrop_path ? (
+          <img
+            loading="lazy"
+            src={`https://image.tmdb.org/t/p/w1280${backdrop_path}`}
+            title={title}
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-102"
+          />
+        ) : (
+          <div className="w-full h-full bg-slate-900" />
+        )}
+        {/* Soft dark vignette gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+      </div>
+      
+      {/* Absolute details box at the bottom */}
+      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 flex flex-col gap-3 justify-end z-10 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent pt-20">
+        
+        {/* Genre Tags */}
         {genres && genres.length > 0 && (
-          <div className="p-guru text-white text-sm flex flex-wrap gap-1 xl:gap-6 mx-4 absolute top-24 xl:top-48">
+          <div className="flex flex-wrap gap-2 animate-fade-in">
             {genres.map((genre) => (
-              <span key={genre} className="bg-gray-700 bg-opacity-60 bg-secondary p-2 rounded-md">
+              <span 
+                key={genre} 
+                className="bg-secondary/10 border border-secondary/20 backdrop-blur-md text-secondary text-[11px] md:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider"
+              >
                 {genre}
               </span>
             ))}
           </div>
         )}
+        
+        {/* Movie/Show Title */}
+        <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-white tracking-tight leading-none group-hover:text-secondary transition-colors duration-200">
+          {title}
+        </h2>
 
-        <div className={`absolute bottom-2 xl:bottom-4 left-4 flex space-x-4 xl:space-x-8 ${isHover ? 'opacity-100' : 'xl:opacity-0'} transition-opacity duration-300`}>
+        {/* Overview Description */}
+        {overview && (
+          <p className="text-slate-300 text-sm md:text-base font-normal max-w-3xl line-clamp-2 md:line-clamp-3 leading-relaxed mt-1">
+            {overview}
+          </p>
+        )}
+
+        {/* Meta Info Badges */}
+        <div className="flex flex-wrap items-center gap-3 mt-2 pt-3 border-t border-slate-900/60 text-slate-300">
           {release_date && (
-            <InfoBadge
-              content={new Date(release_date).toLocaleDateString('en-US', { month: '2-digit', year: 'numeric' })}
-              isHover={isHover}
-            />
+            <span className="bg-slate-900/80 border border-slate-800/80 text-slate-300 text-xs px-3 py-1.5 rounded-lg font-semibold shadow-sm">
+              {new Date(release_date).toLocaleDateString('en-US', { month: '2-digit', year: 'numeric' })}
+            </span>
           )}
           {media_type && (
-            <InfoBadge
-              content={`${MediaType.Tv === media_type ? 'TV Show' : 'Movie'}`}
-              isHover={isHover}
-            />
+            <span className="bg-slate-900/80 border border-slate-800/80 text-slate-300 text-xs px-3 py-1.5 rounded-lg font-semibold shadow-sm">
+              {media_type === MediaType.Tv ? 'TV Show' : 'Movie'}
+            </span>
           )}
-          {vote_average && (
-            <InfoBadge
-              content={`${vote_average.toFixed(1)} / 10`}
-              isHover={isHover}
-            />
+          {vote_average > 0 && (
+            <span className="bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-xs px-3 py-1.5 rounded-lg font-bold shadow-sm flex items-center gap-1.5">
+              ★ {vote_average.toFixed(1)}
+            </span>
           )}
         </div>
       </div>

@@ -9,8 +9,14 @@ import { MovieType } from '@appTypes/movies/movieProps';
 import useMediaByGenreId from '@hooks/useMediaByGenreId';
 import FeaturedGenresSection from '@sections/FeaturedGenresSection';
 import { MediaType } from '@appTypes/common/MediaType';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { translations } from '../i18n/translations';
 
 const Movies: React.FC = () => {
+  const currentLanguage = useSelector((state: RootState) => state.language.currentLanguage);
+  const t = translations[currentLanguage];
+
   const { media: trendingMovies } = useMovies({ movieType: MovieType.Trending });
   const { media: nowPlayingMovies } = useMovies({ movieType: MovieType.NowPlaying });
   const { media: popularMovies } = useMovies({ movieType: MovieType.Popular });
@@ -41,9 +47,30 @@ const Movies: React.FC = () => {
       keywords: MovieAndTvKeywords.MARVEL,
     }); */
 
-  const getGenreImageUrl = (genreName: string) => {
-    const formattedGenreName = genreName.toLowerCase().replace(/\s+/g, '-');
-    return `/genres/${formattedGenreName}.jpg`;
+  const getGenreImageUrl = (genreId: number) => {
+    const genreIdImageMap: Record<number, string> = {
+      28: "action",
+      12: "adventure",
+      16: "animation",
+      35: "comedy",
+      80: "crime",
+      99: "documentary",
+      18: "drama",
+      10751: "family",
+      14: "fantasy",
+      36: "history",
+      27: "horror",
+      10402: "music",
+      9648: "mystery",
+      10749: "romance",
+      878: "science-fiction",
+      10770: "tv-movie",
+      53: "thriller",
+      10752: "war",
+      37: "western",
+    };
+    const filename = genreIdImageMap[genreId] || 'default';
+    return `/genres/${filename}.jpg`;
   };
 
   const [backgroundImg, setBackgroundImg] = useState<string | undefined>(undefined);
@@ -57,14 +84,14 @@ const Movies: React.FC = () => {
 
   return (
     <Layout backgroundSrc={backgroundImg} className='mb-4 md:mb-8' searchType={MediaType.Movie}>
-      <MainTitle>MOVIES</MainTitle>
+      <MainTitle>{t.movies}</MainTitle>
 
       {/* movies genres */}
       <GenresSection genres={moviesGenres} />
 
-      {/* trending tv shows */}
+      {/* trending movies */}
       {trendingMovies && trendingMovies.length > 0 && (
-        <GenericList title="Trending Movies" genericList={trendingMovies} showViewMore href="/movies/trending" />
+        <GenericList title={t.trendingMovies} genericList={trendingMovies} showViewMore href="/movies/trending" />
       )}
 
       {/* moviesByGenre1 */}
@@ -80,24 +107,15 @@ const Movies: React.FC = () => {
         genres={randomGenres.map((genre) => ({
           id: genre.id,
           name: genre.name,
-          image: getGenreImageUrl(genre.name),
+          image: getGenreImageUrl(genre.id),
           path: `/genres/${genre.id}`,
         }))}
       />
 
-      {/* marvel */}
-      {/* TODO: improve by keywords logic */}
-      {/* {marvelMovies && marvelMovies.length > 0 && (
-        <GenericList
-          title="Marvel Movies"
-          genericList={marvelMovies}
-        />
-      )} */}
-
       {/* now playing movies */}
       {nowPlayingMovies && nowPlayingMovies.length > 0 && (
         <GenericList
-          title="Now Playing Movies"
+          title={t.nowPlayingMovies}
           genericList={nowPlayingMovies}
           showViewMore href="/movies/now-playing"
         />
@@ -114,7 +132,7 @@ const Movies: React.FC = () => {
 
       {/* popular movies */}
       {popularMovies && popularMovies.length > 0 && (
-        <GenericList title="Popular Movies" genericList={popularMovies} showViewMore href="/movies/popular" />
+        <GenericList title={t.popularMovies} genericList={popularMovies} showViewMore href="/movies/popular" />
       )}
 
       {/* moviesByGenre3 */}
@@ -128,12 +146,12 @@ const Movies: React.FC = () => {
 
       {/* top rated movies */}
       {topRatedMovies && topRatedMovies.length > 0 && (
-        <GenericList title="Top Rated Movies" genericList={topRatedMovies} showViewMore href="/movies/top-rated" />
+        <GenericList title={t.topRatedMovies} genericList={topRatedMovies} showViewMore href="/movies/top-rated" />
       )}
 
       {/* upcoming movies */}
       {upcomingMovies && upcomingMovies.length > 0 && (
-        <GenericList title="Upcoming Movies" genericList={upcomingMovies} showViewMore href="/movies/upcoming" />
+        <GenericList title={t.upcomingMovies} genericList={upcomingMovies} showViewMore href="/movies/upcoming" />
       )}
 
     </Layout>

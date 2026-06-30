@@ -1,14 +1,20 @@
 import { PersonProps } from "@appTypes/person/personProps";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { translations } from "../../i18n/translations";
 
 interface PersonSectionProps {
   person: PersonProps;
 }
 
 const PersonSection = ({ person }: PersonSectionProps) => {
+  const currentLanguage = useSelector((state: RootState) => state.language.currentLanguage);
+  const t = translations[currentLanguage];
+
   const formatDate = (dateString: string | null) => {
-    if (!dateString) return "Unknown";
+    if (!dateString) return currentLanguage === 'es' ? "Desconocido" : "Unknown";
     const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return new Date(dateString).toLocaleDateString(currentLanguage === 'es' ? 'es-ES' : 'en-US', options);
   };
 
   return (
@@ -37,15 +43,15 @@ const PersonSection = ({ person }: PersonSectionProps) => {
           {/* Birthdate and Place of Birth */}
           {person.birthday && person.place_of_birth && <div className="mb-4">
             <p>
-              <strong>Born: </strong>
-              {formatDate(person.birthday)} {person.place_of_birth && `in ${person.place_of_birth}`}
+              <strong>{t.born}: </strong>
+              {formatDate(person.birthday)} {person.place_of_birth && `${t.inWord} ${person.place_of_birth}`}
             </p>
           </div>
           }
           {/* Department and Popularity */}
           {person.known_for_department && <div className="mb-4">
             <p>
-              <strong>Known for: </strong>
+              <strong>{t.knownFor}: </strong>
               {person.known_for_department}
             </p>
           </div>}
@@ -59,7 +65,7 @@ const PersonSection = ({ person }: PersonSectionProps) => {
                 rel="noopener noreferrer"
                 className="text-blue-400 hover:underline"
               >
-                Visit Official Website
+                {t.visitOfficialWebsite}
               </a>
             </div>
           )}

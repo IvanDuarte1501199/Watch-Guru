@@ -9,8 +9,14 @@ import { TvShowType } from '@appTypes/tv/tvProps';
 import FeaturedGenresSection from '@sections/FeaturedGenresSection';
 import useMediaByGenreId from '@hooks/useMediaByGenreId';
 import { MediaType } from '@appTypes/common/MediaType';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { translations } from '../i18n/translations';
 
 const TvShows: React.FC = () => {
+  const currentLanguage = useSelector((state: RootState) => state.language.currentLanguage);
+  const t = translations[currentLanguage];
+
   const {
     media: trendingTv,
   } = useTvShows({ tvShowType: TvShowType.Trending });
@@ -45,9 +51,27 @@ const TvShows: React.FC = () => {
     mediaType: MediaType.Tv
   });
 
-  const getGenreImageUrl = (genreName: string) => {
-    const formattedGenreName = genreName.toLowerCase().replace(/\s+/g, '-');
-    return `/genres/${formattedGenreName}.jpg`;
+  const getGenreImageUrl = (genreId: number) => {
+    const genreIdImageMap: Record<number, string> = {
+      10759: "action-&-adventure",
+      16: "animation",
+      35: "comedy",
+      80: "crime",
+      99: "documentary",
+      18: "drama",
+      10751: "family",
+      10762: "kids",
+      9648: "mystery",
+      10763: "news",
+      10764: "reality",
+      10765: "sci-fi-&-fantasy",
+      10766: "soap",
+      10767: "talk",
+      10768: "war-&-politics",
+      37: "western",
+    };
+    const filename = genreIdImageMap[genreId] || 'default';
+    return `/genres/${filename}.jpg`;
   };
 
   const [backgroundImg, setBackgroundImg] = useState<string | undefined>(undefined);
@@ -62,11 +86,11 @@ const TvShows: React.FC = () => {
 
   return (
     <Layout backgroundSrc={backgroundImg} className='mb-4 md:mb-8' searchType={MediaType.Tv}>
-      <MainTitle>TV SHOWS</MainTitle>
+      <MainTitle>{t.tvShows}</MainTitle>
       <GenresSection genres={tvGenres} />
 
       {trendingTv && trendingTv.length > 0 && (
-        <GenericList title="Trending Tv Shows" genericList={trendingTv} showViewMore href="/tv-shows/trending" />
+        <GenericList title={t.trendingTvShows} genericList={trendingTv} showViewMore href="/tv-shows/trending" />
       )}
 
       {/* tvShowsByGenre1 */}
@@ -82,12 +106,12 @@ const TvShows: React.FC = () => {
         genres={randomGenres.map((genre) => ({
           id: genre.id,
           name: genre.name,
-          image: getGenreImageUrl(genre.name),
+          image: getGenreImageUrl(genre.id),
           path: `/genres/${genre.id}`,
         }))}
       />
       {popularTv && popularTv.length > 0 && (
-        <GenericList title="Popular Tv Shows" genericList={popularTv} showViewMore href="/tv-shows/popular" />
+        <GenericList title={t.popularTvShows} genericList={popularTv} showViewMore href="/tv-shows/popular" />
       )}
 
       {/* tvShowsByGenre2 */}
@@ -100,7 +124,7 @@ const TvShows: React.FC = () => {
       )}
 
       {topRatedTv && topRatedTv.length > 0 && (
-        <GenericList title="Top Rated Tv Shows" genericList={topRatedTv} showViewMore href="/tv-shows/top-rated" />
+        <GenericList title={t.topRatedTvShows} genericList={topRatedTv} showViewMore href="/tv-shows/top-rated" />
       )}
 
       {/* tvShowsByGenre3 */}

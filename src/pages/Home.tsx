@@ -6,7 +6,7 @@ import useMovies from '@hooks/movies/useMovies';
 import useTvShows from '@hooks/tv/useTvShows';
 import { TvShowType } from '@appTypes/tv/tvProps';
 import useMedias from '@hooks/useMedias';
-import SuggestBox from '@components/shared/SuggestBox';
+import MagicSuggest from '@components/shared/MagicSuggest';
 import { MainTitle } from '@components/common/MainTitle';
 import { MediaTypes } from '@appTypes/common/media';
 import useGenres from '@hooks/useGenres';
@@ -16,8 +16,15 @@ import usePeople from '@hooks/person/usePeople';
 import FeaturedPeopleSection from '@sections/person/FeaturedPeopleSection';
 import { PeopleTypes } from '@appTypes/person/peopleTypes';
 import PopularCarousel from '@components/shared/PopularCarousel';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { translations } from '../i18n/translations';
 
 const Home: React.FC = () => {
+  const currentLanguage = useSelector((state: RootState) => state.language.currentLanguage);
+  const t = translations[currentLanguage];
+
   const {
     media: trending,
   } = useMedias({ mediaType: MediaTypes.Trending });
@@ -87,7 +94,7 @@ const Home: React.FC = () => {
           : undefined
       }
     >
-      <MainTitle>Welcome to your next binge-worthy recommendation!</MainTitle>
+      <MainTitle>{t.welcome}</MainTitle>
 
       <PopularCarousel
         items={trending.map((item) => {
@@ -113,72 +120,73 @@ const Home: React.FC = () => {
         customClass="mb:8 mb-12"
       />
 
-      <h2 className='h2-guru mb-4 text-center'>Suggest me a random movie or tv show</h2>
-      <section className='flex flex-col md:flex-row align-middle justify-center gap-10 mb-4 '>
-        <SuggestBox placeholder='Random MOVIE suggest' icon='movie' href='/random/movie' customClass='animate-fade-in-right' />
-        <SuggestBox placeholder='Random TV SHOW suggest' icon='tv-shows' href='/random/tv-show' customClass='animate-fade-in-left' />
-      </section>
+      {/* Magic suggestion section */}
+      <MagicSuggest />
 
-      <h2 className='h2-guru mb-4 md:mb-8 text-center animate-fade-in'><a href="/search">Advanced Search</a></h2>
+      <h2 className='h2-guru mb-6 md:mb-10 text-center animate-fade-in'>
+        <Link to="/search" className="text-secondary hover:text-secondary-80 font-bold hover:underline transition duration-200">
+          {t.advancedSearch} &rarr;
+        </Link>
+      </h2>
 
       {/* popular movies */}
       {popularMovies && popularMovies.length > 0 && (
-        <GenericList title="Popular movies" genericList={popularMovies} showViewMore href="/movies/popular" />
+        <GenericList title={t.popularMovies} genericList={popularMovies} showViewMore href="/movies/popular" />
       )}
-
+ 
       {/* moviesByGenre1 */}
       {moviesByGenre1 && moviesByGenre1.length > 0 && (
         <GenericList
-          title={`${randomMoviesGenres[0]?.name} movies`}
+          title={currentLanguage === 'es' ? `Películas de ${randomMoviesGenres[0]?.name}` : `${randomMoviesGenres[0]?.name} Movies`}
           genericList={moviesByGenre1}
           showViewMore href={`/genres/${randomMoviesGenres[0]?.id}`}
         />
       )}
-
+ 
       {/* Featured People part 1*/}
       <FeaturedPeopleSection people={featuredPeople.slice(0, (featuredPeople.length / 2))} />
-
+ 
       {/* trending tv shows */}
       {trendingTv && trendingTv.length > 0 && (
-        <GenericList title="Trending tv shows" genericList={trendingTv} showViewMore href="/tv-shows/trending" />
+        <GenericList title={t.trendingTvShows} genericList={trendingTv} showViewMore href="/tv-shows/trending" />
       )}
-
+ 
       {/* tvShowsByGenre1 */}
       {tvShowsByGenre1 && tvShowsByGenre1.length > 0 && (
         <GenericList
-          title={`${randomTvShowsGenres[0]?.name} tv shows`}
+          title={currentLanguage === 'es' ? `Series de ${randomTvShowsGenres[0]?.name}` : `${randomTvShowsGenres[0]?.name} TV Shows`}
           genericList={tvShowsByGenre1}
           showViewMore href={`/genres/${randomTvShowsGenres[0]?.id}`}
         />
       )}
-
+ 
       {/* Featured People part 2*/}
       <FeaturedPeopleSection people={featuredPeople.slice((featuredPeople.length / 2), featuredPeople.length)} />
-
+ 
       {/* upcoming movies */}
       {upcomingMovies && upcomingMovies.length > 0 && (
-        <GenericList title="Upcoming movies" genericList={upcomingMovies} showViewMore href="/movies/upcoming" />
+        <GenericList title={t.upcomingMovies} genericList={upcomingMovies} showViewMore href="/movies/upcoming" />
       )}
-
-
+ 
+ 
       {/* moviesByGenre2 */}
       {moviesByGenre2 && moviesByGenre2.length > 0 && (
         <GenericList
-          title={`${randomMoviesGenres[1]?.name} movies`}
+          title={currentLanguage === 'es' ? `Películas de ${randomMoviesGenres[1]?.name}` : `${randomMoviesGenres[1]?.name} Movies`}
           genericList={moviesByGenre2}
           showViewMore href={`/genres/${randomMoviesGenres[1]?.id}`}
         />
       )}
-
+ 
       {/* top rated tv show */}
       {topRated && topRated.length > 0 && (
-        <GenericList title="Top rated tv shows" genericList={topRated} showViewMore href="/tv-shows/top-rated" />
+        <GenericList title={t.topRatedTvShows} genericList={topRated} showViewMore href="/tv-shows/top-rated" />
       )}
-
+ 
       {/* tvShowsByGenre2 */}
       {tvShowsByGenre2 && tvShowsByGenre2.length > 0 && (
         <GenericList
-          title={`${randomTvShowsGenres[1]?.name} tv shows`}
+          title={currentLanguage === 'es' ? `Series de ${randomTvShowsGenres[1]?.name}` : `${randomTvShowsGenres[1]?.name} TV Shows`}
           genericList={tvShowsByGenre2}
           showViewMore href={`/genres/${randomTvShowsGenres[1]?.id}`}
         />

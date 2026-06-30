@@ -61,18 +61,6 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
     setCurrentSlide(0);
   }, []);
 
-  useEffect(() => {
-    if (autoplay) {
-      const interval = setInterval(() => {
-        if (slider.current) {
-          slider.current.slickNext();
-        }
-      }, autoplaySpeed);
-
-      return () => clearInterval(interval);
-    }
-  }, [autoplay, autoplaySpeed]);
-
   const itemCount = React.Children.count(children);
   const settings = {
     dots: dots && itemCount > maxItems,
@@ -84,6 +72,9 @@ const CarouselSlider: React.FC<CarouselSliderProps> = ({
     prevArrow: <PrevArrow />,
     afterChange: (current: number) => setCurrentSlide(current),
     infinite: infinite,
+    autoplay: autoplay,
+    autoplaySpeed: autoplaySpeed,
+    pauseOnHover: true,
     centerMode: false,
     centerpadding: 0,
     responsive: [

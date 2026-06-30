@@ -10,11 +10,17 @@ import MediaGrid from '@components/shared/MediaGrid';
 import TeaserList from '@components/shared/TesaerList';
 import useMediaProvider from '@hooks/useMediaProvider';
 import Credits from '@components/shared/Credits';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { translations } from '../i18n/translations';
+import Loader from '@components/common/Loader';
 
 const TvShowInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [showAllRecommendedTvShows, setShowAllRecommendedTvShows] = useState(false);
+  const currentLanguage = useSelector((state: RootState) => state.language.currentLanguage);
+  const t = translations[currentLanguage];
 
   useEffect(() => {
     if (!id) {
@@ -46,20 +52,23 @@ const TvShowInfo: React.FC = () => {
 
   return (
     <Layout backgroundSrc={tvShow?.backdrop_path ? `https://image.tmdb.org/t/p/original/${tvShow.backdrop_path}` : undefined}>
-      {loadingShow ? <><p className="text-center">Loading TV show details...</p></>
-        : <><TvShowSection tvShow={tvShow as TvProps} providers={mediasProviders} />
+      {loadingShow ? <Loader />
+        : <div className="animate-fade-in-page">
+          <TvShowSection tvShow={tvShow as TvProps} providers={mediasProviders} />
           <Credits credits={tvShowCredits} />
           {mediaTeasers && mediaTeasers.length > 0 && <TeaserList teasers={mediaTeasers} />}
 
           {
-            displayRecommendedTvShows && displayRecommendedTvShows.length > 0 && <><h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>Recommended similars tv shows</h2>
+            displayRecommendedTvShows && displayRecommendedTvShows.length > 0 && <>
+              <h2 className='h2-guru text-center uppercase mb-4 md:mb-8'>{t.recommendedTvShows}</h2>
               <MediaGrid media={displayRecommendedTvShows} />
               {recommendedTvShows.length > 10 && !showAllRecommendedTvShows && (
                 <Button onClick={() => setShowAllRecommendedTvShows(true)} variant="secondary">
-                  View more
+                  {t.viewMore}
                 </Button>
-              )}</>
-          }</>
+              )}
+            </>
+          }</div>
       }
     </Layout>
   );

@@ -21,11 +21,13 @@ export const getTrendingAll = async (page: number = 1, time: TimeWindow = 'week'
 };
 
 export const getRandomByType = async (type: MediaType) => {
-  const page = Math.floor(Math.random() * 10) + 1;
+  const page = Math.floor(Math.random() * 8) + 1;
   try {
     const response = await tmdbApi.get(`/discover/${type}`, {
       params: {
         page,
+        'vote_average.gte': 7.2,
+        'vote_count.gte': 150,
       },
     });
     const randomIndex = Math.floor(Math.random() * response.data.results.length);

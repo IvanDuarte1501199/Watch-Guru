@@ -15,6 +15,7 @@ import DataByGenreIdReducer from '@slice/genres/DataByGenreIdSlice';
 import moviesByKeywordsReducer from '@slice/movies/moviesByKeywordsSlice';
 import trendingPeopleReducer from '@slice/person/trendingPeopleSlice';
 import countryReducer from '@slice/country/countrySlice';
+import languageReducer from '@slice/language/languageSlice';
 
 export const store = configureStore({
   reducer: {
@@ -34,6 +35,7 @@ export const store = configureStore({
     moviesByKeywords: moviesByKeywordsReducer,
     trendingPeople: trendingPeopleReducer,
     countries: countryReducer,
+    language: languageReducer,
   },
 });
 

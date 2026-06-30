@@ -1,19 +1,19 @@
 .h1-guru {
-  @apply text-lg md:text-2xl font-bold text-default;
+  @apply text-3xl md:text-5xl font-extrabold text-default tracking-tight;
 }
 
 .h2-guru {
-  @apply text-sm md:text-xl font-semibold text-gray;
+  @apply text-xl md:text-2xl font-bold text-default tracking-wide;
 }
 
 .h3-guru {
-  @apply text-lg font-semibold text-default;
+  @apply text-lg md:text-xl font-semibold text-default;
 }
 
 .p-guru {
-  @apply text-base font-normal text-default;
+  @apply text-sm md:text-base font-normal text-gray leading-relaxed;
 }
 
 .nav-link-guru {
-  @apply text-default text-base md:text-xl hover:underline transition duration-200 ease-in-out;
+  @apply text-default/80 text-sm md:text-base font-semibold hover:text-default transition duration-200 ease-in-out;
 }
