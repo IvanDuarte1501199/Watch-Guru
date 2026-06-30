@@ -33,12 +33,17 @@ export const getMovieById = async (id: string) => {
 
 export const searchMovies = async (query: string) => {
   try {
+    const savedLanguage = localStorage.getItem('language') || 'en';
+    const tmdbLanguage = savedLanguage === 'es' ? 'es-ES' : 'en-US';
     const response = await tmdbApi.get<TmdbGenericResponse>('/search/movie', {
-      params: { query },
+      params: { 
+        query,
+        language: tmdbLanguage,
+      },
     });
     return response.data.results;
   } catch (error) {
-    console.error('Error searching tv shows:', error);
+    console.error('Error searching movies:', error);
     throw error;
   }
 };

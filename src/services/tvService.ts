@@ -33,8 +33,13 @@ export const getTvById = async (id: string) => {
 
 export const searchTv = async (query: string) => {
   try {
+    const savedLanguage = localStorage.getItem('language') || 'en';
+    const tmdbLanguage = savedLanguage === 'es' ? 'es-ES' : 'en-US';
     const response = await tmdbApi.get<TmdbTvShowResponse>('/search/tv', {
-      params: { query },
+      params: { 
+        query,
+        language: tmdbLanguage,
+      },
     });
     return response.data.results;
   } catch (error) {
