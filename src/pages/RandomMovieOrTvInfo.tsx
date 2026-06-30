@@ -19,8 +19,8 @@ const RandomMovieOrTvInfo: React.FC = () => {
   const [showAllRecommendedItems, setShowAllRecommendedItems] = useState(false);
 
   const { mediasProviders } = useMediaProvider({
-    id: randomTvOrMovie?.id! ?? 0,
-    type: MediaType.Tv,
+    id: randomTvOrMovie?.id ? String(randomTvOrMovie.id) : '',
+    type,
   });
 
   useEffect(() => {

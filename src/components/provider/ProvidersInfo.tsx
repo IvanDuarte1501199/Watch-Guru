@@ -105,9 +105,18 @@ const ProvidersInfo = ({ providers }: { providers: MovieAvailability }) => {
     return currentLanguage === 'es' ? country.native_name : country.english_name;
   };
 
-  const provider = providers?.results[selectedCountry];
-  const hasResults = Object.keys(providers.results).length > 0;
+  const hasResults = !!(providers && providers.results && Object.keys(providers.results).length > 0);
   if (!hasResults) return <></>;
+  
+  
+  // Guard: make sure selectedCountry exists in results, otherwise pick a valid fallback
+  const activeCountry = providers.results[selectedCountry] 
+    ? selectedCountry 
+    : countryCodes.includes(defaultCountry) 
+      ? defaultCountry 
+      : countryCodes[0];
+
+  const provider = providers.results[activeCountry];
 
   const selectOptions = countryCodes.map(code => ({
     value: code,
@@ -115,8 +124,8 @@ const ProvidersInfo = ({ providers }: { providers: MovieAvailability }) => {
   }));
 
   const selectValue = {
-    value: selectedCountry,
-    label: getCountryName(selectedCountry)
+    value: activeCountry,
+    label: getCountryName(activeCountry)
   };
 
   return (

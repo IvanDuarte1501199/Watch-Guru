@@ -15,11 +15,17 @@ const useMediaProvider = ({ id, type }: UseMediaProviderParams) => {
 
   useEffect(() => {
     const fetchMediaProviders = async () => {
+      const idStr = String(id);
+      if (!id || idStr === '0' || idStr === 'undefined') {
+        setMediasProviders({} as MovieAvailability);
+        setLoading(false);
+        return;
+      }
       setLoading(true);
       setError(null);
 
       try {
-        const mediaProvidersData = await getMediaProvidersByCountry({ id, type });
+        const mediaProvidersData = await getMediaProvidersByCountry({ id: idStr, type });
         setMediasProviders(mediaProvidersData || {} as MovieAvailability);
       } catch (error) {
         setError(`Failed to fetch media providers by id: ${id}`);
