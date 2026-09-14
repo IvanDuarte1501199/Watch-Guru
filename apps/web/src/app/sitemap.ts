@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { getPublicLists } from '@/lib/backend';
 import { locales } from '@/lib/i18n/config';
 import { routes } from '@/lib/routes';
 import { SITE_URL } from '@/lib/site';
@@ -42,6 +43,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         seen.add(path);
         add(path, 0.5, 'weekly');
       });
+  }
+
+  const publicLists = await getPublicLists();
+  for (const lang of locales) {
+    for (const list of publicLists) {
+      entries.push({
+        url: `${SITE_URL}${routes.userList(lang, list.id, list.title)}`,
+        lastModified: list.updatedAt,
+        changeFrequency: 'weekly',
+        priority: 0.5,
+      });
+    }
   }
 
   return entries;

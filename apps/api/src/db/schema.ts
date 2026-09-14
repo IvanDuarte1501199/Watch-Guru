@@ -147,6 +147,45 @@ export const episodeProgress = pgTable(
 );
 
 /* ------------------------------------------------------------------ */
+/* Custom lists                                                        */
+/* ------------------------------------------------------------------ */
+
+export const userList = pgTable(
+  'user_list',
+  {
+    /** Short URL-safe id used in share links. */
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    title: text('title').notNull(),
+    description: text('description').notNull().default(''),
+    isPublic: boolean('is_public').notNull().default(true),
+    ...timestamps,
+  },
+  (table) => [index('user_list_user_idx').on(table.userId), index('user_list_public_updated_idx').on(table.isPublic, table.updatedAt)],
+);
+
+export const userListItem = pgTable(
+  'user_list_item',
+  {
+    listId: text('list_id')
+      .notNull()
+      .references(() => userList.id, { onDelete: 'cascade' }),
+    mediaType: text('media_type').$type<MediaType>().notNull(),
+    tmdbId: integer('tmdb_id').notNull(),
+    title: text('title').notNull(),
+    posterPath: text('poster_path'),
+    releaseDate: text('release_date'),
+    addedAt: timestamp('added_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.listId, table.mediaType, table.tmdbId] }),
+    check('user_list_item_media_type', sql`${table.mediaType} IN ('movie', 'tv')`),
+  ],
+);
+
+/* ------------------------------------------------------------------ */
 /* Match rooms                                                         */
 /* ------------------------------------------------------------------ */
 

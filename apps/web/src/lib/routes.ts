@@ -35,6 +35,7 @@ export const routes = {
   login: (lang: Locale, next?: string) => `/${lang}/login${next ? `?next=${encodeURIComponent(next)}` : ''}`,
   signup: (lang: Locale, next?: string) => `/${lang}/signup${next ? `?next=${encodeURIComponent(next)}` : ''}`,
   myList: (lang: Locale) => `/${lang}/my-list`,
+  userList: (lang: Locale, id: string, title?: string) => `/${lang}/list/${id}${title && slugify(title) ? `-${slugify(title)}` : ''}`,
   forgotPassword: (lang: Locale) => `/${lang}/forgot-password`,
   resetPassword: (lang: Locale) => `/${lang}/reset-password`,
   taste: (lang: Locale) => `/${lang}/taste`,

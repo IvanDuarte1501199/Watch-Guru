@@ -28,7 +28,7 @@ export async function startTestApi() {
 
   await migrate(db, { migrationsFolder: fileURLToPath(new URL('../drizzle', import.meta.url)) });
   await db.execute(
-    sql`TRUNCATE "user", session, account, verification, library_entry, episode_progress, taste_profile, match_room, match_participant, match_vote CASCADE`,
+    sql`TRUNCATE "user", session, account, verification, library_entry, episode_progress, taste_profile, match_room, match_participant, match_vote, user_list, user_list_item CASCADE`,
   );
 
   const app = await buildApp({ logger: false });
@@ -79,6 +79,7 @@ export function createClient(baseUrl: string) {
     get: (path: string) => request('GET', path),
     post: (path: string, body?: unknown) => request('POST', path, body ?? {}),
     put: (path: string, body: unknown) => request('PUT', path, body),
+    delete: (path: string) => request('DELETE', path),
     cookies,
   };
 }

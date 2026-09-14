@@ -50,6 +50,37 @@ export interface WatchedEpisode {
   episodeNumber: number;
 }
 
+export interface UserListSummary {
+  id: string;
+  title: string;
+  description: string;
+  isPublic: boolean;
+  updatedAt: string;
+  itemCount: number;
+  posters: string[];
+  hasTitle: boolean;
+}
+
+export interface ListItem {
+  mediaType: MediaKind;
+  tmdbId: number;
+  title: string;
+  posterPath: string | null;
+  releaseDate: string | null;
+  addedAt: string;
+}
+
+export interface UserListDetail {
+  id: string;
+  title: string;
+  description: string;
+  isPublic: boolean;
+  ownerName: string;
+  isOwner: boolean;
+  updatedAt: string;
+  items: ListItem[];
+}
+
 export class ApiError extends Error {
   constructor(readonly status: number) {
     super(`Request failed with status ${status}`);
@@ -102,6 +133,31 @@ export const api = {
   taste: () => request<{ taste: Taste | null }>('/api/me/taste').then((data) => data.taste),
 
   saveTaste: (taste: Taste) => put<{ taste: Taste }>('/api/me/taste', taste),
+
+  lists: (contains?: TitleInfo) =>
+    request<{ lists: UserListSummary[] }>(
+      `/api/me/lists${contains ? `?contains=${contains.mediaType}:${contains.tmdbId}` : ''}`,
+    ).then((data) => data.lists),
+
+  createList: (input: { title: string; description?: string; isPublic?: boolean }) =>
+    request<{ list: UserListSummary }>('/api/me/lists', { method: 'POST', body: JSON.stringify(input) }).then(
+      (data) => data.list,
+    ),
+
+  updateList: (id: string, changes: { title?: string; description?: string; isPublic?: boolean }) =>
+    put<{ list: UserListSummary }>(`/api/me/lists/${id}`, changes),
+
+  deleteList: (id: string) => request<{ ok: true }>(`/api/me/lists/${id}`, { method: 'DELETE' }),
+
+  addToList: (id: string, info: TitleInfo) =>
+    put<{ ok: true }>(`/api/me/lists/${id}/items/${info.mediaType}/${info.tmdbId}`, {
+      title: info.title,
+      posterPath: info.posterPath,
+      releaseDate: info.releaseDate,
+    }),
+
+  removeFromList: (id: string, kind: MediaKind, tmdbId: number) =>
+    request<{ ok: true }>(`/api/me/lists/${id}/items/${kind}/${tmdbId}`, { method: 'DELETE' }),
 
   authConfig: () => request<{ emailPassword: boolean; google: boolean }>('/api/auth-config'),
 };

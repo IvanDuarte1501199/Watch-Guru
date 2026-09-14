@@ -7,6 +7,7 @@ Discover what to watch tonight: movie and TV recommendations, where to stream th
 - 🎲 **Random pick**: the Guru chooses a well-rated movie or TV show for you — personalized once you share your taste.
 - 👤 **Accounts**: email/password (and optional Google) sign-in, email verification and password reset.
 - 📚 **My list**: want to watch, watching, watched, plus per-episode progress for TV shows.
+- 📋 **Custom lists**: themed lists you can keep private or share with a public, indexable link.
 - ⭐ **Guru score**: rate titles with half-star precision and see the community average.
 - 🧠 **Taste profile**: favorite and disliked genres, your streaming services and country.
 - 💞 **Match rooms**: create a room, share a link or QR, everyone picks genres and swipes the same deck Tinder-style. When a majority likes a title, it's a match. Guests don't need an account.

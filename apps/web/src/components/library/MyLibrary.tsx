@@ -8,9 +8,10 @@ import { useI18n } from '@/lib/i18n/DictionaryProvider';
 import { routes } from '@/lib/routes';
 import type { MediaSummary } from '@/lib/tmdb/types';
 import { MediaGrid } from '@/components/media/MediaGrid';
+import { ListsManager } from '@/components/lists/ListsManager';
 import { Loader } from '@/components/ui/Loader';
 
-type Tab = LibraryStatus | 'rated';
+type Tab = LibraryStatus | 'rated' | 'lists';
 
 /** Library entries rendered with the regular media cards; the badge shows the user's own rating. */
 function toMediaSummary(entry: LibraryEntry): MediaSummary {
@@ -44,10 +45,10 @@ export function MyLibrary() {
   }, [signedIn]);
 
   useEffect(() => {
-    if (!signedIn) return;
+    if (!signedIn || tab === 'lists') return;
     let cancelled = false;
     api
-      .library(tab)
+      .library(tab as LibraryStatus | 'rated')
       .then((entries) => !cancelled && setItems({ tab, entries }))
       .catch(() => !cancelled && setItems({ tab, entries: [] }));
     return () => {
@@ -73,6 +74,7 @@ export function MyLibrary() {
     { id: 'watching', label: t.statusWatching },
     { id: 'watched', label: t.statusWatched },
     { id: 'rated', label: t.rated },
+    { id: 'lists', label: t.myLists },
   ];
   const current = items?.tab === tab ? items.entries : null;
 
@@ -95,12 +97,14 @@ export function MyLibrary() {
             }`}
           >
             {item.label}
-            {summary && <span className="ml-2 opacity-70">{summary[item.id]}</span>}
+            {summary && item.id !== 'lists' && <span className="ml-2 opacity-70">{summary[item.id]}</span>}
           </button>
         ))}
       </div>
 
-      {!current ? (
+      {tab === 'lists' ? (
+        <ListsManager />
+      ) : !current ? (
         <Loader label={t.loading} />
       ) : current.length === 0 ? (
         <div className="flex flex-col items-center gap-4 py-16 text-center">

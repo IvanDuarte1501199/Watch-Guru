@@ -7,6 +7,7 @@ import type { LibraryStatus } from '@/lib/api';
 import { format } from '@/lib/i18n/config';
 import { useI18n } from '@/lib/i18n/DictionaryProvider';
 import { routes } from '@/lib/routes';
+import { AddToListButton } from '@/components/lists/AddToListButton';
 import { StarRating } from './StarRating';
 import { useTitleLibrary } from './TitleLibraryProvider';
 
@@ -49,6 +50,7 @@ export function TitleActions() {
             </button>
           );
         })}
+        <AddToListButton info={library.info} signedIn={signedIn} />
       </div>
 
       <div className="mt-4 flex flex-wrap items-end justify-between gap-4">

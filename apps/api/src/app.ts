@@ -8,6 +8,7 @@ import { env } from './env.js';
 import { authRoutes } from './routes/auth.js';
 import { deleteExpiredRooms } from './match/service.js';
 import { libraryRoutes } from './routes/library.js';
+import { listRoutes } from './routes/lists.js';
 import { matchRoutes } from './routes/match.js';
 import { tasteRoutes } from './routes/taste.js';
 
@@ -62,6 +63,7 @@ export async function buildApp({ logger = true }: { logger?: boolean } = {}) {
   await app.register(authRoutes);
   await app.register(libraryRoutes);
   await app.register(tasteRoutes);
+  await app.register(listRoutes);
   await app.register(matchRoutes);
 
   const cleanup = setInterval(() => {

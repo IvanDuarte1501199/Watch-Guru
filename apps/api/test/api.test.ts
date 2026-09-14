@@ -135,6 +135,58 @@ describe('password reset and email verification', () => {
   });
 });
 
+describe('custom lists', () => {
+  const fightClub = { title: 'Fight Club', posterPath: '/fc.jpg', releaseDate: '1999-10-15' };
+
+  test('owners build lists that others can read when public', async () => {
+    const owner = await signUp('lists@test.dev', 'Lola');
+    const created = await owner.post('/api/me/lists', { title: 'Para no dormir', description: 'Terror' });
+    assert.equal(created.status, 201);
+    const { id } = created.body.list;
+
+    await owner.put(`/api/me/lists/${id}/items/movie/550`, fightClub);
+    await owner.put(`/api/me/lists/${id}/items/tv/1399`, { title: 'Game of Thrones' });
+    await owner.put(`/api/me/lists/${id}/items/movie/550`, fightClub); // duplicates are ignored
+
+    const mine = await owner.get('/api/me/lists?contains=movie:550');
+    assert.equal(mine.body.lists[0].itemCount, 2);
+    assert.equal(mine.body.lists[0].hasTitle, true);
+    assert.deepEqual(mine.body.lists[0].posters, ['/fc.jpg']);
+
+    const visitor = createClient(api.baseUrl);
+    const shared = await visitor.get(`/api/lists/${id}`);
+    assert.equal(shared.status, 200);
+    assert.equal(shared.body.ownerName, 'Lola');
+    assert.equal(shared.body.isOwner, false);
+    assert.deepEqual(
+      shared.body.items.map((item: { tmdbId: number }) => item.tmdbId).sort((x: number, y: number) => x - y),
+      [550, 1399],
+    );
+
+    const recent = await visitor.get('/api/lists');
+    assert.ok(recent.body.lists.some((list: { id: string }) => list.id === id));
+
+    await owner.put(`/api/me/lists/${id}`, { isPublic: false });
+    assert.equal((await visitor.get(`/api/lists/${id}`)).status, 404, 'private lists are hidden');
+    assert.equal((await owner.get(`/api/lists/${id}`)).status, 200, 'owners still see private lists');
+
+    await owner.delete(`/api/me/lists/${id}/items/movie/550`);
+    const afterRemove = await owner.get(`/api/lists/${id}`);
+    assert.equal(afterRemove.body.items.length, 1);
+  });
+
+  test("users cannot change other people's lists", async () => {
+    const owner = await signUp('owner-list@test.dev');
+    const intruder = await signUp('intruder-list@test.dev');
+    const { body } = await owner.post('/api/me/lists', { title: 'Mine' });
+
+    assert.equal((await intruder.put(`/api/me/lists/${body.list.id}`, { title: 'Hacked' })).status, 404);
+    assert.equal((await intruder.put(`/api/me/lists/${body.list.id}/items/movie/1`, { title: 'X' })).status, 404);
+    assert.equal((await intruder.delete(`/api/me/lists/${body.list.id}`)).status, 404);
+    assert.equal((await owner.delete(`/api/me/lists/${body.list.id}`)).status, 200);
+  });
+});
+
 describe('taste and recommendations', () => {
   test('personal pick respects liked genres and skips watched titles', async () => {
     const client = await signUp('taste@test.dev');
