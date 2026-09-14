@@ -18,5 +18,5 @@ COPY --from=build /repo/apps/api/dist apps/api/dist
 COPY apps/api/drizzle apps/api/drizzle
 WORKDIR /repo/apps/api
 EXPOSE 4000
-# Apply pending migrations on every deploy, then start the server.
-CMD ["sh", "-c", "node dist/migrate.js && node dist/server.js"]
+# The server applies pending migrations on boot.
+CMD ["node", "dist/server.js"]

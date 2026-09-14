@@ -1,5 +1,12 @@
 import { buildApp } from './app.js';
+import { runMigrations } from './db/migrations.js';
 import { env } from './env.js';
+
+// Migrate before accepting traffic, whatever command the host uses to start us.
+if (process.env.SKIP_MIGRATIONS !== 'true') {
+  await runMigrations();
+  console.log('Migrations applied');
+}
 
 const app = await buildApp();
 
