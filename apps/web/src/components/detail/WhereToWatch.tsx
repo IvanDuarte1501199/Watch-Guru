@@ -65,7 +65,7 @@ export function WhereToWatch({ providers, countryNames, defaultCountry }: WhereT
   const available = providers[country];
 
   return (
-    <section className="w-full max-w-2xl rounded-xl border border-slate-800/80 bg-slate-950/40 p-4 backdrop-blur-sm md:p-6">
+    <section id="where-to-watch" className="w-full max-w-2xl scroll-mt-24 rounded-xl border border-slate-800/80 bg-slate-950/40 p-4 backdrop-blur-sm md:p-6">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <h2 className="h2-guru">{t.whereToWatch}</h2>
         <label className="flex items-center gap-2 text-sm text-slate-300">

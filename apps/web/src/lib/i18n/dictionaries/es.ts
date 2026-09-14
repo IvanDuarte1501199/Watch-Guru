@@ -103,7 +103,11 @@ const es = {
 
   // SEO
   siteTitle: 'WatchGuru: qué ver hoy y dónde ver películas y series',
-  homeHeading: 'Qué ver hoy: películas y series recomendadas y dónde verlas',
+  homeHeadingTitle: 'Qué ver hoy',
+  homeHeadingSubtitle: 'Películas y series recomendadas, y {highlight}.',
+  homeHeadingHighlight: 'dónde verlas',
+  heroTopLabel: 'Top 5 de hoy',
+  heroWhereToWatch: 'Dónde verla',
   guides: 'Guías',
   guidesTitle: 'Guías: las mejores películas y series por género y plataforma',
   guidesDescription:

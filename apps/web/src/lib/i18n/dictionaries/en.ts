@@ -105,7 +105,11 @@ const en: Dictionary = {
 
   // SEO
   siteTitle: 'WatchGuru: what to watch tonight and where to stream it',
-  homeHeading: 'What to watch tonight: movie and TV picks and where to stream them',
+  homeHeadingTitle: 'What to watch tonight',
+  homeHeadingSubtitle: 'Movie and TV picks, and {highlight}.',
+  homeHeadingHighlight: 'where to stream them',
+  heroTopLabel: "Today's top 5",
+  heroWhereToWatch: 'Where to watch',
   guides: 'Guides',
   guidesTitle: 'Guides: the best movies and TV shows by genre and service',
   guidesDescription:

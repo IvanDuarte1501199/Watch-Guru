@@ -14,7 +14,17 @@
   --animate-fade-in-left: fade-in-left 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-fade-in-right: fade-in-right 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-fade-in-up: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  /* Hero autoplay: one slide per run of the progress bar. */
+  --animate-hero-progress: hero-progress 6s linear both;
 
+  @keyframes hero-progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
   @keyframes fade-in {
     from {
       opacity: 0;

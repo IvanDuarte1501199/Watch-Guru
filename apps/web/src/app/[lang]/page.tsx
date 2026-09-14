@@ -7,9 +7,7 @@ import { routes } from '@/lib/routes';
 import { pageMetadata } from '@/lib/seo';
 import { rotatingPick } from '@/lib/site';
 import { discover, getCategory, getGenres, getTrendingAll, getTrendingPeople } from '@/lib/tmdb/api';
-import { tmdbImage } from '@/lib/tmdb/images';
 import { AdSlot } from '@/components/ads/AdSlot';
-import { Backdrop } from '@/components/layout/Backdrop';
 import { HeroCarousel } from '@/components/media/HeroCarousel';
 import { MagicSuggest } from '@/components/media/MagicSuggest';
 import { MatchPromo } from '@/components/media/MatchPromo';
@@ -53,7 +51,7 @@ export default async function HomePage({ params }: PageProps<'/[lang]'>) {
   ]);
 
   const genreName = new Map([...movieGenres, ...tvGenres].map((genre) => [genre.id, genre.name]));
-  const heroItems = trending.results.slice(0, 10).map((item) => ({
+  const heroItems = trending.results.slice(0, 5).map((item) => ({
     ...item,
     genreNames: item.genre_ids
       .map((id) => genreName.get(id))
@@ -64,9 +62,24 @@ export default async function HomePage({ params }: PageProps<'/[lang]'>) {
 
   return (
     <>
-      <Backdrop src={tmdbImage(trending.results[0]?.backdrop_path, 'w1280')} />
+      <div aria-hidden className="pointer-events-none absolute -top-56 -left-40 -z-10 h-[620px] w-[620px] rounded-full bg-secondary/15 blur-[120px]" />
+      <div aria-hidden className="pointer-events-none absolute top-64 -right-52 -z-10 h-[560px] w-[560px] rounded-full bg-tertiary/15 blur-[120px]" />
 
-      <h1 className="h1-guru mx-auto max-w-4xl animate-fade-in pt-6 pb-6 text-center">{t.homeHeading}</h1>
+      <div className="flex animate-fade-in flex-col-reverse gap-2 pt-6 pb-6 md:flex-row md:items-end md:justify-between md:gap-10 md:pb-8">
+        <h1 className="flex flex-col gap-2">
+          <span className="text-4xl leading-none font-black tracking-tight text-white sm:text-5xl md:text-6xl">
+            {t.homeHeadingTitle}
+          </span>
+          <span className="text-base font-normal text-muted sm:text-lg md:text-[22px]">
+            {t.homeHeadingSubtitle.split('{highlight}')[0]}
+            <span className="bg-[linear-gradient(transparent_62%,rgba(95,179,205,0.45)_62%)] font-semibold text-white">
+              {t.homeHeadingHighlight}
+            </span>
+            {t.homeHeadingSubtitle.split('{highlight}')[1]}
+          </span>
+        </h1>
+        <p className="text-xs font-bold tracking-[0.2em] text-secondary uppercase md:pb-2 md:text-[13px]">{t.heroTopLabel}</p>
+      </div>
 
       <HeroCarousel items={heroItems} />
 
