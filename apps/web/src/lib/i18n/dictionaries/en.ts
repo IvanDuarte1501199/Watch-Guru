@@ -100,7 +100,6 @@ const en: Dictionary = {
   rating: 'TMDB rating',
   noItems: 'No titles available at the moment.',
   footerRights: '© {year} WatchGuru. All rights reserved.',
-  footerDevelopedBy: 'Developed by',
   tmdbAttribution: 'This product uses the TMDB API but is not endorsed or certified by TMDB.',
   language: 'Language',
 

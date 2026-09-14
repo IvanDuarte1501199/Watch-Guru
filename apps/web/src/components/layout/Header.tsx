@@ -7,6 +7,7 @@ import { Search, X } from 'lucide-react';
 import { LOCALE_COOKIE, locales, type Locale } from '@/lib/i18n/config';
 import { useI18n } from '@/lib/i18n/DictionaryProvider';
 import { routes } from '@/lib/routes';
+import { CafecitoButton } from '@/components/support/CafecitoButton';
 import { SearchBox } from './SearchBox';
 import { UserMenu } from './UserMenu';
 
@@ -48,11 +49,11 @@ export function Header() {
           : 'border-transparent bg-transparent'
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-8 lg:px-12">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 py-3 sm:gap-4 md:px-8 lg:px-12">
         <Link href={routes.home(lang)} className="flex shrink-0 items-center gap-2 transition duration-200 hover:scale-105">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.svg" alt="" className="h-9 w-9" />
-          <span className="text-xl font-bold tracking-tight text-white">
+          <img src="/logo.svg" alt="" className="h-8 w-8 sm:h-9 sm:w-9" />
+          <span className="text-lg font-bold tracking-tight text-white max-[399px]:sr-only sm:text-xl">
             Watch<span className="text-secondary">Guru</span>
           </span>
         </Link>
@@ -61,7 +62,7 @@ export function Header() {
           <SearchBox />
         </div>
 
-        <nav className="flex items-center gap-4 md:gap-8">
+        <nav className="flex items-center gap-2 sm:gap-4 md:gap-8">
           {links.map((link) => {
             const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
             return (
@@ -82,7 +83,7 @@ export function Header() {
             type="button"
             onClick={() => setMobileSearchOpen((open) => !open)}
             aria-label={mobileSearchOpen ? t.closeSearch : t.search}
-            className="rounded-lg p-2 text-slate-300 hover:text-secondary lg:hidden"
+            className="rounded-lg p-1.5 text-slate-300 hover:text-secondary sm:p-2 lg:hidden"
           >
             {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
           </button>
@@ -107,6 +108,8 @@ export function Header() {
               </Link>
             ))}
           </div>
+
+          <CafecitoButton label={t.supportCafecito} compact />
 
           <UserMenu />
         </nav>

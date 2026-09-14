@@ -98,7 +98,6 @@ const es = {
   rating: 'Calificación TMDB',
   noItems: 'No hay títulos disponibles en este momento.',
   footerRights: '© {year} WatchGuru. Todos los derechos reservados.',
-  footerDevelopedBy: 'Desarrollado por',
   tmdbAttribution: 'Este producto usa la API de TMDB pero no está avalado ni certificado por TMDB.',
   language: 'Idioma',
 

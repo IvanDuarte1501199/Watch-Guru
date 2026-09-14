@@ -3,7 +3,6 @@ import type { Locale } from '@/lib/i18n/config';
 import { format } from '@/lib/i18n/config';
 import type { Dictionary } from '@/lib/i18n/get-dictionary';
 import { routes } from '@/lib/routes';
-import { CafecitoButton } from '@/components/support/CafecitoButton';
 
 export function Footer({ lang, t }: { lang: Locale; t: Dictionary }) {
   return (
@@ -14,10 +13,6 @@ export function Footer({ lang, t }: { lang: Locale; t: Dictionary }) {
             Watch<span className="text-secondary">Guru</span>
           </Link>
           <p className="text-sm text-slate-400">{format(t.footerRights, { year: new Date().getFullYear() })}</p>
-          <p className="text-sm text-slate-400">
-            {t.footerDevelopedBy} <span className="font-semibold text-slate-300">Iván Duarte</span>
-          </p>
-          <CafecitoButton label={t.supportCafecito} className="mt-2" />
         </div>
 
         <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-300">
