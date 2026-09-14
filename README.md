@@ -9,6 +9,7 @@ Discover what to watch tonight: movie and TV recommendations, where to stream th
 - 📚 **My list**: want to watch, watching, watched, plus per-episode progress for TV shows.
 - ⭐ **Guru score**: rate titles with half-star precision and see the community average.
 - 🧠 **Taste profile**: favorite and disliked genres, your streaming services and country.
+- 💞 **Match rooms**: create a room, share a link or QR, everyone picks genres and swipes the same deck Tinder-style. When a majority likes a title, it's a match. Guests don't need an account.
 - 📍 **Where to watch**: streaming, rent and buy options per country (auto-detected).
 - 🔍 **Search & discover**: instant search plus filters by genre and sort order.
 - 📊 **Episode ratings heatmap** for every season of a show.
@@ -26,13 +27,15 @@ Discover what to watch tonight: movie and TV recommendations, where to stream th
 ```
 Browser ──► Next.js (apps/web) ──► TMDB          (catalog pages, cached/ISR)
                │
-               └─ rewrites /api/auth/*, /api/me/*, /api/titles/*
+               └─ rewrites /api/auth/*, /api/me/*, /api/titles/*, /api/match/*
                                ▼
-                     Fastify API (apps/api) ──► PostgreSQL
-                               └──────────────► TMDB (personalized picks)
+Browser ══ WebSocket ══► Fastify API (apps/api) ──► PostgreSQL
+                               └──────────────► TMDB (personalized picks, match decks)
 ```
 
-The browser only talks to the web origin: backend routes are proxied through Next.js rewrites, so auth cookies are first-party and no CORS is needed. Catalog pages stay statically cached; user-specific UI (list status, ratings, episode progress) loads client-side.
+HTTP requests go through the web origin: backend routes are proxied through Next.js rewrites, so auth cookies are first-party and no CORS is needed. Match rooms use a WebSocket straight to the API (`NEXT_PUBLIC_API_URL`), authenticated with a per-participant room token. Catalog pages stay statically cached; user-specific UI (list status, ratings, episode progress) loads client-side.
+
+Room connections are tracked in memory, so run a single API instance (or add a shared pub/sub such as Redis before scaling out).
 
 ## Project structure
 
@@ -77,6 +80,7 @@ npm run dev                                     # http://localhost:3000 (another
 | `TMDB_BASE_URL`        | Optional. Defaults to `https://api.themoviedb.org/3`.             |
 | `NEXT_PUBLIC_SITE_URL` | Public URL used for canonical links, sitemap and Open Graph tags. |
 | `API_URL`              | Backend URL the web server proxies to (e.g. `http://localhost:4000`). |
+| `NEXT_PUBLIC_API_URL`  | Public backend URL the browser uses for Match WebSockets.          |
 
 `apps/api/.env`
 
@@ -100,6 +104,7 @@ npm run dev                                     # http://localhost:3000 (another
 | `npm run typecheck`  | TypeScript checks for web and API        |
 | `npm run db:up`      | Start local Postgres with Docker Compose |
 | `npm run db:migrate` | Apply database migrations                |
+| `npm run test:match -w api` | End-to-end check of a 3-person match room (API must be running) |
 
 After changing `apps/api/src/db/schema.ts`, create a migration with `npm run db:generate -w api`.
 
@@ -108,7 +113,7 @@ After changing `apps/api/src/db/schema.ts`, create a migration with `npm run db:
 **Web (Vercel)**
 
 1. Set **Root Directory** to `apps/web` (framework preset: Next.js).
-2. Add `TMDB_API_KEY`, `NEXT_PUBLIC_SITE_URL` and `API_URL` (the public URL of the API).
+2. Add `TMDB_API_KEY`, `NEXT_PUBLIC_SITE_URL`, `API_URL` and `NEXT_PUBLIC_API_URL` (both the public URL of the API).
 
 **API (any Docker host: Railway, Render, Fly.io...)**
 
@@ -118,7 +123,6 @@ After changing `apps/api/src/db/schema.ts`, create a migration with `npm run db:
 
 ## Roadmap
 
-- 💞 **Match rooms**: swipe with your partner or friends until you agree on what to watch
 - 🔔 Alerts when a watchlisted title lands on your streaming services
 - 📋 Public lists and a yearly "Guru Wrapped"
 

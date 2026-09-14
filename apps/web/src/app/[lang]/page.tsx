@@ -11,6 +11,7 @@ import { tmdbImage } from '@/lib/tmdb/images';
 import { Backdrop } from '@/components/layout/Backdrop';
 import { HeroCarousel } from '@/components/media/HeroCarousel';
 import { MagicSuggest } from '@/components/media/MagicSuggest';
+import { MatchPromo } from '@/components/media/MatchPromo';
 import { MediaRail } from '@/components/media/MediaRail';
 import { PeopleRail } from '@/components/media/PeopleRail';
 
@@ -68,6 +69,7 @@ export default async function HomePage({ params }: PageProps<'/[lang]'>) {
       <HeroCarousel items={heroItems} />
 
       <MagicSuggest lang={lang} t={t} />
+      <MatchPromo lang={lang} t={t} />
 
       <p className="mb-8 text-center md:mb-12">
         <Link

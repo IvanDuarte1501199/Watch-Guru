@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   // The browser talks to the backend through the web origin, so auth cookies
   // are first-party and no CORS is needed.
   async rewrites() {
-    return ['/api/auth/:path*', '/api/auth-config', '/api/me/:path*', '/api/titles/:path*'].map((source) => ({
+    return ['/api/auth/:path*', '/api/auth-config', '/api/me/:path*', '/api/titles/:path*', '/api/match/:path*'].map((source) => ({
       source,
       destination: `${API_URL}${source}`,
     }));

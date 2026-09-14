@@ -36,6 +36,8 @@ export const routes = {
   signup: (lang: Locale, next?: string) => `/${lang}/signup${next ? `?next=${encodeURIComponent(next)}` : ''}`,
   myList: (lang: Locale) => `/${lang}/my-list`,
   taste: (lang: Locale) => `/${lang}/taste`,
+  match: (lang: Locale) => `/${lang}/match`,
+  matchRoom: (lang: Locale, code: string) => `/${lang}/match/${code}`,
 };
 
 /** Reads the numeric id from a `123-some-slug` route segment. */

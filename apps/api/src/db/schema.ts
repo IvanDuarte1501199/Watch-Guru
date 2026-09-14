@@ -4,6 +4,7 @@ import {
   check,
   index,
   integer,
+  jsonb,
   pgTable,
   primaryKey,
   serial,
@@ -143,6 +144,89 @@ export const episodeProgress = pgTable(
     watchedAt: timestamp('watched_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [primaryKey({ columns: [table.userId, table.tvId, table.seasonNumber, table.episodeNumber] })],
+);
+
+/* ------------------------------------------------------------------ */
+/* Match rooms                                                         */
+/* ------------------------------------------------------------------ */
+
+export const ROOM_MEDIA_TYPES = ['movie', 'tv', 'both'] as const;
+export const ROOM_STATUSES = ['lobby', 'genres', 'swiping', 'matched', 'finished'] as const;
+
+export type RoomMediaType = (typeof ROOM_MEDIA_TYPES)[number];
+export type RoomStatus = (typeof ROOM_STATUSES)[number];
+
+/** A title in a room's shared deck, snapshotted so every participant sees the same cards. */
+export interface DeckCard {
+  mediaType: MediaType;
+  tmdbId: number;
+  title: string;
+  posterPath: string | null;
+  backdropPath: string | null;
+  overview: string;
+  year: string | null;
+  voteAverage: number;
+  genres: string[];
+}
+
+export const matchRoom = pgTable(
+  'match_room',
+  {
+    code: text('code').primaryKey(),
+    mediaType: text('media_type').$type<RoomMediaType>().notNull(),
+    status: text('status').$type<RoomStatus>().notNull().default('lobby'),
+    lang: text('lang').notNull().default('es'),
+    deck: jsonb('deck').$type<DeckCard[]>().notNull().default([]),
+    /** How many deck pages were fetched per media type, to extend the deck later. */
+    deckPages: smallint('deck_pages').notNull().default(0),
+    /** Participants who were in when swiping started; majority is computed from this. */
+    voterCount: smallint('voter_count').notNull().default(0),
+    /** Deck indexes that reached a majority, in match order. */
+    matches: integer('matches').array().notNull().default(sql`'{}'::integer[]`),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    ...timestamps,
+  },
+  (table) => [index('match_room_expires_at_idx').on(table.expiresAt)],
+);
+
+export const matchParticipant = pgTable(
+  'match_participant',
+  {
+    id: text('id').primaryKey(),
+    roomCode: text('room_code')
+      .notNull()
+      .references(() => matchRoom.code, { onDelete: 'cascade' }),
+    userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
+    nickname: text('nickname').notNull(),
+    /** SHA-256 of the participant's secret token (guests have no account). */
+    tokenHash: text('token_hash').notNull().unique(),
+    isHost: boolean('is_host').notNull().default(false),
+    genres: integer('genres').array().notNull().default(sql`'{}'::integer[]`),
+    ready: boolean('ready').notNull().default(false),
+    /** Voters take part in swiping; people who weren't ready when it started only watch. */
+    isVoter: boolean('is_voter').notNull().default(false),
+    joinedAt: timestamp('joined_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index('match_participant_room_idx').on(table.roomCode)],
+);
+
+export const matchVote = pgTable(
+  'match_vote',
+  {
+    roomCode: text('room_code')
+      .notNull()
+      .references(() => matchRoom.code, { onDelete: 'cascade' }),
+    participantId: text('participant_id')
+      .notNull()
+      .references(() => matchParticipant.id, { onDelete: 'cascade' }),
+    cardIndex: smallint('card_index').notNull(),
+    liked: boolean('liked').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.participantId, table.cardIndex] }),
+    index('match_vote_room_card_idx').on(table.roomCode, table.cardIndex),
+  ],
 );
 
 /** Answers from the taste onboarding, used for personalized picks. */

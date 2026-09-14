@@ -1,11 +1,17 @@
 import cors from '@fastify/cors';
+import rateLimit from '@fastify/rate-limit';
+import websocket from '@fastify/websocket';
 import Fastify, { type FastifyError } from 'fastify';
 import { ZodError } from 'zod';
 import { pool } from './db/index.js';
 import { env } from './env.js';
 import { authRoutes } from './routes/auth.js';
+import { deleteExpiredRooms } from './match/service.js';
 import { libraryRoutes } from './routes/library.js';
+import { matchRoutes } from './routes/match.js';
 import { tasteRoutes } from './routes/taste.js';
+
+const HOUR_MS = 60 * 60 * 1000;
 
 export async function buildApp() {
   const app = Fastify({
@@ -31,6 +37,10 @@ export async function buildApp() {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   });
 
+  // Must be registered before any route so WebSocket upgrades are intercepted.
+  await app.register(websocket, { options: { maxPayload: 16 * 1024 } });
+  await app.register(rateLimit, { global: false });
+
   app.decorateRequest('user', null);
 
   app.setErrorHandler((error: FastifyError, request, reply) => {
@@ -52,8 +62,15 @@ export async function buildApp() {
   await app.register(authRoutes);
   await app.register(libraryRoutes);
   await app.register(tasteRoutes);
+  await app.register(matchRoutes);
+
+  const cleanup = setInterval(() => {
+    deleteExpiredRooms().catch((error) => app.log.error(error, 'Failed to delete expired match rooms'));
+  }, HOUR_MS);
+  cleanup.unref();
 
   app.addHook('onClose', async () => {
+    clearInterval(cleanup);
     await pool.end();
   });
 

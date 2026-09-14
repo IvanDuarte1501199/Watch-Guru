@@ -37,6 +37,7 @@ export function Header() {
   const links = [
     { name: t.tvShows, href: routes.list(lang, 'tv') },
     { name: t.movies, href: routes.list(lang, 'movie') },
+    { name: t.match, href: routes.match(lang) },
   ];
 
   return (
