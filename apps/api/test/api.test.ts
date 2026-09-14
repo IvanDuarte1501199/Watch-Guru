@@ -74,6 +74,67 @@ describe('auth and library', () => {
   });
 });
 
+describe('password reset and email verification', () => {
+  const lastEmailTo = async (email: string) => {
+    const { outbox } = await import('../src/lib/mailer.js');
+    const message = outbox.filter((item) => item.to === email).at(-1);
+    assert.ok(message, `an email was sent to ${email}`);
+    return message;
+  };
+  const linkIn = (text: string) => /https?:\/\/\S+/.exec(text)![0];
+
+  test('sign-up sends a verification email that verifies the account', async () => {
+    const client = await signUp('verify@test.dev', 'Vera');
+    const email = await lastEmailTo('verify@test.dev');
+    assert.match(email.subject, /Confirmá tu email/);
+
+    const link = new URL(linkIn(email.text));
+    const response = await fetch(`${api.baseUrl}${link.pathname}${link.search}`, { redirect: 'manual' });
+    assert.ok([200, 302].includes(response.status), `verify responded ${response.status}`);
+
+    const session = await client.get('/api/auth/get-session');
+    assert.equal(session.body.user.emailVerified, true);
+  });
+
+  test('reset link changes the password and signs out other sessions', async () => {
+    const oldSession = await signUp('reset@test.dev', 'Rita');
+    const guest = createClient(api.baseUrl);
+    const requested = await guest.post('/api/auth/request-password-reset', {
+      email: 'reset@test.dev',
+      redirectTo: '/en/reset-password',
+    });
+    assert.equal(requested.status, 200);
+
+    const email = await lastEmailTo('reset@test.dev');
+    assert.match(email.subject, /Reset your WatchGuru password/, 'language follows the redirect path');
+    const token = /reset-password\/([^?\s]+)/.exec(linkIn(email.text))![1];
+
+    const reset = await guest.post('/api/auth/reset-password', { newPassword: 'brand-new-pass-456', token });
+    assert.equal(reset.status, 200, JSON.stringify(reset.body));
+
+    assert.equal((await oldSession.get('/api/me/library')).status, 401, 'existing sessions are revoked');
+    const login = await createClient(api.baseUrl).post('/api/auth/sign-in/email', {
+      email: 'reset@test.dev',
+      password: 'brand-new-pass-456',
+    });
+    assert.equal(login.status, 200);
+
+    const reused = await guest.post('/api/auth/reset-password', { newPassword: 'another-pass-789', token });
+    assert.notEqual(reused.status, 200, 'tokens are single use');
+  });
+
+  test('unknown emails get the same response, without sending anything', async () => {
+    const { outbox } = await import('../src/lib/mailer.js');
+    const before = outbox.length;
+    const response = await createClient(api.baseUrl).post('/api/auth/request-password-reset', {
+      email: 'nobody@test.dev',
+      redirectTo: '/es/reset-password',
+    });
+    assert.equal(response.status, 200);
+    assert.equal(outbox.length, before);
+  });
+});
+
 describe('taste and recommendations', () => {
   test('personal pick respects liked genres and skips watched titles', async () => {
     const client = await signUp('taste@test.dev');

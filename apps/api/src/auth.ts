@@ -3,6 +3,7 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { db } from './db/index.js';
 import { account, session, user, verification } from './db/schema.js';
 import { env, googleAuthEnabled } from './env.js';
+import { authEmail, sendEmail } from './lib/mailer.js';
 
 const DAY = 60 * 60 * 24;
 
@@ -22,6 +23,15 @@ export const auth = betterAuth({
     enabled: true,
     minPasswordLength: 8,
     autoSignIn: true,
+    resetPasswordTokenExpiresIn: 60 * 60,
+    revokeSessionsOnPasswordReset: true,
+    sendResetPassword: ({ user, url }) => sendEmail(authEmail('reset', user, url)),
+  },
+  emailVerification: {
+    // Verification is encouraged but not required, so sign-up keeps working without an email provider.
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: ({ user, url }) => sendEmail(authEmail('verify', user, url)),
   },
   socialProviders: googleAuthEnabled
     ? { google: { clientId: env.GOOGLE_CLIENT_ID!, clientSecret: env.GOOGLE_CLIENT_SECRET! } }
@@ -29,7 +39,7 @@ export const auth = betterAuth({
   session: {
     expiresIn: 30 * DAY,
     updateAge: DAY,
-    cookieCache: { enabled: true, maxAge: 5 * 60 },
+    // No cookie cache: revoked sessions (e.g. after a password reset) must stop working immediately.
   },
   advanced: {
     useSecureCookies: env.NODE_ENV === 'production',

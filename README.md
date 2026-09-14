@@ -5,7 +5,7 @@ Discover what to watch tonight: movie and TV recommendations, where to stream th
 ## Features
 
 - 🎲 **Random pick**: the Guru chooses a well-rated movie or TV show for you — personalized once you share your taste.
-- 👤 **Accounts**: email/password (and optional Google) sign-in.
+- 👤 **Accounts**: email/password (and optional Google) sign-in, email verification and password reset.
 - 📚 **My list**: want to watch, watching, watched, plus per-episode progress for TV shows.
 - ⭐ **Guru score**: rate titles with half-star precision and see the community average.
 - 🧠 **Taste profile**: favorite and disliked genres, your streaming services and country.
@@ -91,6 +91,7 @@ npm run dev                                     # http://localhost:3000 (another
 | `BETTER_AUTH_SECRET`                        | Random string, 32+ characters.                                              |
 | `TMDB_API_KEY`                              | TMDB v3 key for personalized recommendations.                               |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Optional Google sign-in. Redirect URI: `{WEB_URL}/api/auth/callback/google`. |
+| `RESEND_API_KEY` / `EMAIL_FROM`             | Optional [Resend](https://resend.com) credentials for password reset and email verification. Without them, emails are printed to the API console. |
 | `PORT`                                      | Defaults to `4000`.                                                         |
 
 ## Scripts

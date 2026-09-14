@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { Bookmark, LogOut, SlidersHorizontal } from 'lucide-react';
+import { Bookmark, LogOut, MailWarning, SlidersHorizontal } from 'lucide-react';
 import { authClient, useSession } from '@/lib/auth-client';
 import { format } from '@/lib/i18n/config';
 import { useI18n } from '@/lib/i18n/DictionaryProvider';
@@ -15,6 +15,7 @@ export function UserMenu() {
   const router = useRouter();
   const { data: session, isPending } = useSession();
   const [open, setOpen] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,6 +48,11 @@ export function UserMenu() {
 
   const { user } = session;
   const initial = (user.name || user.email).trim().charAt(0).toUpperCase();
+
+  const sendVerification = async () => {
+    await authClient.sendVerificationEmail({ email: user.email, callbackURL: pathname }).catch(() => undefined);
+    setVerificationSent(true);
+  };
 
   const signOut = async () => {
     setOpen(false);
@@ -82,6 +88,18 @@ export function UserMenu() {
           <p className="truncate border-b border-slate-800 px-4 py-3 text-sm font-semibold text-white">
             {format(t.hello, { name: user.name || user.email })}
           </p>
+          {!user.emailVerified && (
+            <button
+              role="menuitem"
+              type="button"
+              disabled={verificationSent}
+              onClick={sendVerification}
+              className={`${itemClass} w-full text-left text-amber-300 disabled:text-slate-400`}
+            >
+              <MailWarning className="h-4 w-4 shrink-0" aria-hidden />
+              {verificationSent ? t.verificationSent : t.verifyEmail}
+            </button>
+          )}
           <Link role="menuitem" href={routes.myList(lang)} onClick={() => setOpen(false)} className={itemClass}>
             <Bookmark className="h-4 w-4" aria-hidden />
             {t.myList}

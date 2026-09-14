@@ -36,7 +36,13 @@ export function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
     setError(null);
     const { error: authError } =
       mode === 'signup'
-        ? await authClient.signUp.email({ name: String(form.get('name')), email, password })
+        ? await authClient.signUp.email({
+            name: String(form.get('name')),
+            email,
+            password,
+            // Where the verification email link lands.
+            callbackURL: routes.home(lang),
+          })
         : await authClient.signIn.email({ email, password });
     setPending(false);
 
@@ -108,6 +114,14 @@ export function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
             className={inputClass}
           />
           {mode === 'signup' && <span className="text-xs font-normal text-slate-500">{t.passwordHint}</span>}
+          {mode === 'login' && (
+            <Link
+              href={routes.forgotPassword(lang)}
+              className="self-end text-xs font-semibold text-secondary hover:underline"
+            >
+              {t.forgotPassword}
+            </Link>
+          )}
         </label>
 
         {error && (
