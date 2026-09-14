@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: watchguru
+          POSTGRES_PASSWORD: watchguru
+          POSTGRES_DB: watchguru_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U watchguru"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      TEST_DATABASE_URL: postgres://watchguru:watchguru@localhost:5432/watchguru_test
+      # Optional repository secret; without it the web production build is skipped
+      # because prerendering needs real TMDB data. API tests use a fake TMDB.
+      TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Tests
+        run: npm test
+
+      - name: Build API
+        run: npm run build -w api
+
+      - name: Build web
+        if: env.TMDB_API_KEY != ''
+        run: npm run build -w web
+        env:
+          NEXT_PUBLIC_SITE_URL: https://watchguru.example
+          API_URL: http://localhost:4000
+          NEXT_PUBLIC_API_URL: http://localhost:4000

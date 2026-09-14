@@ -1,0 +1,248 @@
+import assert from 'node:assert/strict';
+import { after, before, describe, test } from 'node:test';
+import WebSocket from 'ws';
+import { createClient, startTestApi, WEB_URL, type TestApi } from './setup.js';
+
+let api: TestApi;
+
+before(async () => {
+  api = await startTestApi();
+});
+
+after(async () => {
+  await api?.close();
+});
+
+async function signUp(email: string, name = 'Tester') {
+  const client = createClient(api.baseUrl);
+  const response = await client.post('/api/auth/sign-up/email', { name, email, password: 'supersecret123' });
+  assert.equal(response.status, 200, JSON.stringify(response.body));
+  return client;
+}
+
+describe('auth and library', () => {
+  test('guests cannot read a library', async () => {
+    const guest = createClient(api.baseUrl);
+    assert.equal((await guest.get('/api/me/library')).status, 401);
+  });
+
+  test('status and Guru rating round-trip, with community stats', async () => {
+    const ana = await signUp('ana@test.dev', 'Ana');
+    const beto = await signUp('beto@test.dev', 'Beto');
+    const title = { title: 'Fight Club', posterPath: '/fc.jpg', genreIds: [18] };
+
+    const saved = await ana.put('/api/me/library/movie/550', { ...title, status: 'watched', rating: 9 });
+    assert.equal(saved.status, 200);
+    assert.equal(saved.body.entry.status, 'watched');
+    assert.ok(saved.body.entry.watchedAt, 'watchedAt is set when marked as watched');
+
+    await beto.put('/api/me/library/movie/550', { ...title, rating: 6 });
+    const stats = await createClient(api.baseUrl).get('/api/titles/movie/550/stats');
+    assert.deepEqual(stats.body, { average: 7.5, count: 2 });
+
+    // Omitted fields keep their value; null clears.
+    const ratingOnly = await ana.put('/api/me/library/movie/550', { ...title, rating: 10 });
+    assert.equal(ratingOnly.body.entry.status, 'watched');
+    const cleared = await ana.put('/api/me/library/movie/550', { ...title, status: null, rating: null });
+    assert.equal(cleared.body.entry, null, 'entry is removed when nothing is left');
+
+    const summary = await beto.get('/api/me/library/summary');
+    assert.deepEqual(summary.body, { watchlist: 0, watching: 0, watched: 0, rated: 1 });
+  });
+
+  test('rejects invalid ratings', async () => {
+    const client = await signUp('invalid@test.dev');
+    const response = await client.put('/api/me/library/movie/1', { title: 'X', rating: 11 });
+    assert.equal(response.status, 400);
+  });
+
+  test('episode progress can be marked and unmarked', async () => {
+    const client = await signUp('episodes@test.dev');
+    await client.put('/api/me/episodes/1399', { seasonNumber: 1, episodes: [1, 2, 3], watched: true });
+    await client.put('/api/me/episodes/1399', { seasonNumber: 1, episodes: [2], watched: false });
+    const { body } = await client.get('/api/me/episodes/1399');
+    assert.deepEqual(
+      body.episodes.map((episode: { episodeNumber: number }) => episode.episodeNumber).sort(),
+      [1, 3],
+    );
+  });
+
+  test('sign-out ends the session', async () => {
+    const client = await signUp('signout@test.dev');
+    assert.equal((await client.post('/api/auth/sign-out')).status, 200);
+    assert.equal((await client.get('/api/me/library')).status, 401);
+  });
+});
+
+describe('taste and recommendations', () => {
+  test('personal pick respects liked genres and skips watched titles', async () => {
+    const client = await signUp('taste@test.dev');
+    const saved = await client.put('/api/me/taste', {
+      likedGenres: [878],
+      dislikedGenres: [27, 878],
+      providers: [],
+      region: 'AR',
+    });
+    assert.deepEqual(saved.body.taste.dislikedGenres, [27], 'a genre cannot be liked and disliked');
+
+    const pick = await client.get('/api/me/recommendations/random?type=movie');
+    assert.equal(pick.status, 200);
+    assert.ok(pick.body.genres.includes(878));
+
+    const discover = api.tmdb.requests.filter((url) => url.pathname === '/discover/movie').at(-1)!;
+    assert.equal(discover.searchParams.get('with_genres'), '878');
+    assert.equal(discover.searchParams.get('without_genres'), '27');
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* Match rooms                                                         */
+/* ------------------------------------------------------------------ */
+
+interface RoomState {
+  status: string;
+  voterCount: number;
+  majority: number;
+  deck: { tmdbId: number; mediaType: string }[];
+  participants: { online: boolean; votes: number }[];
+  matches: { index: number; likes: number }[];
+  ranking: { index: number; likes: number }[];
+  me: { votedCards: number[] };
+}
+
+function connect(code: string, token: string) {
+  const socket = new WebSocket(api.wsUrl, { headers: { origin: WEB_URL } });
+  const client = {
+    state: null as RoomState | null,
+    errors: [] as string[],
+    closeCode: null as number | null,
+    waiters: [] as { predicate: (state: RoomState) => boolean; resolve: (state: RoomState) => void }[],
+    send: (message: unknown) => socket.send(JSON.stringify(message)),
+    close: () => socket.close(),
+    until(predicate: (state: RoomState) => boolean): Promise<RoomState> {
+      if (this.state && predicate(this.state)) return Promise.resolve(this.state);
+      return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => reject(new Error('Timed out waiting for room state')), 5000);
+        this.waiters.push({ predicate, resolve: (state) => (clearTimeout(timer), resolve(state)) });
+      });
+    },
+    waitForError(code: string): Promise<void> {
+      return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => reject(new Error(`Timed out waiting for error ${code}`)), 5000);
+        const check = setInterval(() => {
+          if (client.errors.includes(code)) {
+            clearTimeout(timer);
+            clearInterval(check);
+            resolve();
+          }
+        }, 20);
+      });
+    },
+  };
+  socket.on('open', () => socket.send(JSON.stringify({ type: 'auth', code, token })));
+  socket.on('close', (closeCode) => (client.closeCode = closeCode));
+  socket.on('message', (raw) => {
+    const message = JSON.parse(raw.toString());
+    if (message.type === 'error') client.errors.push(message.error);
+    if (message.type !== 'state') return;
+    client.state = message.state;
+    client.waiters = client.waiters.filter(({ predicate, resolve }) => {
+      if (!predicate(message.state)) return true;
+      resolve(message.state);
+      return false;
+    });
+  });
+  return client;
+}
+
+describe('match rooms', () => {
+  test('three people reach a majority match, keep looking, and get a podium', async () => {
+    const guest = createClient(api.baseUrl);
+    const host = await guest.post('/api/match/rooms', { mediaType: 'movie', nickname: 'Host' });
+    assert.equal(host.status, 201);
+    const { code } = host.body;
+
+    const preview = await guest.get(`/api/match/rooms/${code.toLowerCase()}`);
+    assert.equal(preview.body.host, 'Host');
+
+    const ana = await guest.post(`/api/match/rooms/${code}/join`, { nickname: 'Ana' });
+    const beto = await guest.post(`/api/match/rooms/${code}/join`, { nickname: 'Beto' });
+    const clients = [connect(code, host.body.token), connect(code, ana.body.token), connect(code, beto.body.token)];
+    const [h, a, b] = clients;
+    await h.until((s) => s.participants.length === 3 && s.participants.every((p) => p.online));
+
+    a.send({ type: 'start' });
+    await a.waitForError('not_host');
+
+    h.send({ type: 'start' });
+    await b.until((s) => s.status === 'genres');
+    h.send({ type: 'genres', genres: [878] });
+    a.send({ type: 'genres', genres: [35] });
+    b.send({ type: 'genres', genres: [878, 28] });
+
+    const [deckState] = await Promise.all(clients.map((c) => c.until((s) => s.status === 'swiping' && s.deck.length > 0)));
+    assert.equal(deckState.voterCount, 3);
+    assert.equal(deckState.majority, 2);
+    assert.equal(deckState.deck.length, 40);
+    for (const c of clients) assert.equal(c.state!.deck[0].tmdbId, deckState.deck[0].tmdbId);
+
+    h.send({ type: 'vote', index: 0, liked: true });
+    a.send({ type: 'vote', index: 0, liked: false });
+    await h.until((s) => s.participants.filter((p) => p.votes > 0).length === 2);
+    assert.equal(h.state!.status, 'swiping', 'one like of three is not a match');
+
+    b.send({ type: 'vote', index: 0, liked: true });
+    const matched = await a.until((s) => s.status === 'matched');
+    assert.deepEqual(matched.matches, [{ ...matched.matches[0], index: 0, likes: 2 }]);
+
+    b.send({ type: 'vote', index: 1, liked: true });
+    await b.waitForError('invalid_state');
+
+    h.send({ type: 'keep-swiping' });
+    await Promise.all(clients.map((c) => c.until((s) => s.status === 'swiping')));
+
+    for (const c of clients) {
+      const voted = new Set(c.state!.me.votedCards);
+      for (let index = 0; index < deckState.deck.length; index++) {
+        if (!voted.has(index)) c.send({ type: 'vote', index, liked: index === 3 && c === a });
+      }
+    }
+    const finished = await h.until((s) => s.status === 'finished');
+    assert.equal(finished.ranking[0].index, 0, 'the matched title tops the podium');
+
+    h.send({ type: 'more-cards' });
+    const extended = await b.until((s) => s.status === 'swiping' && s.deck.length === 80);
+    const keys = extended.deck.map((card) => `${card.mediaType}:${card.tmdbId}`);
+    assert.equal(new Set(keys).size, keys.length, 'no duplicate cards after extending');
+
+    const late = await guest.post(`/api/match/rooms/${code}/join`, { nickname: 'Late' });
+    assert.equal(late.status, 409);
+
+    clients.forEach((c) => c.close());
+  });
+
+  test('bad tokens and foreign origins are rejected', async () => {
+    const guest = createClient(api.baseUrl);
+    const { body } = await guest.post('/api/match/rooms', { mediaType: 'both', nickname: 'Host' });
+
+    const intruder = connect(body.code, 'not-a-real-token');
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    assert.equal(intruder.state, null);
+    assert.equal(intruder.closeCode, 4003);
+
+    const foreign = new WebSocket(api.wsUrl, { headers: { origin: 'https://evil.example' } });
+    const closeCode = await new Promise<number>((resolve) => foreign.on('close', resolve));
+    assert.equal(closeCode, 1008);
+  });
+
+  test('signed-in users rejoin with the same seat', async () => {
+    const client = await signUp('match-host@test.dev', 'Carla');
+    const created = await client.post('/api/match/rooms', { mediaType: 'tv' });
+    const rejoined = await client.post(`/api/match/rooms/${created.body.code}/join`, {});
+    assert.equal(rejoined.body.participantId, created.body.participantId);
+
+    const socket = connect(created.body.code, created.body.token);
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    assert.equal(socket.closeCode, 4003, 'the previous token is revoked on rejoin');
+  });
+});

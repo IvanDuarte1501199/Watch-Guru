@@ -12,7 +12,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "test:match": "node scripts/match-smoke.mjs"
+    "test": "node --import tsx --test test/unit.test.ts test/api.test.ts"
   },
   "devDependencies": {
     "@types/node": "^20.19.43",

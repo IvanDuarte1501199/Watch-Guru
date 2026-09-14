@@ -13,9 +13,9 @@ import { tasteRoutes } from './routes/taste.js';
 
 const HOUR_MS = 60 * 60 * 1000;
 
-export async function buildApp() {
+export async function buildApp({ logger = true }: { logger?: boolean } = {}) {
   const app = Fastify({
-    logger: true,
+    logger,
     trustProxy: true,
   });
 

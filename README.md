@@ -104,7 +104,9 @@ npm run dev                                     # http://localhost:3000 (another
 | `npm run typecheck`  | TypeScript checks for web and API        |
 | `npm run db:up`      | Start local Postgres with Docker Compose |
 | `npm run db:migrate` | Apply database migrations                |
-| `npm run test:match -w api` | End-to-end check of a 3-person match room (API must be running) |
+| `npm test`           | Unit tests (web + API) and API integration tests |
+
+API integration tests run against a `watchguru_test` Postgres database (created with `docker compose exec db psql -U watchguru -c "CREATE DATABASE watchguru_test"`, or set `TEST_DATABASE_URL`) and a fake TMDB server, so they need no API key. GitHub Actions runs lint, typecheck, tests and builds on every push; add a `TMDB_API_KEY` repository secret to also build the web app there.
 
 After changing `apps/api/src/db/schema.ts`, create a migration with `npm run db:generate -w api`.
 
