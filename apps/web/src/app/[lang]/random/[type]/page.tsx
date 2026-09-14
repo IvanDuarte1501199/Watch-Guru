@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { personalPick } from '@/lib/backend';
 import { hasLocale } from '@/lib/i18n/config';
 import { getDictionary } from '@/lib/i18n/get-dictionary';
 import { pageMetadata } from '@/lib/seo';
@@ -31,6 +32,12 @@ export default async function RandomPage({ params }: PageProps<'/[lang]/random/[
   const { lang, type } = await params;
   const kind = kinds[type];
   if (!hasLocale(lang) || !kind) notFound();
+
+  const personalId = await personalPick(kind);
+  const personal = personalId ? await loadMedia(kind, personalId, lang) : null;
+  if (personal) {
+    return <MediaDetailView media={personal} lang={lang} banner={<RandomBanner personalized />} />;
+  }
 
   // A title can disappear from TMDB between the discover call and the lookup; retry a couple of times.
   for (let attempt = 0; attempt < 3; attempt++) {

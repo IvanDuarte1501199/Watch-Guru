@@ -8,6 +8,7 @@ import { LOCALE_COOKIE, locales, type Locale } from '@/lib/i18n/config';
 import { useI18n } from '@/lib/i18n/DictionaryProvider';
 import { routes } from '@/lib/routes';
 import { SearchBox } from './SearchBox';
+import { UserMenu } from './UserMenu';
 
 function swapLocale(pathname: string, target: Locale): string {
   const segments = pathname.split('/');
@@ -105,6 +106,8 @@ export function Header() {
               </Link>
             ))}
           </div>
+
+          <UserMenu />
         </nav>
       </div>
 

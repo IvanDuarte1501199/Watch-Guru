@@ -6,8 +6,12 @@
   ],
   "scripts": {
     "dev": "npm run dev -w web",
-    "build": "npm run build -w web",
+    "dev:api": "npm run dev -w api",
+    "build": "npm run build --workspaces",
     "start": "npm run start -w web",
-    "lint": "npm run lint -w web"
+    "lint": "npm run lint -w web",
+    "typecheck": "npm run typecheck -w api && npx tsc --noEmit -p apps/web",
+    "db:up": "docker compose up -d",
+    "db:migrate": "npm run db:migrate -w api"
   }
 }

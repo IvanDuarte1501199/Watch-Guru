@@ -14,6 +14,8 @@ import { SeasonsSection } from '@/components/detail/SeasonsSection';
 import { TrailerList } from '@/components/detail/TrailerList';
 import { WhereToWatch } from '@/components/detail/WhereToWatch';
 import { Backdrop } from '@/components/layout/Backdrop';
+import { TitleActions } from '@/components/library/TitleActions';
+import { TitleLibraryProvider } from '@/components/library/TitleLibraryProvider';
 import { ShowMoreGrid } from '@/components/media/ShowMoreGrid';
 
 function structuredData(media: MediaDetail, lang: Locale) {
@@ -55,24 +57,40 @@ export async function MediaDetailView({ media, lang, banner }: MediaDetailViewPr
     <>
       <JsonLd data={structuredData(media, lang)} />
       <Backdrop src={tmdbImage(media.backdrop_path, 'original')} />
-      <div className="animate-fade-in">
-        {banner}
-        <DetailHero media={media} lang={lang} t={t}>
-          <WhereToWatch providers={media.providers} countryNames={countryNames} defaultCountry={defaultWatchRegion[lang]} />
-        </DetailHero>
+      <TitleLibraryProvider
+        info={{
+          mediaType: media.media_type,
+          tmdbId: media.id,
+          title: media.title,
+          posterPath: media.poster_path,
+          releaseDate: media.release_date,
+          genreIds: media.genre_ids,
+        }}
+      >
+        <div className="animate-fade-in">
+          {banner}
+          <DetailHero media={media} lang={lang} t={t}>
+            <TitleActions />
+            <WhereToWatch
+              providers={media.providers}
+              countryNames={countryNames}
+              defaultCountry={defaultWatchRegion[lang]}
+            />
+          </DetailHero>
 
-        {isTv && episodes && (
-          <SeasonsSection
-            seasons={media.seasons}
-            episodes={episodes}
-            ratingsGrid={<EpisodesRatingGrid seasons={media.seasons} episodes={episodes} t={t} />}
-          />
-        )}
+          {isTv && episodes && (
+            <SeasonsSection
+              seasons={media.seasons}
+              episodes={episodes}
+              ratingsGrid={<EpisodesRatingGrid seasons={media.seasons} episodes={episodes} t={t} />}
+            />
+          )}
 
-        <CastList title={t.cast} cast={media.cast} lang={lang} />
-        <TrailerList videos={media.videos} />
-        <ShowMoreGrid title={isTv ? t.recommendedTvShows : t.recommendedMovies} items={media.recommendations} />
-      </div>
+          <CastList title={t.cast} cast={media.cast} lang={lang} />
+          <TrailerList videos={media.videos} />
+          <ShowMoreGrid title={isTv ? t.recommendedTvShows : t.recommendedMovies} items={media.recommendations} />
+        </div>
+      </TitleLibraryProvider>
     </>
   );
 }

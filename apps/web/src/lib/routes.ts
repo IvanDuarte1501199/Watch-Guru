@@ -32,6 +32,10 @@ export const routes = {
   trending: (lang: Locale) => `/${lang}/trending`,
   search: (lang: Locale) => `/${lang}/search`,
   random: (lang: Locale, kind: MediaKind) => `/${lang}/random/${mediaSegment(kind)}`,
+  login: (lang: Locale, next?: string) => `/${lang}/login${next ? `?next=${encodeURIComponent(next)}` : ''}`,
+  signup: (lang: Locale, next?: string) => `/${lang}/signup${next ? `?next=${encodeURIComponent(next)}` : ''}`,
+  myList: (lang: Locale) => `/${lang}/my-list`,
+  taste: (lang: Locale) => `/${lang}/taste`,
 };
 
 /** Reads the numeric id from a `123-some-slug` route segment. */

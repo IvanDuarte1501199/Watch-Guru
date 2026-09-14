@@ -3,6 +3,7 @@ import { Film, Sparkles, Tv } from 'lucide-react';
 import type { Locale } from '@/lib/i18n/config';
 import type { Dictionary } from '@/lib/i18n/get-dictionary';
 import { routes } from '@/lib/routes';
+import { PersonalizeHint } from './PersonalizeHint';
 
 export function MagicSuggest({ lang, t }: { lang: Locale; t: Dictionary }) {
   return (
@@ -18,6 +19,7 @@ export function MagicSuggest({ lang, t }: { lang: Locale; t: Dictionary }) {
           <div>
             <h2 className="text-xl font-black tracking-tight text-white md:text-2xl">{t.dontKnowWhatToWatch}</h2>
             <p className="mt-1 max-w-md text-sm text-slate-400 md:text-base">{t.magicSuggestBody}</p>
+            <PersonalizeHint />
           </div>
         </div>
 

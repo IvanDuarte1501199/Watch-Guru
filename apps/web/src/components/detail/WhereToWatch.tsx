@@ -4,49 +4,7 @@ import { useEffect, useState } from 'react';
 import { useI18n } from '@/lib/i18n/DictionaryProvider';
 import { tmdbImage } from '@/lib/tmdb/images';
 import type { Provider, ProvidersByCountry } from '@/lib/tmdb/types';
-
-const STORAGE_KEY = 'watchRegion';
-const isCountryCode = (value: unknown): value is string => typeof value === 'string' && /^[A-Z]{2}$/.test(value);
-
-function readStoredCountry(): string | null {
-  try {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    return isCountryCode(stored) ? stored : null;
-  } catch {
-    return null; // Storage can be unavailable (private mode).
-  }
-}
-
-function storeCountry(code: string) {
-  try {
-    window.localStorage.setItem(STORAGE_KEY, code);
-  } catch {
-    // Ignore storage failures; the choice still applies to this page.
-  }
-}
-
-async function detectCountry(): Promise<string | null> {
-  const stored = readStoredCountry();
-  if (stored) return stored;
-
-  try {
-    const response = await fetch('/api/geo');
-    const { country } = (await response.json()) as { country: unknown };
-    if (isCountryCode(country)) {
-      storeCountry(country);
-      return country;
-    }
-  } catch {
-    // Fall through to the browser language.
-  }
-
-  // Browser regions can be non-country codes such as "es-419" (Latin America).
-  return (
-    navigator.languages
-      .map((language) => language.split('-')[1]?.toUpperCase())
-      .find(isCountryCode) ?? null
-  );
-}
+import { detectCountry, storeCountry } from '@/lib/watch-region';
 
 interface WhereToWatchProps {
   providers: ProvidersByCountry;

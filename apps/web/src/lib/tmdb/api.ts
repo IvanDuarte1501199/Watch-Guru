@@ -12,6 +12,7 @@ import type {
   Paged,
   PersonDetail,
   PersonSummary,
+  Provider,
   ProvidersByCountry,
   SearchResult,
   Season,
@@ -243,7 +244,10 @@ export async function getTvShow(id: number, lang: Locale): Promise<TvDetail | nu
     media_type: 'tv',
     genres: raw.genres ?? [],
     tagline: raw.tagline ?? '',
-    seasons: raw.seasons ?? [],
+    // Specials (season 0) go last.
+    seasons: [...(raw.seasons ?? [])].sort(
+      (a, b) => (a.season_number || Number.MAX_SAFE_INTEGER) - (b.season_number || Number.MAX_SAFE_INTEGER),
+    ),
     number_of_seasons: raw.number_of_seasons ?? 0,
     number_of_episodes: raw.number_of_episodes ?? 0,
     episode_run_time: raw.episode_run_time ?? [],
@@ -335,6 +339,35 @@ export async function getPerson(id: number, lang: Locale): Promise<PersonDetail 
     movies: personCredits(raw.movie_credits, 'movie', includeCrew),
     tvShows: personCredits(raw.tv_credits, 'tv', includeCrew),
   };
+}
+
+interface RawWatchProvider extends Provider {
+  display_priorities?: Record<string, number>;
+}
+
+/** Streaming services available in a region, for movies and TV combined, most relevant first. */
+export async function getWatchProviders(region: string, lang: Locale): Promise<Provider[]> {
+  const [movies, tv] = await Promise.all(
+    (['movie', 'tv'] as const).map((kind) =>
+      tmdbFetch<{ results: RawWatchProvider[] }>(`/watch/providers/${kind}`, {
+        lang,
+        revalidate: DAY,
+        params: { watch_region: region },
+      }),
+    ),
+  );
+
+  const byId = new Map<number, Provider>();
+  for (const provider of [...movies.results, ...tv.results]) {
+    if (byId.has(provider.provider_id)) continue;
+    byId.set(provider.provider_id, {
+      provider_id: provider.provider_id,
+      provider_name: provider.provider_name,
+      logo_path: provider.logo_path,
+      display_priority: provider.display_priorities?.[region] ?? provider.display_priority ?? 999,
+    });
+  }
+  return [...byId.values()].sort((a, b) => (a.display_priority ?? 999) - (b.display_priority ?? 999));
 }
 
 export async function getCountries(lang: Locale): Promise<Country[]> {
