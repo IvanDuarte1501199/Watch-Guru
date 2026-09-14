@@ -1,126 +1,81 @@
-# App currently in progress 🚧
+# 📺 WatchGuru
 
-This application is currently under development. New features and improvements are being added regularly.
-
-# 📺 Movie & TV Show Recommendation App
-
-## Description
-
-**Movie & TV Show Recommendation App** allows you to explore popular TV shows and movies, discover new releases, and get personalized random recommendations for TV shows or movies. The app uses The Movie Database (TMDb) API to provide detailed information on movies, TV shows, actors, genres, and more.
+Discover what to watch tonight: movie and TV recommendations, where to stream them, trailers, cast and per-episode ratings. Built on [The Movie Database (TMDB)](https://www.themoviedb.org/) API.
 
 ## Features
 
-- 📽 **Random Recommendations**: Get random movie or TV show recommendations with a single click.
-- 🔍 **Advanced Search**: Search for your favorite movies or TV shows using our TMDb integration.
-- 🌟 **Popular Movies**: Discover trending movies or find out what's playing in theaters.
-- 📅 **Popular TV Shows**: Access the most-watched TV shows or what's currently on air.
-- 🎬 **Detailed Information**: View comprehensive details for each movie or show, such as genres, seasons, episodes, and reviews.
-- 🧑‍🤝‍🧑 **Actor Profiles**: Explore information about actors and their latest projects.
+- 🎲 **Random pick**: the Guru chooses a well-rated movie or TV show for you.
+- 📍 **Where to watch**: streaming, rent and buy options per country (auto-detected).
+- 🔍 **Search & discover**: instant search plus filters by genre and sort order.
+- 📊 **Episode ratings heatmap** for every season of a show.
+- 🌎 **Spanish and English**, with localized URLs (`/es/...`, `/en/...`).
+- 🚀 **SEO-ready**: server-rendered pages, canonical/hreflang tags, JSON-LD, sitemap and robots.
 
-## Tech Stack
+## Tech stack
 
-- **Frontend**:
-  - React
-  - TypeScript
-  - Tailwind CSS
-  - React Router
-  - Axios
-  - Vite
-- **State Management**:
-  - Redux
-- **API**:
-  - [The Movie Database (TMDb)](https://www.themoviedb.org/documentation/api)
+- [Next.js 16](https://nextjs.org/) (App Router, Server Components, ISR) + React 19
+- TypeScript, Tailwind CSS v4, lucide-react
+- npm workspaces monorepo (`apps/web` today, `apps/api` next)
 
-## Installation & Setup
+## Project structure
 
-Follow these steps to run the app on your local environment:
-
-1. **Clone the repository**:
-
-   ```bash
-   git clone https://github.com/your-username/movie-tv-app.git
-   cd movie-tv-app
-   ```
-
-2. **Install dependencies**:
-
-   Ensure you have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed, then run:
-
-   ```bash
-   npm install
-   ```
-
-3. **Set up TMDb API**:
-
-   You will need an API key from [The Movie Database (TMDb)](https://www.themoviedb.org/documentation/api). Create a `.env` file in the root of the project and add your API key:
-
-   ```bash
-   VITE_TMDB_API_KEY=your_api_key_here
-   ```
-
-4. **Run the development server**:
-
-   ```bash
-   npm run dev
-   ```
-
-5. **Open the app**:
-
-   Navigate to `http://localhost:3000` in your browser.
-
-## Available Scripts
-
-- `npm run dev`: Start the development server.
-- `npm run build`: Create a production build.
-- `npm run preview`: Preview the optimized build.
-- `npm run lint`: Run lint checks and fix code issues.
-
-## Environment Variables
-
-To run this project, you will need to add the following environment variables to your `.env` file:
-
-- `VITE_TMDB_API_KEY`: This is your API key from The Movie Database (TMDb). You can obtain it by creating an account on [TMDb](https://www.themoviedb.org/) and generating an API key in the developer section.
-- `VITE_TMDB_BASE_URL`: "VITE_TMDB_BASE_URL=https://api.themoviedb.org/3" This is the base URL for The Movie Database API.
-
-## Project Structure
-
-```bash
-src/
-├── assets/               # Static files
-├── components/           # Reusable components
-├── hooks/                # Custom hooks
-├── pages/                # Main app pages
-├── services/             # TMDb API calls
-├── store/                # Global state with Redux
-├── App.tsx               # Root component
-├── main.tsx              # App entry point
-└── index.css             # Global styles
+```
+apps/web/
+├── src/app/[lang]/        # Routes (home, movies, tv-shows, movie/[id], search, random...)
+├── src/app/api/           # Route handlers (search autocomplete, geo country)
+├── src/components/        # UI: layout, media rails/cards, detail sections, pages
+├── src/lib/tmdb/          # Server-only TMDB client, API functions and types
+├── src/lib/i18n/          # Locales, dictionaries, client provider
+├── src/proxy.ts           # Adds the locale prefix to bare URLs
+└── public/                # Logo, icons and genre images
 ```
 
-## API Used
+## Getting started
 
-This app uses the TMDb API to fetch information about movies and TV shows. For more details, visit [TMDb API Documentation](https://developers.themoviedb.org/3).
+Requires Node.js 20.9+.
 
-## Future Improvements
+```bash
+npm install
+cp apps/web/.env.example apps/web/.env.local   # then fill in TMDB_API_KEY
+npm run dev
+```
 
-- 💾 **Favorites Functionality**: Allow users to save their favorite movies or TV shows.
-- 📱 **Enhanced Mobile Responsiveness**: Further optimize the experience on mobile devices.
-- 💬 **Commenting System**: Add a system for users to comment and leave reviews.
+Open http://localhost:3000.
 
-## Contributions
+### Environment variables (`apps/web/.env.local`)
 
-Contributions are welcome! If you'd like to contribute to this project, please follow these steps:
+| Variable               | Description                                                           |
+| ---------------------- | --------------------------------------------------------------------- |
+| `TMDB_API_KEY`         | TMDB v3 API key. **Server-only**, never exposed to the browser.       |
+| `TMDB_BASE_URL`        | Optional. Defaults to `https://api.themoviedb.org/3`.                 |
+| `NEXT_PUBLIC_SITE_URL` | Public URL used for canonical links, sitemap and Open Graph tags.     |
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/new-feature`).
-3. Make your changes and commit them (`git commit -m 'Add new feature'`).
-4. Push to your branch (`git push origin feature/new-feature`).
-5. Open a Pull Request.
+## Scripts
 
-## License
+| Command         | Description                   |
+| --------------- | ----------------------------- |
+| `npm run dev`   | Start the dev server          |
+| `npm run build` | Production build              |
+| `npm run start` | Serve the production build    |
+| `npm run lint`  | ESLint                        |
 
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more information.
+## Deploying to Vercel
+
+1. In the project settings set **Root Directory** to `apps/web` (framework preset: Next.js).
+2. Add `TMDB_API_KEY` and `NEXT_PUBLIC_SITE_URL` as environment variables.
+3. Remove the old `VITE_TMDB_*` variables.
+
+## Roadmap
+
+- 👤 Accounts (own backend): watched list, watchlist and **Guru ratings**
+- 🧠 Taste onboarding and personalized recommendations
+- 💞 **Match rooms**: swipe with your partner or friends until you agree on what to watch
+- 🔔 Alerts when a watchlisted title lands on your streaming services
+
+## Attribution
+
+This product uses the TMDB API but is not endorsed or certified by TMDB. Streaming availability data is provided by JustWatch.
 
 ## Author
 
-Developed by [Iván](https://github.com/IvanDuarte1501199).
+Developed by [Iván Duarte](https://github.com/IvanDuarte1501199).
