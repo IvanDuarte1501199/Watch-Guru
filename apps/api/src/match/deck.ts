@@ -21,6 +21,20 @@ interface RawDiscoverItem {
   genre_ids: number[];
 }
 
+export interface DeckInput {
+  mediaType: RoomMediaType;
+  /** Each voter's genre picks. */
+  picks: number[][];
+  /** Union of the voters' streaming services. */
+  providers: number[];
+  region: string | null;
+  lang: string;
+  existing: DeckCard[];
+  pagesFetched: number;
+}
+
+type Scored = { card: DeckCard; score: number };
+
 async function genreNames(kind: MediaType, lang: string): Promise<Map<number, string>> {
   const data = await tmdbGet<{ genres: { id: number; name: string }[] }>(`/genre/${kind}/list`, {
     language: tmdbLanguage(lang),
@@ -39,31 +53,38 @@ function genreVotes(kind: MediaType, picks: number[][]): Map<number, number> {
 
 async function candidatesFor(
   kind: MediaType,
-  picks: number[][],
-  lang: string,
-  firstPage: number,
-): Promise<{ card: DeckCard; score: number }[]> {
-  const votes = genreVotes(kind, picks);
+  input: DeckInput,
+  availability: { providers: number[]; region: string } | null,
+): Promise<Scored[]> {
+  const votes = genreVotes(kind, input.picks);
   // The most shared genres drive the query; the rest only affect ordering.
   const topGenres = [...votes.entries()]
     .sort((a, b) => b[1] - a[1])
     .slice(0, 4)
     .map(([id]) => id);
 
-  const names = await genreNames(kind, lang);
-  const pages = await Promise.all(
-    Array.from({ length: PAGES_PER_BATCH }, (_, i) =>
+  const firstPage = input.pagesFetched * PAGES_PER_BATCH + 1;
+  const [names, ...pages] = await Promise.all([
+    genreNames(kind, input.lang),
+    ...Array.from({ length: PAGES_PER_BATCH }, (_, i) =>
       tmdbGet<{ results: RawDiscoverItem[] }>(`/discover/${kind}`, {
-        language: tmdbLanguage(lang),
+        language: tmdbLanguage(input.lang),
         page: firstPage + i,
         sort_by: 'popularity.desc',
         include_adult: false,
         'vote_average.gte': 6.5,
         'vote_count.gte': kind === 'movie' ? 300 : 150,
         with_genres: topGenres.join('|'),
+        ...(availability
+          ? {
+              with_watch_providers: availability.providers.join('|'),
+              watch_region: availability.region,
+              with_watch_monetization_types: 'flatrate',
+            }
+          : {}),
       }),
     ),
-  );
+  ]);
 
   return pages
     .flatMap((page) => page.results)
@@ -79,36 +100,44 @@ async function candidatesFor(
         year: (item.release_date || item.first_air_date || '').slice(0, 4) || null,
         voteAverage: item.vote_average,
         genres: item.genre_ids.map((id) => names.get(id)).filter((name): name is string => Boolean(name)).slice(0, 3),
+        onGroupProviders: Boolean(availability),
       },
       // Titles that please more people first, with a little shuffle so decks feel fresh.
       score: item.genre_ids.reduce((sum, id) => sum + (votes.get(id) ?? 0), 0) + Math.random() * 1.5,
     }));
 }
 
+const cardKey = (card: DeckCard) => `${card.mediaType}:${card.tmdbId}`;
+
+function freshSorted(candidates: Scored[], seen: Set<string>): DeckCard[] {
+  const cards: DeckCard[] = [];
+  for (const { card } of [...candidates].sort((a, b) => b.score - a.score)) {
+    if (seen.has(cardKey(card))) continue;
+    seen.add(cardKey(card));
+    cards.push(card);
+  }
+  return cards;
+}
+
 /**
  * Builds the next batch of cards for a room from everyone's genre picks,
- * skipping titles already in the deck. Stored once so all participants
- * swipe through the same cards in the same order.
+ * skipping titles already in the deck. Titles on the group's streaming
+ * services come first; if there aren't enough, the rest of the catalog fills
+ * the batch. Stored once so all participants swipe the same cards in order.
  */
-export async function buildDeckBatch(
-  mediaType: RoomMediaType,
-  picks: number[][],
-  lang: string,
-  existing: DeckCard[],
-  pagesFetched: number,
-): Promise<DeckCard[]> {
-  const kinds: MediaType[] = mediaType === 'both' ? ['movie', 'tv'] : [mediaType];
-  const seen = new Set(existing.map((card) => `${card.mediaType}:${card.tmdbId}`));
-  const firstPage = pagesFetched * PAGES_PER_BATCH + 1;
+export async function buildDeckBatch(input: DeckInput): Promise<DeckCard[]> {
+  const kinds: MediaType[] = input.mediaType === 'both' ? ['movie', 'tv'] : [input.mediaType];
+  const perKindTarget = Math.ceil(DECK_BATCH / kinds.length);
+  const seen = new Set(input.existing.map(cardKey));
+  const availability =
+    input.providers.length > 0 && input.region ? { providers: input.providers, region: input.region } : null;
 
-  const perKind = await Promise.all(
-    kinds.map(async (kind) =>
-      (await candidatesFor(kind, picks, lang, firstPage))
-        .filter(({ card }) => !seen.has(`${card.mediaType}:${card.tmdbId}`))
-        .sort((a, b) => b.score - a.score)
-        .map(({ card }) => card),
-    ),
-  );
+  const perKind: DeckCard[][] = [];
+  for (const kind of kinds) {
+    const available = availability ? freshSorted(await candidatesFor(kind, input, availability), seen) : [];
+    const rest = available.length < perKindTarget ? freshSorted(await candidatesFor(kind, input, null), seen) : [];
+    perKind.push([...available, ...rest]);
+  }
 
   // Interleave movies and shows when the room wants both.
   const batch: DeckCard[] = [];

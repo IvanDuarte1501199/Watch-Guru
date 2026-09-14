@@ -10,7 +10,7 @@ import {
   type RoomMediaType,
   type RoomStatus,
 } from '../db/schema.js';
-import { buildDeckBatch } from './deck.js';
+import { buildDeckBatch, type DeckInput } from './deck.js';
 
 export const MAX_PARTICIPANTS = 8;
 const ROOM_TTL_MS = 24 * 60 * 60 * 1000;
@@ -54,10 +54,17 @@ async function getRoomOrThrow(code: string): Promise<Room> {
   return room;
 }
 
+async function tasteOf(userId: string | null) {
+  if (!userId) return null;
+  const [taste] = await db.select().from(tasteProfile).where(eq(tasteProfile.userId, userId));
+  return taste ?? null;
+}
+
 async function addParticipant(
-  roomCode: string,
+  room: Pick<Room, 'code' | 'region'>,
   input: { nickname: string; userId: string | null; isHost: boolean },
 ): Promise<{ participant: Participant; token: string }> {
+  const roomCode = room.code;
   const token = randomBytes(32).toString('base64url');
 
   // Signed-in users keep their seat (and votes) if they rejoin from another device.
@@ -76,10 +83,9 @@ async function addParticipant(
     }
   }
 
-  // Pre-fill genres from the taste profile so signed-in users can skip that step.
-  const [taste] = input.userId
-    ? await db.select().from(tasteProfile).where(eq(tasteProfile.userId, input.userId))
-    : [];
+  // Pre-fill genres (and services, when they're for the room's country) from the taste profile.
+  const taste = await tasteOf(input.userId);
+  const providers = taste && taste.region === room.region ? taste.providers : [];
 
   const [participant] = await db
     .insert(matchParticipant)
@@ -91,6 +97,7 @@ async function addParticipant(
       tokenHash: hashToken(token),
       isHost: input.isHost,
       genres: taste?.likedGenres ?? [],
+      providers,
     })
     .returning();
   return { participant, token };
@@ -101,16 +108,24 @@ export async function createRoom(input: {
   lang: string;
   nickname: string;
   userId: string | null;
+  region: string | null;
 }) {
+  const region = input.region ?? (await tasteOf(input.userId))?.region ?? null;
   for (let attempt = 0; attempt < 5; attempt++) {
     const code = newCode();
     const [room] = await db
       .insert(matchRoom)
-      .values({ code, mediaType: input.mediaType, lang: input.lang, expiresAt: new Date(Date.now() + ROOM_TTL_MS) })
+      .values({
+        code,
+        mediaType: input.mediaType,
+        lang: input.lang,
+        region,
+        expiresAt: new Date(Date.now() + ROOM_TTL_MS),
+      })
       .onConflictDoNothing()
       .returning();
     if (!room) continue;
-    const { participant, token } = await addParticipant(code, { ...input, isHost: true });
+    const { participant, token } = await addParticipant(room, { ...input, isHost: true });
     return { room, participant, token };
   }
   throw new Error('Could not allocate a room code');
@@ -141,7 +156,7 @@ export async function joinRoom(code: string, input: { nickname: string; userId: 
     if (room.status !== 'lobby' && room.status !== 'genres') throw new MatchError('room_closed');
     if (participants.length >= MAX_PARTICIPANTS) throw new MatchError('room_full');
   }
-  return addParticipant(code, { ...input, isHost: false });
+  return addParticipant(room, { ...input, isHost: false });
 }
 
 export async function authenticate(code: string, token: string): Promise<Participant | null> {
@@ -173,13 +188,17 @@ export async function startGenres(participant: Participant) {
   if (!room) throw new MatchError('invalid_state');
 }
 
-export async function submitGenres(participant: Participant, genres: number[]) {
+export async function submitGenres(participant: Participant, genres: number[], providers?: number[]) {
   const room = await getRoomOrThrow(participant.roomCode);
   if (room.status !== 'lobby' && room.status !== 'genres') throw new MatchError('invalid_state');
 
   await db
     .update(matchParticipant)
-    .set({ genres: [...new Set(genres)], ready: true })
+    .set({
+      genres: [...new Set(genres)],
+      ...(providers ? { providers: [...new Set(providers)] } : {}),
+      ready: true,
+    })
     .where(eq(matchParticipant.id, participant.id));
 
   // Everyone is ready: no need to wait for the host.
@@ -190,6 +209,24 @@ export async function submitGenres(participant: Participant, genres: number[]) {
 }
 
 /* Genres → swiping ---------------------------------------------------- */
+
+/** Any service someone in the group has counts: they're watching on the same screen. */
+function deckInput(
+  room: Room,
+  voters: { genres: number[]; providers: number[] }[],
+  existing: DeckCard[],
+  pagesFetched: number,
+): DeckInput {
+  return {
+    mediaType: room.mediaType,
+    picks: voters.map((voter) => voter.genres),
+    providers: [...new Set(voters.flatMap((voter) => voter.providers))],
+    region: room.region,
+    lang: room.lang,
+    existing,
+    pagesFetched,
+  };
+}
 
 export async function startSwiping(participant: Participant) {
   requireHost(participant);
@@ -211,7 +248,7 @@ async function beginSwiping(code: string) {
   const voters = participants.filter((participant) => participant.ready);
 
   try {
-    const deck = await buildDeckBatch(room.mediaType, voters.map((voter) => voter.genres), room.lang, [], 0);
+    const deck = await buildDeckBatch(deckInput(room, voters, [], 0));
     if (deck.length === 0) throw new MatchError('no_cards');
 
     await db.transaction(async (tx) => {
@@ -305,16 +342,10 @@ export async function extendDeck(participant: Participant) {
   if (room.status !== 'finished' && room.status !== 'matched') throw new MatchError('invalid_state');
 
   const voters = await db
-    .select({ genres: matchParticipant.genres })
+    .select({ genres: matchParticipant.genres, providers: matchParticipant.providers })
     .from(matchParticipant)
     .where(and(eq(matchParticipant.roomCode, room.code), eq(matchParticipant.isVoter, true)));
-  const batch = await buildDeckBatch(
-    room.mediaType,
-    voters.map((voter) => voter.genres),
-    room.lang,
-    room.deck,
-    room.deckPages,
-  );
+  const batch = await buildDeckBatch(deckInput(room, voters, room.deck, room.deckPages));
   if (batch.length === 0) throw new MatchError('no_cards');
 
   await db
@@ -350,7 +381,17 @@ export interface RoomState {
   matches: RankedCard[];
   /** Most liked cards, for the podium when the deck runs out. */
   ranking: RankedCard[];
-  me: { id: string; nickname: string; isHost: boolean; isVoter: boolean; ready: boolean; genres: number[]; votedCards: number[] };
+  region: string | null;
+  me: {
+    id: string;
+    nickname: string;
+    isHost: boolean;
+    isVoter: boolean;
+    ready: boolean;
+    genres: number[];
+    providers: number[];
+    votedCards: number[];
+  };
 }
 
 /** Loads everything needed to render a room once, then personalizes per participant. */
@@ -386,6 +427,7 @@ export function personalizeState(
     code: room.code,
     status: room.status,
     mediaType: room.mediaType,
+    region: room.region,
     voterCount: room.voterCount,
     majority: majorityOf(room.voterCount),
     deck: showDeck ? room.deck : [],
@@ -411,6 +453,7 @@ export function personalizeState(
       isVoter: me.isVoter,
       ready: me.ready,
       genres: me.genres,
+      providers: me.providers,
       votedCards: votes.filter((item) => item.participantId === me.id).map((item) => item.cardIndex),
     },
   };

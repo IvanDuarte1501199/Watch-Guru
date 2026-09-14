@@ -17,6 +17,7 @@ export interface DeckCard {
   year: string | null;
   voteAverage: number;
   genres: string[];
+  onGroupProviders?: boolean;
 }
 
 export interface RankedCard {
@@ -39,6 +40,7 @@ export interface RoomState {
   code: string;
   status: RoomStatus;
   mediaType: RoomMediaType;
+  region: string | null;
   voterCount: number;
   majority: number;
   deck: DeckCard[];
@@ -52,6 +54,7 @@ export interface RoomState {
     isVoter: boolean;
     ready: boolean;
     genres: number[];
+    providers: number[];
     votedCards: number[];
   };
 }
@@ -67,7 +70,7 @@ export interface RoomPreview {
 
 export type ClientMessage =
   | { type: 'start' }
-  | { type: 'genres'; genres: number[] }
+  | { type: 'genres'; genres: number[]; providers?: number[] }
   | { type: 'begin-swiping' }
   | { type: 'vote'; index: number; liked: boolean }
   | { type: 'keep-swiping' }
@@ -100,7 +103,7 @@ async function post<T>(path: string, body: unknown): Promise<T> {
 }
 
 export const matchApi = {
-  create: (input: { mediaType: RoomMediaType; lang: string; nickname?: string }) =>
+  create: (input: { mediaType: RoomMediaType; lang: string; nickname?: string; region?: string }) =>
     post<RoomCredentials & { code: string }>('/api/match/rooms', input),
 
   join: (code: string, nickname?: string) =>

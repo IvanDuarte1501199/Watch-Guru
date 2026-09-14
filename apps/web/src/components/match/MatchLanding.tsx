@@ -7,6 +7,7 @@ import { useSession } from '@/lib/auth-client';
 import { useI18n } from '@/lib/i18n/DictionaryProvider';
 import { MatchApiError, matchApi, saveCredentials, type RoomMediaType } from '@/lib/match';
 import { routes } from '@/lib/routes';
+import { detectCountry } from '@/lib/watch-region';
 
 export function MatchLanding() {
   const { lang, t } = useI18n();
@@ -25,7 +26,13 @@ export function MatchLanding() {
     setPending('create');
     setError(null);
     try {
-      const room = await matchApi.create({ mediaType, lang, nickname: nickname.trim() || undefined });
+      const region = await detectCountry().catch(() => null);
+      const room = await matchApi.create({
+        mediaType,
+        lang,
+        nickname: nickname.trim() || undefined,
+        region: region ?? undefined,
+      });
       saveCredentials(room.code, room);
       router.push(routes.matchRoom(lang, room.code));
     } catch {

@@ -221,6 +221,35 @@ describe('match rooms', () => {
     clients.forEach((c) => c.close());
   });
 
+  test("deck prioritizes titles on the group's streaming services", async () => {
+    const guest = createClient(api.baseUrl);
+    const host = await guest.post('/api/match/rooms', { mediaType: 'tv', nickname: 'Host', region: 'AR' });
+    const ana = await guest.post(`/api/match/rooms/${host.body.code}/join`, { nickname: 'Ana' });
+    const h = connect(host.body.code, host.body.token);
+    const a = connect(host.body.code, ana.body.token);
+    await h.until((s) => s.participants.length === 2);
+
+    h.send({ type: 'start' });
+    await a.until((s) => s.status === 'genres');
+    h.send({ type: 'genres', genres: [35], providers: [8] });
+    a.send({ type: 'genres', genres: [35], providers: [337, 8] });
+
+    const state = (await h.until((s) => s.status === 'swiping' && s.deck.length > 0)) as RoomState & {
+      deck: { onGroupProviders?: boolean }[];
+    };
+    assert.ok(state.deck.every((card) => card.onGroupProviders), 'all cards come from the services query');
+
+    const providerQuery = api.tmdb.requests.find(
+      (url) => url.pathname === '/discover/tv' && url.searchParams.has('with_watch_providers'),
+    );
+    assert.ok(providerQuery, 'discover was filtered by providers');
+    assert.deepEqual(providerQuery.searchParams.get('with_watch_providers')!.split('|').sort(), ['337', '8']);
+    assert.equal(providerQuery.searchParams.get('watch_region'), 'AR');
+
+    h.close();
+    a.close();
+  });
+
   test('bad tokens and foreign origins are rejected', async () => {
     const guest = createClient(api.baseUrl);
     const { body } = await guest.post('/api/match/rooms', { mediaType: 'both', nickname: 'Host' });

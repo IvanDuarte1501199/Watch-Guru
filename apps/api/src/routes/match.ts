@@ -27,6 +27,7 @@ const createBody = z.object({
   mediaType: z.enum(ROOM_MEDIA_TYPES),
   lang: z.enum(['es', 'en']).default('es'),
   nickname: nickname.optional(),
+  region: z.string().regex(/^[A-Z]{2}$/).optional(),
 });
 
 const joinBody = z.object({ nickname: nickname.optional() });
@@ -34,7 +35,11 @@ const joinBody = z.object({ nickname: nickname.optional() });
 const clientMessage = z.discriminatedUnion('type', [
   z.object({ type: z.literal('auth'), code: z.string().max(12), token: z.string().max(100) }),
   z.object({ type: z.literal('start') }),
-  z.object({ type: z.literal('genres'), genres: z.array(z.number().int().positive()).max(30) }),
+  z.object({
+    type: z.literal('genres'),
+    genres: z.array(z.number().int().positive()).max(30),
+    providers: z.array(z.number().int().positive()).max(30).optional(),
+  }),
   z.object({ type: z.literal('begin-swiping') }),
   z.object({ type: z.literal('vote'), index: z.number().int().min(0), liked: z.boolean() }),
   z.object({ type: z.literal('keep-swiping') }),
@@ -73,6 +78,7 @@ export async function matchRoutes(app: FastifyInstance) {
       lang: body.lang,
       nickname: name.slice(0, 24),
       userId: user?.id ?? null,
+      region: body.region ?? null,
     });
     return reply.status(201).send({ code: room.code, participantId: participant.id, token });
   });
@@ -153,7 +159,7 @@ export async function matchRoutes(app: FastifyInstance) {
               await startGenres(current);
               break;
             case 'genres':
-              await submitGenres(current, message.genres);
+              await submitGenres(current, message.genres, message.providers);
               break;
             case 'begin-swiping':
               await startSwiping(current);

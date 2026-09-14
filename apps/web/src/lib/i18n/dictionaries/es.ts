@@ -216,6 +216,7 @@ const es = {
   swipeHint: 'Deslizá o usá las flechas ← →',
   cardsLeft: '{count} por ver',
   majorityHint: 'Match con {count} likes',
+  majorityHintOne: 'Match con 1 like',
   doneSwiping: 'Viste todas las opciones',
   doneSwipingHint: 'Esperando a que los demás terminen...',
   spectator: 'La sala empezó antes de que estuvieras listo. Podés mirar cómo va.',
@@ -233,6 +234,8 @@ const es = {
   newRoom: 'Nueva sala',
   noCards: 'No encontramos títulos con esos géneros. Prueben con otros.',
   matchPromoTitle: '¿No se ponen de acuerdo?',
+  groupProvidersHint: 'Marcá tus plataformas: primero te mostramos lo que está en alguna de las del grupo.',
+  onGroupProviders: 'En sus plataformas',
   matchPromoBody: 'Hagan Match: deslicen opciones juntos hasta que coincidan.',
 };
 

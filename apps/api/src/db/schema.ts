@@ -167,6 +167,8 @@ export interface DeckCard {
   year: string | null;
   voteAverage: number;
   genres: string[];
+  /** True when the title streams on at least one of the group's services. */
+  onGroupProviders?: boolean;
 }
 
 export const matchRoom = pgTable(
@@ -176,6 +178,8 @@ export const matchRoom = pgTable(
     mediaType: text('media_type').$type<RoomMediaType>().notNull(),
     status: text('status').$type<RoomStatus>().notNull().default('lobby'),
     lang: text('lang').notNull().default('es'),
+    /** Country used for streaming availability (ISO 3166-1), from the host's browser. */
+    region: text('region'),
     deck: jsonb('deck').$type<DeckCard[]>().notNull().default([]),
     /** How many deck pages were fetched per media type, to extend the deck later. */
     deckPages: smallint('deck_pages').notNull().default(0),
@@ -202,6 +206,8 @@ export const matchParticipant = pgTable(
     tokenHash: text('token_hash').notNull().unique(),
     isHost: boolean('is_host').notNull().default(false),
     genres: integer('genres').array().notNull().default(sql`'{}'::integer[]`),
+    /** Streaming services this participant has, as TMDB provider ids. */
+    providers: integer('providers').array().notNull().default(sql`'{}'::integer[]`),
     ready: boolean('ready').notNull().default(false),
     /** Voters take part in swiping; people who weren't ready when it started only watch. */
     isVoter: boolean('is_voter').notNull().default(false),

@@ -218,6 +218,7 @@ const en: Dictionary = {
   swipeHint: 'Swipe or use the ← → arrow keys',
   cardsLeft: '{count} left',
   majorityHint: 'Match at {count} likes',
+  majorityHintOne: 'Match at 1 like',
   doneSwiping: 'You’ve seen every option',
   doneSwipingHint: 'Waiting for the others to finish...',
   spectator: 'The room started before you were ready. You can watch how it goes.',
@@ -235,6 +236,8 @@ const en: Dictionary = {
   newRoom: 'New room',
   noCards: "We couldn't find titles for those genres. Try different ones.",
   matchPromoTitle: "Can't agree?",
+  groupProvidersHint: 'Pick your services: titles on any of the group’s services come first.',
+  onGroupProviders: 'On your services',
   matchPromoBody: 'Try Match: swipe options together until you agree.',
 };
 

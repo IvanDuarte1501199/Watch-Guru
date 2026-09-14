@@ -22,6 +22,11 @@ function CardFace({ card, posterOnly = false }: { card: DeckCard; posterOnly?: b
       )}
       {!posterOnly && <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/85 to-transparent p-5 pt-24 text-left">
         <div className="mb-2 flex flex-wrap gap-1.5">
+          {card.onGroupProviders && (
+            <span className="rounded-full bg-green-500/20 px-2.5 py-0.5 text-[11px] font-bold text-green-300 uppercase">
+              {t.onGroupProviders}
+            </span>
+          )}
           {card.genres.map((genre) => (
             <span key={genre} className="rounded-full bg-white/10 px-2.5 py-0.5 text-[11px] font-bold text-slate-200 uppercase">
               {genre}
@@ -139,7 +144,7 @@ export function SwipeDeck({ state, send, rejectedAt }: { state: RoomState; send:
     <section className="mx-auto flex max-w-md flex-col items-center gap-4">
       <div className="flex w-full items-center justify-between text-xs font-semibold text-slate-400">
         <span>{format(t.cardsLeft, { count: remaining })}</span>
-        <span>{format(t.majorityHint, { count: state.majority })}</span>
+        <span>{state.majority === 1 ? t.majorityHintOne : format(t.majorityHint, { count: state.majority })}</span>
       </div>
 
       <div className="relative aspect-[2/3] w-full max-w-[min(100%,24rem)] touch-none">
