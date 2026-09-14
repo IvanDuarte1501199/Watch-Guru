@@ -187,6 +187,45 @@ describe('custom lists', () => {
   });
 });
 
+describe('availability alerts', () => {
+  test('notifies once a watchlisted title reaches one of your services', async () => {
+    const { runAvailabilityCheck } = await import('../src/lib/availability.js');
+    const { outbox } = await import('../src/lib/mailer.js');
+    const netflix = { provider_id: 8, provider_name: 'Netflix', logo_path: '/netflix.png' };
+    const disney = { provider_id: 337, provider_name: 'Disney Plus', logo_path: '/disney.png' };
+
+    const client = await signUp('alerts@test.dev', 'Alex');
+    await client.put('/api/me/taste', { likedGenres: [], dislikedGenres: [], providers: [8], region: 'AR' });
+    await client.put('/api/me/library/movie/777', { title: 'Coming Soon', posterPath: '/cs.jpg', status: 'watchlist' });
+    await client.put('/api/me/library/movie/778', { title: 'Already There', status: 'watchlist' });
+
+    // Baseline: what's already available doesn't trigger alerts.
+    api.tmdb.setProviders('movie', 777, { AR: [disney] });
+    api.tmdb.setProviders('movie', 778, { AR: [netflix] });
+    await runAvailabilityCheck();
+    let feed = await client.get('/api/me/notifications');
+    assert.equal(feed.body.unread, 0);
+
+    // Now it lands on Netflix in Argentina (Disney doesn't count: the user doesn't have it).
+    api.tmdb.setProviders('movie', 777, { AR: [disney, netflix], US: [netflix] });
+    const result = await runAvailabilityCheck();
+    assert.ok(result.notifications >= 1);
+
+    feed = await client.get('/api/me/notifications');
+    assert.equal(feed.body.unread, 1);
+    assert.equal(feed.body.items[0].title, 'Coming Soon');
+    assert.deepEqual(feed.body.items[0].data.providers.map((p: { name: string }) => p.name), ['Netflix']);
+    assert.ok(!outbox.some((email) => email.to === 'alerts@test.dev' && /plataformas/.test(email.subject)), 'no email while unverified');
+
+    // Nothing new on the next run.
+    await runAvailabilityCheck();
+    assert.equal((await client.get('/api/me/notifications')).body.items.length, 1);
+
+    await client.post('/api/me/notifications/read', {});
+    assert.equal((await client.get('/api/me/notifications')).body.unread, 0);
+  });
+});
+
 describe('taste and recommendations', () => {
   test('personal pick respects liked genres and skips watched titles', async () => {
     const client = await signUp('taste@test.dev');

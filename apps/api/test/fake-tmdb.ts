@@ -24,14 +24,19 @@ const GENRES = {
 export const PAGE_SIZE = 20;
 export const TOTAL_PAGES = 10;
 
+type Flatrate = { provider_id: number; provider_name: string; logo_path: string | null }[];
+
 export interface FakeTmdb {
   url: string;
   requests: URL[];
+  /** Sets the streaming availability returned for a title, keyed by region. */
+  setProviders: (kind: 'movie' | 'tv', id: number, byRegion: Record<string, Flatrate>) => void;
   close: () => Promise<void>;
 }
 
 export async function startFakeTmdb(): Promise<FakeTmdb> {
   const requests: URL[] = [];
+  const providers = new Map<string, Record<string, Flatrate>>();
 
   const server: Server = createServer((request, response) => {
     const url = new URL(request.url ?? '/', 'http://fake');
@@ -40,6 +45,13 @@ export async function startFakeTmdb(): Promise<FakeTmdb> {
       response.writeHead(status, { 'Content-Type': 'application/json' });
       response.end(JSON.stringify(body));
     };
+
+    const providersMatch = /^\/(movie|tv)\/(\d+)\/watch\/providers$/.exec(url.pathname);
+    if (providersMatch) {
+      const byRegion = providers.get(`${providersMatch[1]}:${providersMatch[2]}`) ?? {};
+      const results = Object.fromEntries(Object.entries(byRegion).map(([region, flatrate]) => [region, { flatrate }]));
+      return send(200, { id: Number(providersMatch[2]), results });
+    }
 
     const genreMatch = /^\/genre\/(movie|tv)\/list$/.exec(url.pathname);
     if (genreMatch) return send(200, { genres: GENRES[genreMatch[1] as 'movie' | 'tv'] });
@@ -75,6 +87,7 @@ export async function startFakeTmdb(): Promise<FakeTmdb> {
   return {
     url: `http://127.0.0.1:${port}`,
     requests,
+    setProviders: (kind, id, byRegion) => providers.set(`${kind}:${id}`, byRegion),
     close: () => new Promise((resolve) => server.close(() => resolve())),
   };
 }

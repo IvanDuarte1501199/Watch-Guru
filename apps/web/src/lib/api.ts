@@ -81,6 +81,18 @@ export interface UserListDetail {
   items: ListItem[];
 }
 
+export interface AppNotification {
+  id: number;
+  type: 'available';
+  mediaType: MediaKind;
+  tmdbId: number;
+  title: string;
+  posterPath: string | null;
+  data: { region: string; providers: { id: number; name: string; logoPath: string | null }[] };
+  readAt: string | null;
+  createdAt: string;
+}
+
 export class ApiError extends Error {
   constructor(readonly status: number) {
     super(`Request failed with status ${status}`);
@@ -158,6 +170,11 @@ export const api = {
 
   removeFromList: (id: string, kind: MediaKind, tmdbId: number) =>
     request<{ ok: true }>(`/api/me/lists/${id}/items/${kind}/${tmdbId}`, { method: 'DELETE' }),
+
+  notifications: () => request<{ items: AppNotification[]; unread: number }>('/api/me/notifications', { cache: 'no-store' }),
+
+  markNotificationsRead: () =>
+    request<{ ok: true }>('/api/me/notifications/read', { method: 'POST', body: JSON.stringify({}) }),
 
   authConfig: () => request<{ emailPassword: boolean; google: boolean }>('/api/auth-config'),
 };

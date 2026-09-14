@@ -9,6 +9,8 @@ import { authRoutes } from './routes/auth.js';
 import { deleteExpiredRooms } from './match/service.js';
 import { libraryRoutes } from './routes/library.js';
 import { listRoutes } from './routes/lists.js';
+import { notificationRoutes } from './routes/notifications.js';
+import { runAvailabilityCheck } from './lib/availability.js';
 import { matchRoutes } from './routes/match.js';
 import { tasteRoutes } from './routes/taste.js';
 
@@ -64,6 +66,7 @@ export async function buildApp({ logger = true }: { logger?: boolean } = {}) {
   await app.register(libraryRoutes);
   await app.register(tasteRoutes);
   await app.register(listRoutes);
+  await app.register(notificationRoutes);
   await app.register(matchRoutes);
 
   const cleanup = setInterval(() => {
@@ -71,8 +74,20 @@ export async function buildApp({ logger = true }: { logger?: boolean } = {}) {
   }, HOUR_MS);
   cleanup.unref();
 
+  // Availability alerts. Tests call runAvailabilityCheck() directly instead.
+  const availability =
+    env.NODE_ENV === 'test'
+      ? null
+      : setInterval(() => {
+          runAvailabilityCheck()
+            .then((result) => app.log.info(result, 'Availability check finished'))
+            .catch((error) => app.log.error(error, 'Availability check failed'));
+        }, 6 * HOUR_MS);
+  availability?.unref();
+
   app.addHook('onClose', async () => {
     clearInterval(cleanup);
+    if (availability) clearInterval(availability);
     await pool.end();
   });
 

@@ -57,7 +57,7 @@ export function Header() {
           </span>
         </Link>
 
-        <div className="hidden w-full max-w-md md:block">
+        <div className="hidden w-full max-w-md lg:block">
           <SearchBox />
         </div>
 
@@ -82,7 +82,7 @@ export function Header() {
             type="button"
             onClick={() => setMobileSearchOpen((open) => !open)}
             aria-label={mobileSearchOpen ? t.closeSearch : t.search}
-            className="rounded-lg p-2 text-slate-300 hover:text-secondary md:hidden"
+            className="rounded-lg p-2 text-slate-300 hover:text-secondary lg:hidden"
           >
             {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
           </button>
@@ -113,7 +113,7 @@ export function Header() {
       </div>
 
       {mobileSearchOpen && (
-        <div className="border-t border-slate-800/50 px-4 pb-4 md:hidden">
+        <div className="border-t border-slate-800/50 px-4 pb-4 lg:hidden">
           <nav className="flex gap-6 py-3 sm:hidden">
             {links.map((link) => (
               <Link

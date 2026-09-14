@@ -21,7 +21,11 @@ export class TmdbError extends Error {
 }
 
 /** Small TMDB client with an in-memory cache (discover pages change slowly). */
-export async function tmdbGet<T>(path: string, params: Record<string, QueryValue> = {}): Promise<T> {
+export async function tmdbGet<T>(
+  path: string,
+  params: Record<string, QueryValue> = {},
+  { cache: useCache = true }: { cache?: boolean } = {},
+): Promise<T> {
   const url = new URL(`${env.TMDB_BASE_URL}${path}`);
   for (const [key, value] of Object.entries(params)) {
     if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, String(value));
@@ -30,7 +34,7 @@ export async function tmdbGet<T>(path: string, params: Record<string, QueryValue
   url.searchParams.set('api_key', env.TMDB_API_KEY);
 
   const cached = cache.get(cacheKey);
-  if (cached && cached.expiresAt > Date.now()) return cached.value as T;
+  if (useCache && cached && cached.expiresAt > Date.now()) return cached.value as T;
 
   const response = await fetch(url);
   if (!response.ok) throw new TmdbError(response.status, path);

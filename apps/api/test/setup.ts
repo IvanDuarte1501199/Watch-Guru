@@ -28,7 +28,7 @@ export async function startTestApi() {
 
   await migrate(db, { migrationsFolder: fileURLToPath(new URL('../drizzle', import.meta.url)) });
   await db.execute(
-    sql`TRUNCATE "user", session, account, verification, library_entry, episode_progress, taste_profile, match_room, match_participant, match_vote, user_list, user_list_item CASCADE`,
+    sql`TRUNCATE "user", session, account, verification, library_entry, episode_progress, taste_profile, match_room, match_participant, match_vote, user_list, user_list_item, availability_snapshot, notification CASCADE`,
   );
 
   const app = await buildApp({ logger: false });

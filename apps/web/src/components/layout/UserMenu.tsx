@@ -8,6 +8,7 @@ import { authClient, useSession } from '@/lib/auth-client';
 import { format } from '@/lib/i18n/config';
 import { useI18n } from '@/lib/i18n/DictionaryProvider';
 import { routes } from '@/lib/routes';
+import { NotificationBell } from './NotificationBell';
 
 export function UserMenu() {
   const { lang, t } = useI18n();
@@ -63,7 +64,9 @@ export function UserMenu() {
   const itemClass = 'flex items-center gap-3 px-4 py-2.5 text-sm text-slate-200 transition hover:bg-slate-900 hover:text-secondary';
 
   return (
-    <div ref={menuRef} className="relative">
+    <div className="flex items-center gap-1">
+      <NotificationBell />
+      <div ref={menuRef} className="relative">
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
@@ -114,6 +117,7 @@ export function UserMenu() {
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 }
