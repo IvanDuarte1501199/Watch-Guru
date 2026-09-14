@@ -10,6 +10,7 @@ import { discover, getCountries, getGenres } from '@/lib/tmdb/api';
 import { tmdbImage } from '@/lib/tmdb/images';
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 import { RankedList } from '@/components/seo/RankedList';
+import { AdSlot } from '@/components/ads/AdSlot';
 
 export const revalidate = 3600;
 
@@ -144,6 +145,8 @@ export default async function GuidePage({ params }: PageProps<'/[lang]/guides/[s
       ) : (
         <p className="p-guru py-10 text-center">{t.guideEmpty}</p>
       )}
+
+      <AdSlot />
 
       {related.length > 0 && (
         <section className="mt-12">

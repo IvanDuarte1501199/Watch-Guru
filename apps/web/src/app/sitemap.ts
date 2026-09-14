@@ -31,6 +31,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     add(routes.guides(lang), 0.9, 'weekly');
     add(routes.trending(lang), 0.8, 'daily');
     add(routes.match(lang), 0.8, 'weekly');
+    add(routes.privacy(lang), 0.2, 'weekly');
+    add(routes.terms(lang), 0.2, 'weekly');
     movieCategories.forEach((category) => add(routes.category(lang, 'movie', category), 0.7, 'daily'));
     tvCategories.forEach((category) => add(routes.category(lang, 'tv', category), 0.7, 'daily'));
 

@@ -11,6 +11,8 @@ import { useSession } from '@/lib/auth-client';
 import type { MediaKind } from '@/lib/tmdb/types';
 import { ListsManager } from '@/components/lists/ListsManager';
 import { Loader } from '@/components/ui/Loader';
+import { CafecitoButton } from '@/components/support/CafecitoButton';
+import { CAFECITO_USER } from '@/lib/site';
 import { LibraryCard } from './LibraryCard';
 import { useLibraryIndex } from './LibraryIndexProvider';
 import { statusOptions } from './statusOptions';
@@ -250,6 +252,13 @@ export function MyLibrary() {
             </ul>
           )}
         </>
+      )}
+
+      {CAFECITO_USER && (
+        <div className="mt-12 flex flex-col items-center gap-3 text-center text-sm text-slate-400">
+          <p>{t.supportCafecitoHint}</p>
+          <CafecitoButton label={t.supportCafecito} />
+        </div>
       )}
 
       {toast && (

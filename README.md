@@ -82,6 +82,9 @@ npm run dev                                     # http://localhost:3000 (another
 | `NEXT_PUBLIC_SITE_URL` | Public URL used for canonical links, sitemap and Open Graph tags. |
 | `API_URL`              | Backend URL the web server proxies to (e.g. `http://localhost:4000`). |
 | `NEXT_PUBLIC_API_URL`  | Public backend URL the browser uses for Match WebSockets.          |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | Optional. Contact address shown on the privacy and terms pages. |
+| `NEXT_PUBLIC_CAFECITO_USER` | Optional. Cafecito username; shows the support button when set. |
+| `NEXT_PUBLIC_ADSENSE_CLIENT` / `NEXT_PUBLIC_ADSENSE_SLOT` | Optional. AdSense publisher id (`ca-pub-…`) and ad unit id. Ads, `ads.txt` and the consent banner stay off until set. |
 
 `apps/api/.env`
 

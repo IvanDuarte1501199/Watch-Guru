@@ -8,6 +8,7 @@ import { pageMetadata } from '@/lib/seo';
 import { rotatingPick } from '@/lib/site';
 import { discover, getCategory, getGenres, getTrendingAll, getTrendingPeople } from '@/lib/tmdb/api';
 import { tmdbImage } from '@/lib/tmdb/images';
+import { AdSlot } from '@/components/ads/AdSlot';
 import { Backdrop } from '@/components/layout/Backdrop';
 import { HeroCarousel } from '@/components/media/HeroCarousel';
 import { MagicSuggest } from '@/components/media/MagicSuggest';
@@ -72,6 +73,7 @@ export default async function HomePage({ params }: PageProps<'/[lang]'>) {
       <MagicSuggest lang={lang} t={t} />
       <MatchPromo lang={lang} t={t} />
       <PopularGuides lang={lang} t={t} />
+      <AdSlot />
 
       <p className="mb-8 text-center md:mb-12">
         <Link

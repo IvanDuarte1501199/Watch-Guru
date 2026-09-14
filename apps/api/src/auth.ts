@@ -36,7 +36,13 @@ export const auth = betterAuth({
   socialProviders: googleAuthEnabled
     ? { google: { clientId: env.GOOGLE_CLIENT_ID!, clientSecret: env.GOOGLE_CLIENT_SECRET! } }
     : undefined,
+  user: {
+    // Password accounts confirm with their password; social-only accounts need a fresh session.
+    // Everything the user owns is removed by ON DELETE CASCADE.
+    deleteUser: { enabled: true },
+  },
   session: {
+    freshAge: DAY,
     expiresIn: 30 * DAY,
     updateAge: DAY,
     // No cookie cache: revoked sessions (e.g. after a password reset) must stop working immediately.

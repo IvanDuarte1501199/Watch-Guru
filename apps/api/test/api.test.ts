@@ -175,6 +175,27 @@ describe('custom lists', () => {
     assert.equal(afterRemove.body.items.length, 1);
   });
 
+  test('deleting the account requires the password and removes personal data', async () => {
+    const client = await signUp('delete@test.dev', 'Dani');
+    await client.put('/api/me/library/movie/9550', { title: 'Only Mine', status: 'watched', rating: 9 });
+    await client.post('/api/me/lists', { title: 'Soon gone', isPublic: true });
+
+    const wrong = await client.post('/api/auth/delete-user', { password: 'not-my-password' });
+    assert.equal(wrong.status, 400);
+    assert.equal((await client.get('/api/me/library')).status, 200);
+
+    const deleted = await client.post('/api/auth/delete-user', { password: 'supersecret123' });
+    assert.equal(deleted.status, 200, JSON.stringify(deleted.body));
+    assert.equal((await client.get('/api/me/library')).status, 401);
+    assert.equal((await client.get('/api/titles/movie/9550/stats')).body.count, 0);
+
+    const login = await createClient(api.baseUrl).post('/api/auth/sign-in/email', {
+      email: 'delete@test.dev',
+      password: 'supersecret123',
+    });
+    assert.equal(login.status, 401);
+  });
+
   test("users cannot change other people's lists", async () => {
     const owner = await signUp('owner-list@test.dev');
     const intruder = await signUp('intruder-list@test.dev');

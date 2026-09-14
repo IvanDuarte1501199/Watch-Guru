@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { Bookmark, LogOut, MailWarning, SlidersHorizontal } from 'lucide-react';
+import { Bookmark, LogOut, MailWarning, SlidersHorizontal, UserRound } from 'lucide-react';
 import { authClient, useSession } from '@/lib/auth-client';
 import { format } from '@/lib/i18n/config';
 import { useI18n } from '@/lib/i18n/DictionaryProvider';
@@ -110,6 +110,10 @@ export function UserMenu() {
           <Link role="menuitem" href={routes.taste(lang)} onClick={() => setOpen(false)} className={itemClass}>
             <SlidersHorizontal className="h-4 w-4" aria-hidden />
             {t.myTaste}
+          </Link>
+          <Link role="menuitem" href={routes.account(lang)} onClick={() => setOpen(false)} className={itemClass}>
+            <UserRound className="h-4 w-4" aria-hidden />
+            {t.account}
           </Link>
           <button role="menuitem" type="button" onClick={signOut} className={`${itemClass} w-full border-t border-slate-800`}>
             <LogOut className="h-4 w-4" aria-hidden />

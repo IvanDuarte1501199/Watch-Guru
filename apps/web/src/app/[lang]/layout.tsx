@@ -6,7 +6,8 @@ import { hasLocale, locales } from '@/lib/i18n/config';
 import { DictionaryProvider } from '@/lib/i18n/DictionaryProvider';
 import { getDictionary } from '@/lib/i18n/get-dictionary';
 import { pageMetadata } from '@/lib/seo';
-import { SITE_NAME, SITE_URL } from '@/lib/site';
+import { ADSENSE_CLIENT, SITE_NAME, SITE_URL } from '@/lib/site';
+import { AdsConsent } from '@/components/ads/AdsConsent';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { LibraryIndexProvider } from '@/components/library/LibraryIndexProvider';
@@ -54,6 +55,7 @@ export default async function LangLayout({ children, params }: LayoutProps<'/[la
             {children}
           </main>
           <Footer lang={lang} t={dictionary} />
+          {ADSENSE_CLIENT && <AdsConsent client={ADSENSE_CLIENT} />}
           </LibraryIndexProvider>
         </DictionaryProvider>
       </body>

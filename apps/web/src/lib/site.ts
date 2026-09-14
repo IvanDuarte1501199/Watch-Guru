@@ -2,6 +2,17 @@ export const SITE_NAME = 'WatchGuru';
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(/\/$/, '');
 
+/** Public contact address shown on the legal pages. Optional. */
+export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL || null;
+
+/** Cafecito username for the support button; the button is hidden when unset. */
+export const CAFECITO_USER = process.env.NEXT_PUBLIC_CAFECITO_USER || null;
+
+/** AdSense publisher id (`ca-pub-…`). Ads, ads.txt and the consent banner stay off when unset. */
+export const ADSENSE_CLIENT = /^ca-pub-\d+$/.test(process.env.NEXT_PUBLIC_ADSENSE_CLIENT ?? '')
+  ? process.env.NEXT_PUBLIC_ADSENSE_CLIENT!
+  : null;
+
 /** Background images bundled in /public/genres, keyed by TMDB genre id. */
 const genreImages: Record<number, string> = {
   28: 'action',
