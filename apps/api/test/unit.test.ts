@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 
 // These modules read env at import time; unit tests only need it to be valid.
-process.env.DATABASE_URL ??= 'postgres://watchguru:watchguru@localhost:5432/watchguru_test';
-process.env.WEB_URL ??= 'http://localhost:3000';
-process.env.BETTER_AUTH_SECRET ??= 'test-secret-that-is-long-enough-for-better-auth';
-process.env.TMDB_API_KEY ??= 'test';
+process.env.DATABASE_URL ||= 'postgres://watchguru:watchguru@localhost:5432/watchguru_test';
+process.env.WEB_URL ||= 'http://localhost:3000';
+process.env.BETTER_AUTH_SECRET ||= 'test-secret-that-is-long-enough-for-better-auth';
+process.env.TMDB_API_KEY ||= 'test';
 
 const { genresFor } = await import('../src/lib/recommendations.js');
 const { majorityOf, normalizeCode } = await import('../src/match/service.js');

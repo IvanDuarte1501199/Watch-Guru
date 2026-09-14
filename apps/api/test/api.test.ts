@@ -177,6 +177,7 @@ function connect(code: string, token: string) {
     state: null as RoomState | null,
     errors: [] as string[],
     closeCode: null as number | null,
+    closed: null as unknown as Promise<number>,
     waiters: [] as { predicate: (state: RoomState) => boolean; resolve: (state: RoomState) => void }[],
     send: (message: unknown) => socket.send(JSON.stringify(message)),
     close: () => socket.close(),
@@ -201,7 +202,12 @@ function connect(code: string, token: string) {
     },
   };
   socket.on('open', () => socket.send(JSON.stringify({ type: 'auth', code, token })));
-  socket.on('close', (closeCode) => (client.closeCode = closeCode));
+  client.closed = new Promise<number>((resolve) =>
+    socket.on('close', (closeCode) => {
+      client.closeCode = closeCode;
+      resolve(closeCode);
+    }),
+  );
   socket.on('message', (raw) => {
     const message = JSON.parse(raw.toString());
     if (message.type === 'error') client.errors.push(message.error);
@@ -316,9 +322,8 @@ describe('match rooms', () => {
     const { body } = await guest.post('/api/match/rooms', { mediaType: 'both', nickname: 'Host' });
 
     const intruder = connect(body.code, 'not-a-real-token');
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    assert.equal(await intruder.closed, 4003);
     assert.equal(intruder.state, null);
-    assert.equal(intruder.closeCode, 4003);
 
     const foreign = new WebSocket(api.wsUrl, { headers: { origin: 'https://evil.example' } });
     const closeCode = await new Promise<number>((resolve) => foreign.on('close', resolve));
@@ -332,7 +337,6 @@ describe('match rooms', () => {
     assert.equal(rejoined.body.participantId, created.body.participantId);
 
     const socket = connect(created.body.code, created.body.token);
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    assert.equal(socket.closeCode, 4003, 'the previous token is revoked on rejoin');
+    assert.equal(await socket.closed, 4003, 'the previous token is revoked on rejoin');
   });
 });
