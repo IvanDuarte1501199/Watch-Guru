@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --import tsx --test test/lib.test.ts",
+    "test": "node --import tsx --test test/lib.test.ts test/availability.test.ts",
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {

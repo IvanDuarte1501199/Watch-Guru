@@ -104,6 +104,43 @@ const en: Dictionary = {
   tmdbAttribution: 'This product uses the TMDB API but is not endorsed or certified by TMDB.',
   language: 'Language',
 
+  // SEO
+  siteTitle: 'WatchGuru: what to watch tonight and where to stream it',
+  homeHeading: 'What to watch tonight: movie and TV picks and where to stream them',
+  guides: 'Guides',
+  guidesTitle: 'Guides: the best movies and TV shows by genre and service',
+  guidesDescription:
+    'Up-to-date rankings of the best movies and TV shows by genre and by streaming service: Netflix, Prime Video, Disney+, Max and more.',
+  guidesMoviesByGenre: 'Movies by genre',
+  guidesTvByGenre: 'TV shows by genre',
+  guidesByPlatform: 'By service',
+  kindMoviesPlural: 'movies',
+  kindTvPlural: 'TV shows',
+  guideTitleGenre: 'The best {genre} {kind}',
+  guideTitleProvider: 'The best {kind} on {provider}',
+  guideTitleGenreProvider: 'The best {genre} {kind} on {provider}',
+  guideIntroGenre:
+    'These are the {count} highest-rated {genre} {kind}, ranked by audience score. Tap any of them for the synopsis, trailer and where to watch it.',
+  guideIntroProvider:
+    'These are the {count} highest-rated {kind} you can stream with {provider} in {country}. Tap any of them for the synopsis, trailer and cast.',
+  guideIntroGenreProvider:
+    'These are the {count} highest-rated {genre} {kind} streaming on {provider} in {country}. Tap any of them for the synopsis, trailer and cast.',
+  guideUpdated: 'Updated {date}',
+  guideAvailabilityNote: '{country} catalog. Availability changes by country and over time.',
+  relatedGuides: 'Related guides',
+  guideEmpty: 'There are not enough titles for this guide right now.',
+  detailMetaTitle: '{title} ({year}): where to watch online',
+  detailMetaTitleNoYear: '{title}: where to watch online',
+  availableOn: '{title} is streaming on {providers} ({country}).',
+  notStreamingIn: '{title} is not on streaming services in {country} right now.',
+  similarMovies: 'Movies like {title}',
+  similarTvShows: 'TV shows like {title}',
+  similarIntro: 'If you liked {title}, these picks share its style, themes or audience.',
+  seeSimilar: 'See similar titles',
+  directedBy: 'Directed by',
+  createdBy: 'Created by',
+  breadcrumb: 'Breadcrumb',
+
   // Accounts
   login: 'Log in',
   signup: 'Sign up',

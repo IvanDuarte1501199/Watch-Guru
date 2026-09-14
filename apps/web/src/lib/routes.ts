@@ -40,6 +40,10 @@ export const routes = {
   resetPassword: (lang: Locale) => `/${lang}/reset-password`,
   taste: (lang: Locale) => `/${lang}/taste`,
   match: (lang: Locale) => `/${lang}/match`,
+  guides: (lang: Locale) => `/${lang}/guides`,
+  guide: (lang: Locale, slug: string) => `/${lang}/guides/${slug}`,
+  similar: (lang: Locale, kind: MediaKind, id: number, title?: string) =>
+    `/${lang}/${mediaSegment(kind)}/${withSlug(id, title)}/similar`,
   matchRoom: (lang: Locale, code: string) => `/${lang}/match/${code}`,
 };
 

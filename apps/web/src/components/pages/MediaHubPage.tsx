@@ -41,7 +41,7 @@ export async function MediaHubPage({ kind, lang }: { kind: MediaKind; lang: Loca
 
   return (
     <>
-      <Backdrop src={tmdbImage(trending.results[0]?.backdrop_path, 'original')} />
+      <Backdrop src={tmdbImage(trending.results[0]?.backdrop_path, 'w1280')} />
       <h1 className="h1-guru animate-fade-in pt-6 pb-6 text-center uppercase">{isMovie ? t.movies : t.tvShows}</h1>
 
       <GenreChips title={t.genres} genres={genres} kind={kind} lang={lang} />

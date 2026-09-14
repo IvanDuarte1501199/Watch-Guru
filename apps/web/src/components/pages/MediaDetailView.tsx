@@ -1,4 +1,4 @@
-import { defaultWatchRegion, type Locale } from '@/lib/i18n/config';
+import { defaultWatchRegion, format, type Locale } from '@/lib/i18n/config';
 import { getDictionary } from '@/lib/i18n/get-dictionary';
 import { routes } from '@/lib/routes';
 import { summarize } from '@/lib/seo';
@@ -17,6 +17,9 @@ import { Backdrop } from '@/components/layout/Backdrop';
 import { TitleActions } from '@/components/library/TitleActions';
 import { TitleLibraryProvider } from '@/components/library/TitleLibraryProvider';
 import { ShowMoreGrid } from '@/components/media/ShowMoreGrid';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { availabilitySentence } from '@/lib/availability';
+import Link from 'next/link';
 
 function structuredData(media: MediaDetail, lang: Locale) {
   return {
@@ -29,6 +32,11 @@ function structuredData(media: MediaDetail, lang: Locale) {
     datePublished: media.release_date ?? undefined,
     genre: media.genres.map((genre) => genre.name),
     actor: media.cast.slice(0, 5).map((member) => ({ '@type': 'Person', name: member.name })),
+    [media.media_type === 'movie' ? 'director' : 'creator']: media.creators.map((person) => ({
+      '@type': 'Person',
+      name: person.name,
+      url: `${SITE_URL}${routes.person(lang, person.id, person.name)}`,
+    })),
     aggregateRating:
       media.vote_count > 0
         ? { '@type': 'AggregateRating', ratingValue: media.vote_average.toFixed(1), bestRating: 10, ratingCount: media.vote_count }
@@ -52,11 +60,13 @@ export async function MediaDetailView({ media, lang, banner }: MediaDetailViewPr
   ]);
 
   const countryNames = Object.fromEntries(countries.map((country) => [country.iso_3166_1, country.native_name]));
+  const region = defaultWatchRegion[lang];
+  const mainGenre = media.genres[0];
 
   return (
     <>
       <JsonLd data={structuredData(media, lang)} />
-      <Backdrop src={tmdbImage(media.backdrop_path, 'original')} />
+      <Backdrop src={tmdbImage(media.backdrop_path, 'w1280')} />
       <TitleLibraryProvider
         info={{
           mediaType: media.media_type,
@@ -68,13 +78,28 @@ export async function MediaDetailView({ media, lang, banner }: MediaDetailViewPr
         }}
       >
         <div className="animate-fade-in">
-          {banner}
+          {banner ?? (
+            <Breadcrumbs
+              label={t.breadcrumb}
+              items={[
+                { name: t.home, href: routes.home(lang) },
+                { name: isTv ? t.tvShows : t.movies, href: routes.list(lang, media.media_type) },
+                ...(mainGenre
+                  ? [{ name: mainGenre.name, href: routes.genre(lang, media.media_type, mainGenre.id, mainGenre.name) }]
+                  : []),
+                { name: media.title, href: routes.media(lang, media.media_type, media.id, media.title) },
+              ]}
+            />
+          )}
           <DetailHero media={media} lang={lang} t={t}>
             <TitleActions />
+            <p className="mb-3 max-w-2xl text-sm text-slate-300">
+              {availabilitySentence(media.title, media.providers, region, countryNames[region] ?? region, t, lang)}
+            </p>
             <WhereToWatch
               providers={media.providers}
               countryNames={countryNames}
-              defaultCountry={defaultWatchRegion[lang]}
+              defaultCountry={region}
             />
           </DetailHero>
 
@@ -89,6 +114,16 @@ export async function MediaDetailView({ media, lang, banner }: MediaDetailViewPr
           <CastList title={t.cast} cast={media.cast} lang={lang} />
           <TrailerList videos={media.videos} />
           <ShowMoreGrid title={isTv ? t.recommendedTvShows : t.recommendedMovies} items={media.recommendations} />
+          {media.recommendations.length > 0 && (
+            <p className="mb-12 text-center">
+              <Link
+                href={routes.similar(lang, media.media_type, media.id, media.title)}
+                className="font-semibold text-secondary hover:underline"
+              >
+                {format(isTv ? t.similarTvShows : t.similarMovies, { title: media.title })} &rarr;
+              </Link>
+            </p>
+          )}
         </div>
       </TitleLibraryProvider>
     </>

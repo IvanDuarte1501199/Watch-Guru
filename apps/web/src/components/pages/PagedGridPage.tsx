@@ -4,6 +4,7 @@ import type { MediaSummary, Paged } from '@/lib/tmdb/types';
 import { Backdrop } from '@/components/layout/Backdrop';
 import { MediaGrid } from '@/components/media/MediaGrid';
 import { Pagination } from '@/components/ui/Pagination';
+import { Breadcrumbs, type Crumb } from '@/components/seo/Breadcrumbs';
 
 interface PagedGridPageProps {
   title: string;
@@ -12,6 +13,7 @@ interface PagedGridPageProps {
   lang: Locale;
   t: Dictionary;
   backdrop?: string | null;
+  breadcrumbs?: Crumb[];
 }
 
 export function parsePage(value: string | string[] | undefined): number {
@@ -20,10 +22,11 @@ export function parsePage(value: string | string[] | undefined): number {
 }
 
 /** A titled grid of media with crawlable pagination links. */
-export function PagedGridPage({ title, data, basePath, lang, t, backdrop }: PagedGridPageProps) {
+export function PagedGridPage({ title, data, basePath, lang, t, backdrop, breadcrumbs }: PagedGridPageProps) {
   return (
     <>
       <Backdrop src={backdrop} />
+      {breadcrumbs && <Breadcrumbs items={breadcrumbs} label={t.breadcrumb} />}
       <section className="animate-fade-in-up">
         <h1 className="h1-guru pt-4 pb-6 text-center md:pt-8 md:pb-10">{title}</h1>
         {data.results.length > 0 ? (

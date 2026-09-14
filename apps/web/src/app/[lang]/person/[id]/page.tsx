@@ -10,6 +10,7 @@ import { tmdbImage } from '@/lib/tmdb/images';
 import { JsonLd } from '@/components/JsonLd';
 import { PersonCredits } from '@/components/detail/PersonCredits';
 import { Backdrop } from '@/components/layout/Backdrop';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 
 export const revalidate = 3600;
 
@@ -67,7 +68,14 @@ export default async function PersonPage({ params }: PageProps<'/[lang]/person/[
           birthPlace: person.place_of_birth ?? undefined,
         }}
       />
-      <Backdrop src={tmdbImage(backdropSource?.backdrop_path, 'original')} />
+      <Backdrop src={tmdbImage(backdropSource?.backdrop_path, 'w1280')} />
+      <Breadcrumbs
+        label={t.breadcrumb}
+        items={[
+          { name: t.home, href: routes.home(lang) },
+          { name: person.name, href: canonical },
+        ]}
+      />
 
       <section className="flex animate-fade-in flex-col items-start gap-8 pt-4 pb-10 md:flex-row md:pt-12">
         {photo && (

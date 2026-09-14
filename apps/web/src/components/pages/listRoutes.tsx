@@ -71,7 +71,12 @@ export async function renderCategory(kind: MediaKind, params: CategoryParams, se
       basePath={routes.category(lang, kind, category)}
       lang={lang}
       t={t}
-      backdrop={tmdbImage(data.results[0]?.backdrop_path, 'original')}
+      backdrop={tmdbImage(data.results[0]?.backdrop_path, 'w1280')}
+      breadcrumbs={[
+        { name: t.home, href: routes.home(lang) },
+        { name: kind === 'movie' ? t.movies : t.tvShows, href: routes.list(lang, kind) },
+        { name: categoryTitle(kind, category, t), href: routes.category(lang, kind, category) },
+      ]}
     />
   );
 }
@@ -117,7 +122,12 @@ export async function renderGenre(kind: MediaKind, params: GenreParams, searchPa
       basePath={canonical}
       lang={lang}
       t={t}
-      backdrop={genreImage(genre.id) ?? tmdbImage(data.results[0]?.backdrop_path, 'original')}
+      backdrop={genreImage(genre.id) ?? tmdbImage(data.results[0]?.backdrop_path, 'w1280')}
+      breadcrumbs={[
+        { name: t.home, href: routes.home(lang) },
+        { name: kind === 'movie' ? t.movies : t.tvShows, href: routes.list(lang, kind) },
+        { name: genre.name, href: canonical },
+      ]}
     />
   );
 }

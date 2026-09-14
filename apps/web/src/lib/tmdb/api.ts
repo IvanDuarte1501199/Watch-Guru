@@ -61,10 +61,11 @@ interface RawDetailAppends {
 interface RawMovieDetail extends RawMedia, RawDetailAppends {
   runtime?: number | null;
   imdb_id?: string | null;
-  credits?: { cast: CastMember[] };
+  credits?: { cast: CastMember[]; crew?: { id: number; name: string; job: string }[] };
 }
 
 interface RawTvDetail extends RawMedia, RawDetailAppends {
+  created_by?: { id: number; name: string }[];
   seasons?: Season[];
   number_of_seasons?: number;
   number_of_episodes?: number;
@@ -183,10 +184,15 @@ export interface DiscoverParams {
   sortBy?: string;
   order?: 'asc' | 'desc';
   page?: number;
+  /** Only titles streaming (flat-rate) on any of these services in `region`. */
+  providers?: number[];
+  region?: string;
+  minVotes?: number;
 }
 
 export async function discover(kind: MediaKind, lang: Locale, params: DiscoverParams = {}) {
   const sortBy = params.sortBy ?? 'popularity';
+  const byProvider = Boolean(params.providers?.length && params.region);
   const data = await tmdbFetch<Paged<RawMedia>>(`/discover/${kind}`, {
     lang,
     params: {
@@ -195,7 +201,10 @@ export async function discover(kind: MediaKind, lang: Locale, params: DiscoverPa
       with_genres: params.genres?.join(','),
       include_adult: false,
       // Rating-based sorts are meaningless for titles with a handful of votes.
-      'vote_count.gte': sortBy === 'vote_average' ? 200 : undefined,
+      'vote_count.gte': params.minVotes ?? (sortBy === 'vote_average' ? 200 : undefined),
+      with_watch_providers: byProvider ? params.providers!.join('|') : undefined,
+      watch_region: byProvider ? params.region : undefined,
+      with_watch_monetization_types: byProvider ? 'flatrate' : undefined,
     },
   });
   return mapPaged(data, kind);
@@ -223,6 +232,9 @@ export async function getMovie(id: number, lang: Locale): Promise<MovieDetail | 
     runtime: raw.runtime ?? null,
     imdb_id: raw.imdb_id ?? null,
     cast: raw.credits?.cast ?? [],
+    creators: (raw.credits?.crew ?? [])
+      .filter((member) => member.job === 'Director')
+      .map(({ id, name }) => ({ id, name })),
     videos: sortVideos(raw.videos?.results ?? []),
     recommendations: (raw.recommendations?.results ?? []).map((item) => toMediaSummary(item, 'movie')),
     providers: raw['watch/providers']?.results ?? {},
@@ -252,6 +264,7 @@ export async function getTvShow(id: number, lang: Locale): Promise<TvDetail | nu
     number_of_episodes: raw.number_of_episodes ?? 0,
     episode_run_time: raw.episode_run_time ?? [],
     status: raw.status ?? '',
+    creators: (raw.created_by ?? []).map(({ id, name }) => ({ id, name })),
     cast: (raw.aggregate_credits?.cast ?? []).map((member) => ({
       id: member.id,
       name: member.name,
@@ -262,6 +275,25 @@ export async function getTvShow(id: number, lang: Locale): Promise<TvDetail | nu
     recommendations: (raw.recommendations?.results ?? []).map((item) => toMediaSummary(item, 'tv')),
     providers: raw['watch/providers']?.results ?? {},
   };
+}
+
+/** Recommendations for a title, falling back to TMDB's "similar" list when there are none. */
+export async function getRecommendations(kind: MediaKind, id: number, lang: Locale, pages = 2): Promise<MediaSummary[]> {
+  const fetchList = (list: 'recommendations' | 'similar') =>
+    Promise.all(
+      Array.from({ length: pages }, (_, index) =>
+        tmdbFetchOrNull<Paged<RawMedia>>(`/${kind}/${id}/${list}`, { lang, params: { page: index + 1 } }),
+      ),
+    ).then((responses) => responses.flatMap((response) => response?.results ?? []));
+
+  let raw = await fetchList('recommendations');
+  if (raw.length === 0) raw = await fetchList('similar');
+  const unique = new Map<string, MediaSummary>();
+  for (const item of raw) {
+    const summary = toMediaSummary(item, kind);
+    unique.set(`${summary.media_type}:${summary.id}`, summary);
+  }
+  return [...unique.values()].filter((item) => item.poster_path);
 }
 
 /** TMDB allows up to 20 appended resources per request, so seasons are fetched in chunks. */

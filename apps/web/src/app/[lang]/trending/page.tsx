@@ -28,7 +28,7 @@ export default async function TrendingPage({ params, searchParams }: PageProps<'
       basePath={routes.trending(lang)}
       lang={lang}
       t={t}
-      backdrop={tmdbImage(data.results[0]?.backdrop_path, 'original')}
+      backdrop={tmdbImage(data.results[0]?.backdrop_path, 'w1280')}
     />
   );
 }

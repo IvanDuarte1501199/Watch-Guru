@@ -73,6 +73,8 @@ export type ProvidersByCountry = Record<string, CountryProviders>;
 
 interface DetailExtras {
   genres: Genre[];
+  /** Directors for movies, creators for TV shows. */
+  creators: { id: number; name: string }[];
   tagline: string;
   cast: CastMember[];
   videos: Video[];

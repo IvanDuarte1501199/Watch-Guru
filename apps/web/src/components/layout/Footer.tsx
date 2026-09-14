@@ -28,6 +28,12 @@ export function Footer({ lang, t }: { lang: Locale; t: Dictionary }) {
           <Link href={routes.trending(lang)} className="hover:text-secondary">
             {t.trendingAll}
           </Link>
+          <Link href={routes.guides(lang)} className="hover:text-secondary">
+            {t.guides}
+          </Link>
+          <Link href={routes.match(lang)} className="hover:text-secondary">
+            {t.match}
+          </Link>
           <Link href={routes.search(lang)} className="hover:text-secondary">
             {t.advancedSearch}
           </Link>

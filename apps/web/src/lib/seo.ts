@@ -12,6 +12,8 @@ interface PageMetadataInput {
   /** Path to use for the other locales when it differs (e.g. slugs are translated). */
   alternatePath?: string;
   noIndex?: boolean;
+  /** Use the title as-is, without the "| WatchGuru" suffix. */
+  absoluteTitle?: boolean;
 }
 
 const localeTags: Record<Locale, string> = { es: 'es_ES', en: 'en_US' };
@@ -24,14 +26,18 @@ export function pageMetadata({
   image,
   alternatePath,
   noIndex,
+  absoluteTitle,
 }: PageMetadataInput): Metadata {
   const canonical = `${SITE_URL}/${lang}${path}`;
   const languages = Object.fromEntries(
     locales.map((locale) => [locale, `${SITE_URL}/${locale}${locale === lang ? path : (alternatePath ?? path)}`]),
   );
+  // Pages without artwork get a branded card with their title.
+  const socialImage =
+    image ?? `${SITE_URL}/og?${new URLSearchParams({ title: title ?? SITE_NAME, subtitle: description ?? '' })}`;
 
   return {
-    title,
+    title: absoluteTitle && title ? { absolute: title } : title,
     description,
     alternates: { canonical, languages: { ...languages, 'x-default': languages.es } },
     openGraph: {
@@ -41,13 +47,13 @@ export function pageMetadata({
       url: canonical,
       title: title ?? SITE_NAME,
       description,
-      images: image ? [{ url: image }] : undefined,
+      images: [image ? { url: image } : { url: socialImage, width: 1200, height: 630 }],
     },
     twitter: {
-      card: image ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image',
       title: title ?? SITE_NAME,
       description,
-      images: image ? [image] : undefined,
+      images: [socialImage],
     },
     robots: noIndex ? { index: false, follow: true } : undefined,
   };

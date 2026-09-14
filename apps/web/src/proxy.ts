@@ -25,5 +25,6 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|.*\\..*).*)'],
+  // og: generated social images; paths with an extension are static assets.
+  matcher: ['/((?!api|_next|og(?:/|$)|.*\\..*).*)'],
 };

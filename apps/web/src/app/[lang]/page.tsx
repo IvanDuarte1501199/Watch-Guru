@@ -12,6 +12,7 @@ import { Backdrop } from '@/components/layout/Backdrop';
 import { HeroCarousel } from '@/components/media/HeroCarousel';
 import { MagicSuggest } from '@/components/media/MagicSuggest';
 import { MatchPromo } from '@/components/media/MatchPromo';
+import { PopularGuides } from '@/components/seo/PopularGuides';
 import { MediaRail } from '@/components/media/MediaRail';
 import { PeopleRail } from '@/components/media/PeopleRail';
 
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: PageProps<'/[lang]'>): Promis
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const t = await getDictionary(lang);
-  return pageMetadata({ lang, path: '', description: t.siteDescription });
+  return pageMetadata({ lang, path: '', title: t.siteTitle, absoluteTitle: true, description: t.siteDescription });
 }
 
 export default async function HomePage({ params }: PageProps<'/[lang]'>) {
@@ -62,14 +63,15 @@ export default async function HomePage({ params }: PageProps<'/[lang]'>) {
 
   return (
     <>
-      <Backdrop src={tmdbImage(trending.results[0]?.backdrop_path, 'original')} />
+      <Backdrop src={tmdbImage(trending.results[0]?.backdrop_path, 'w1280')} />
 
-      <h1 className="h1-guru animate-fade-in pt-6 pb-6 text-center uppercase">{t.welcome}</h1>
+      <h1 className="h1-guru mx-auto max-w-4xl animate-fade-in pt-6 pb-6 text-center">{t.homeHeading}</h1>
 
       <HeroCarousel items={heroItems} />
 
       <MagicSuggest lang={lang} t={t} />
       <MatchPromo lang={lang} t={t} />
+      <PopularGuides lang={lang} t={t} />
 
       <p className="mb-8 text-center md:mb-12">
         <Link

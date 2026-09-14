@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
-import { hasLocale, type Locale } from '@/lib/i18n/config';
+import { streamingProviderNames } from '@/lib/availability';
+import { defaultWatchRegion, format, hasLocale, type Locale } from '@/lib/i18n/config';
+import { getDictionary } from '@/lib/i18n/get-dictionary';
 import { parseIdParam, routes } from '@/lib/routes';
 import { pageMetadata, summarize } from '@/lib/seo';
 import { getMovie, getTvShow } from '@/lib/tmdb/api';
@@ -15,7 +17,7 @@ export async function loadMedia(kind: MediaKind, id: number, lang: Locale): Prom
 }
 
 /** Loads the title and redirects `/movie/550` or an outdated slug to the canonical URL. */
-async function resolveDetail(kind: MediaKind, params: DetailParams) {
+export async function resolveDetail(kind: MediaKind, params: DetailParams, suffix = '') {
   const { lang, id } = await params;
   if (!hasLocale(lang)) notFound();
   const mediaId = parseIdParam(id);
@@ -25,19 +27,29 @@ async function resolveDetail(kind: MediaKind, params: DetailParams) {
   if (!media) notFound();
 
   const canonical = routes.media(lang, kind, media.id, media.title);
-  if (canonical.split('/').pop() !== id) permanentRedirect(canonical);
+  if (canonical.split('/').pop() !== id) permanentRedirect(`${canonical}${suffix}`);
   return { lang, media, canonical };
 }
 
 export async function detailMetadata(kind: MediaKind, params: DetailParams): Promise<Metadata> {
   const { lang, media, canonical } = await resolveDetail(kind, params);
+  const t = await getDictionary(lang);
   const year = media.release_date?.slice(0, 4);
+
+  // Lead with where to watch: it's what most people searching a title want.
+  const providers = streamingProviderNames(media.providers, defaultWatchRegion[lang]).slice(0, 3);
+  const description = summarize(
+    [providers.length ? `${media.title}: ${providers.join(', ')}.` : '', media.overview].filter(Boolean).join(' '),
+  );
+
   return pageMetadata({
     lang,
     path: canonical.slice(lang.length + 1),
     alternatePath: `/${kind === 'movie' ? 'movie' : 'tv-show'}/${media.id}`,
-    title: year ? `${media.title} (${year})` : media.title,
-    description: summarize(media.overview),
+    title: year
+      ? format(t.detailMetaTitle, { title: media.title, year })
+      : format(t.detailMetaTitleNoYear, { title: media.title }),
+    description,
     image: tmdbImage(media.backdrop_path, 'w1280') ?? tmdbImage(media.poster_path, 'w780'),
   });
 }

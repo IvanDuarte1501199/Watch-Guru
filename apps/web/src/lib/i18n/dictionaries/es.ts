@@ -102,6 +102,43 @@ const es = {
   tmdbAttribution: 'Este producto usa la API de TMDB pero no está avalado ni certificado por TMDB.',
   language: 'Idioma',
 
+  // SEO
+  siteTitle: 'WatchGuru: qué ver hoy y dónde ver películas y series',
+  homeHeading: 'Qué ver hoy: películas y series recomendadas y dónde verlas',
+  guides: 'Guías',
+  guidesTitle: 'Guías: las mejores películas y series por género y plataforma',
+  guidesDescription:
+    'Rankings actualizados de las mejores películas y series por género y por plataforma de streaming: Netflix, Prime Video, Disney+, Max y más.',
+  guidesMoviesByGenre: 'Películas por género',
+  guidesTvByGenre: 'Series por género',
+  guidesByPlatform: 'Por plataforma',
+  kindMoviesPlural: 'películas',
+  kindTvPlural: 'series',
+  guideTitleGenre: 'Las mejores {kind} de {genre}',
+  guideTitleProvider: 'Las mejores {kind} en {provider}',
+  guideTitleGenreProvider: 'Las mejores {kind} de {genre} en {provider}',
+  guideIntroGenre:
+    'Estas son las {count} {kind} de {genre} mejor valoradas por el público, ordenadas por calificación. Tocá cualquiera para ver la sinopsis, el tráiler y dónde verla.',
+  guideIntroProvider:
+    'Estas son las {count} {kind} mejor valoradas que podés ver con tu suscripción a {provider} en {country}. Tocá cualquiera para ver la sinopsis, el tráiler y el reparto.',
+  guideIntroGenreProvider:
+    'Estas son las {count} {kind} de {genre} mejor valoradas disponibles en {provider} en {country}. Tocá cualquiera para ver la sinopsis, el tráiler y el reparto.',
+  guideUpdated: 'Actualizado en {date}',
+  guideAvailabilityNote: 'Catálogo de {country}. La disponibilidad cambia según el país y con el tiempo.',
+  relatedGuides: 'Guías relacionadas',
+  guideEmpty: 'Por ahora no hay suficientes títulos para esta guía.',
+  detailMetaTitle: '{title} ({year}): dónde ver online',
+  detailMetaTitleNoYear: '{title}: dónde ver online',
+  availableOn: '{title} está disponible en streaming en {providers} ({country}).',
+  notStreamingIn: 'Por ahora {title} no está en plataformas de streaming en {country}.',
+  similarMovies: 'Películas parecidas a {title}',
+  similarTvShows: 'Series parecidas a {title}',
+  similarIntro: 'Si te gustó {title}, estas recomendaciones comparten estilo, temática o público.',
+  seeSimilar: 'Ver títulos parecidos',
+  directedBy: 'Dirección',
+  createdBy: 'Creada por',
+  breadcrumb: 'Ruta de navegación',
+
   // Accounts
   login: 'Ingresar',
   signup: 'Crear cuenta',

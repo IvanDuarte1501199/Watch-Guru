@@ -85,6 +85,22 @@ export function DetailHero({ media, lang, t, children }: DetailHeroProps) {
             </>
           )}
 
+          {media.creators.length > 0 && (
+            <p className="mb-4 text-sm text-slate-300">
+              <span className="font-semibold text-slate-200">
+                {media.media_type === 'movie' ? t.directedBy : t.createdBy}:
+              </span>{' '}
+              {media.creators.slice(0, 3).map((person, index) => (
+                <span key={person.id}>
+                  {index > 0 && ', '}
+                  <Link href={routes.person(lang, person.id, person.name)} className="text-secondary hover:underline">
+                    {person.name}
+                  </Link>
+                </span>
+              ))}
+            </p>
+          )}
+
           {media.genres.length > 0 && (
             <ul className="mb-8 flex flex-wrap gap-2" aria-label={t.genres}>
               {media.genres.map((genre) => (

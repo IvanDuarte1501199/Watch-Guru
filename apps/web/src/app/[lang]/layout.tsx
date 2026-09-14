@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Outfit } from 'next/font/google';
 import { notFound } from 'next/navigation';
+import { preconnect } from 'react-dom';
 import { hasLocale, locales } from '@/lib/i18n/config';
 import { DictionaryProvider } from '@/lib/i18n/DictionaryProvider';
 import { getDictionary } from '@/lib/i18n/get-dictionary';
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: LayoutProps<'/[lang]'>): Prom
 
   return {
     metadataBase: new URL(SITE_URL),
-    title: { default: `${SITE_NAME} · ${t.dontKnowWhatToWatch}`, template: `%s | ${SITE_NAME}` },
+    title: { default: t.siteTitle, template: `%s | ${SITE_NAME}` },
     applicationName: SITE_NAME,
     icons: { icon: '/logo.svg' },
     ...pageMetadata({ lang, path: '', description: t.siteDescription }),
@@ -35,6 +36,9 @@ export async function generateMetadata({ params }: LayoutProps<'/[lang]'>): Prom
 }
 
 export default async function LangLayout({ children, params }: LayoutProps<'/[lang]'>) {
+  // Posters and backdrops come from TMDB's CDN; open that connection early.
+  preconnect('https://image.tmdb.org', { crossOrigin: 'anonymous' });
+
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dictionary = await getDictionary(lang);
