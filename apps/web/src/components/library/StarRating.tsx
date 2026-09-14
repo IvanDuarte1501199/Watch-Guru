@@ -52,7 +52,7 @@ export function StarRating({ value, onChange, disabled, size = 'md' }: StarRatin
         );
       })}
       {value !== null && size === 'md' && (
-        <span className={`ml-2 min-w-8 font-bold text-secondary ${size === 'sm' ? 'text-xs' : 'text-sm'}`}>{(value / 2).toFixed(1)}</span>
+        <span className="ml-2 min-w-8 text-sm font-bold text-secondary">{(value / 2).toFixed(1)}</span>
       )}
     </div>
   );
