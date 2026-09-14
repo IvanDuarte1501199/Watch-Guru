@@ -5,15 +5,17 @@ import type { Dictionary } from '@/lib/i18n/get-dictionary';
 import { routes } from '@/lib/routes';
 
 /** Hand-picked mix of guides linked from the home page, so crawlers reach them in one hop. */
-const featured: { kind: 'movie' | 'tv'; genre?: number; provider?: string }[] = [
+const featured: { mode?: 'best' | 'new'; kind: 'movie' | 'tv'; genre?: number; provider?: string }[] = [
+  { mode: 'new', kind: 'movie', provider: 'netflix' },
+  { mode: 'new', kind: 'tv', provider: 'netflix' },
+  { mode: 'new', kind: 'tv', provider: 'max' },
+  { mode: 'new', kind: 'movie' },
   { kind: 'movie', genre: 27, provider: 'netflix' },
   { kind: 'tv', provider: 'netflix' },
   { kind: 'movie', provider: 'disney-plus' },
   { kind: 'tv', genre: 18, provider: 'max' },
   { kind: 'movie', genre: 878 },
   { kind: 'movie', genre: 35, provider: 'prime-video' },
-  { kind: 'tv', genre: 80 },
-  { kind: 'tv', genre: 16, provider: 'netflix' },
 ];
 
 export async function PopularGuides({ lang, t }: { lang: Locale; t: Dictionary }) {
@@ -22,6 +24,7 @@ export async function PopularGuides({ lang, t }: { lang: Locale; t: Dictionary }
     .map((spec) =>
       guides.find(
         (guide) =>
+          guide.mode === (spec.mode ?? 'best') &&
           guide.kind === spec.kind &&
           (guide.genre?.id ?? undefined) === spec.genre &&
           (guide.provider?.slug ?? undefined) === spec.provider,

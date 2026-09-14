@@ -3,6 +3,7 @@ import type { Locale } from '@/lib/i18n/config';
 import { routes } from '@/lib/routes';
 import { tmdbImage } from '@/lib/tmdb/images';
 import type { MediaSummary } from '@/lib/tmdb/types';
+import { QuickStatusButton } from '@/components/library/QuickStatusButton';
 import { RatingBadge } from '@/components/ui/RatingBadge';
 
 export function MediaCard({ item, lang }: { item: MediaSummary; lang: Locale }) {
@@ -41,6 +42,18 @@ export function MediaCard({ item, lang }: { item: MediaSummary; lang: Locale }) 
           </span>
         )}
       </Link>
+
+      {/* Outside the link: interactive controls can't be nested inside an anchor. */}
+      <QuickStatusButton
+        info={{
+          mediaType: item.media_type,
+          tmdbId: item.id,
+          title: item.title,
+          posterPath: item.poster_path,
+          releaseDate: item.release_date,
+          genreIds: item.genre_ids,
+        }}
+      />
     </article>
   );
 }

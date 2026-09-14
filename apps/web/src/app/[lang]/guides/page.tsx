@@ -51,6 +51,11 @@ export default async function GuidesPage({ params }: PageProps<'/[lang]/guides'>
       </header>
 
       <section className={sectionClass}>
+        <h2 className="h2-guru mb-4">{t.guidesNew}</h2>
+        {linkList(guides.filter((guide) => guide.mode === 'new'))}
+      </section>
+
+      <section className={sectionClass}>
         <h2 className="h2-guru mb-4">{t.guidesMoviesByGenre}</h2>
         {linkList(guides.filter((guide) => guide.kind === 'movie' && guide.genre && !guide.provider))}
       </section>
@@ -65,7 +70,7 @@ export default async function GuidesPage({ params }: PageProps<'/[lang]/guides'>
           <h2 className="h2-guru mb-4">
             {t.guidesByPlatform}: {provider.name}
           </h2>
-          {linkList(guides.filter((guide) => guide.provider?.id === provider.id))}
+          {linkList(guides.filter((guide) => guide.mode === 'best' && guide.provider?.id === provider.id))}
         </section>
       ))}
     </div>

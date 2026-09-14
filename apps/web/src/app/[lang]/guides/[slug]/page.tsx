@@ -28,20 +28,36 @@ async function loadGuide(params: PageProps<'/[lang]/guides/[slug]'>['params']) {
   if (!guide) notFound();
 
   const region = guideRegion[lang];
-  const data = await discover(guide.kind, lang, {
-    genres: guide.genre ? [guide.genre.id] : undefined,
-    providers: guide.provider ? [guide.provider.id] : undefined,
-    region: guide.provider ? region : undefined,
-    sortBy: 'vote_average',
-    minVotes: guide.provider ? 80 : guide.kind === 'movie' ? 800 : 300,
-  });
+  const today = new Date();
+  const daysAgo = (days: number) => new Date(today.getTime() - days * 86_400_000).toISOString().slice(0, 10);
+  const data = await discover(
+    guide.kind,
+    lang,
+    guide.mode === 'new'
+      ? {
+          providers: guide.provider ? [guide.provider.id] : undefined,
+          region: guide.provider ? region : undefined,
+          // Catalogs add older titles too; a year back keeps service lists full, 90 days for general releases.
+          releasedAfter: daysAgo(guide.provider ? 365 : 90),
+          releasedBefore: today.toISOString().slice(0, 10),
+          sortBy: guide.provider ? (guide.kind === 'movie' ? 'primary_release_date' : 'first_air_date') : 'popularity',
+          minVotes: guide.provider ? 5 : 20,
+        }
+      : {
+          genres: guide.genre ? [guide.genre.id] : undefined,
+          providers: guide.provider ? [guide.provider.id] : undefined,
+          region: guide.provider ? region : undefined,
+          sortBy: 'vote_average',
+          minVotes: guide.provider ? 80 : guide.kind === 'movie' ? 800 : 300,
+        },
+  );
   return { lang, guide, region, items: data.results.filter((item) => item.poster_path) };
 }
 
 export async function generateMetadata({ params }: PageProps<'/[lang]/guides/[slug]'>): Promise<Metadata> {
   const { lang, guide, items } = await loadGuide(params);
   const t = await getDictionary(lang);
-  const heading = guideHeading(guide, lang, t);
+  const heading = guideHeading(guide, lang, t, { withMonth: true });
   const year = new Date().getFullYear();
   const topTitles = items.slice(0, 3).map((item) => item.title).join(', ');
 
@@ -54,8 +70,8 @@ export async function generateMetadata({ params }: PageProps<'/[lang]/guides/[sl
   return pageMetadata({
     lang,
     path: `/guides/${guide.slug}`,
-    alternatePath: `/guides/${guideSlug(otherLang, guide.kind, otherGenre, guide.provider)}`,
-    title: `${heading} (${year})`,
+    alternatePath: `/guides/${guideSlug(otherLang, guide.kind, otherGenre, guide.provider, guide.mode)}`,
+    title: guide.mode === 'new' ? heading : `${heading} (${year})`,
     description: `${heading}: ${topTitles}${items.length > 3 ? '…' : ''} ${t.guidesDescription}`.slice(0, 160),
     image: tmdbImage(items[0]?.backdrop_path, 'w1280'),
     noIndex: items.length < MIN_INDEXABLE_ITEMS,
@@ -71,7 +87,7 @@ export default async function GuidePage({ params }: PageProps<'/[lang]/guides/[s
     listGuides(lang),
   ]);
 
-  const heading = guideHeading(guide, lang, t);
+  const heading = guideHeading(guide, lang, t, { withMonth: true });
   const country = countries.find((item) => item.iso_3166_1 === region)?.native_name ?? region;
   const values = {
     count: items.length,
@@ -81,7 +97,9 @@ export default async function GuidePage({ params }: PageProps<'/[lang]/guides/[s
     country,
   };
   const intro =
-    guide.genre && guide.provider
+    guide.mode === 'new'
+      ? format(guide.provider ? t.guideIntroNewProvider : t.guideIntroNew, values)
+      : guide.genre && guide.provider
       ? format(t.guideIntroGenreProvider, values)
       : guide.provider
         ? format(t.guideIntroProvider, values)
@@ -92,6 +110,8 @@ export default async function GuidePage({ params }: PageProps<'/[lang]/guides/[s
     .filter((other) => other.slug !== guide.slug && other.kind === guide.kind)
     .filter(
       (other) =>
+        (guide.mode === 'new' && other.mode === 'new') ||
+        (guide.provider && other.mode === 'new' && other.provider?.id === guide.provider.id) ||
         (guide.genre && other.genre?.id === guide.genre.id) ||
         (guide.provider && other.provider?.id === guide.provider.id && (!guide.genre || !other.genre)),
     )

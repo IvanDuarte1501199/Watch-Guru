@@ -6,6 +6,7 @@ import { api, type LibraryEntry, type LibraryStatus, type TitleInfo, type TitleS
 import { useSession } from '@/lib/auth-client';
 import { useI18n } from '@/lib/i18n/DictionaryProvider';
 import { routes } from '@/lib/routes';
+import { useLibraryIndex } from './LibraryIndexProvider';
 
 const episodeKey = (season: number, episode: number) => `${season}:${episode}`;
 
@@ -34,6 +35,7 @@ export function TitleLibraryProvider({ info, children }: { info: TitleInfo; chil
   const router = useRouter();
   const pathname = usePathname();
   const { data: session, isPending } = useSession();
+  const index = useLibraryIndex();
   const signedIn = Boolean(session);
 
   const [entry, setEntry] = useState<LibraryEntry | null>(null);
@@ -88,12 +90,13 @@ export function TitleLibraryProvider({ info, children }: { info: TitleInfo; chil
       try {
         const saved = await api.updateEntry(info, changes);
         setEntry(saved);
+        index?.replace(mediaType, tmdbId, saved);
         if (changes.rating !== undefined) api.titleStats(mediaType, tmdbId, true).then(setStats).catch(() => undefined);
       } catch {
         setEntry(previous);
       }
     },
-    [entry, info, requireSignIn, mediaType, tmdbId],
+    [entry, info, requireSignIn, mediaType, tmdbId, index],
   );
 
   const setEpisodesWatched = useCallback(

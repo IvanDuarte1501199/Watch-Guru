@@ -131,8 +131,10 @@ export const api = {
       ...changes,
     }).then((data) => data.entry),
 
-  library: (status: LibraryStatus | 'rated') =>
-    request<{ items: LibraryEntry[] }>(`/api/me/library?status=${status}`).then((data) => data.items),
+  library: (status?: LibraryStatus | 'rated') =>
+    request<{ items: LibraryEntry[] }>(`/api/me/library${status ? `?status=${status}` : ''}`, {
+      cache: 'no-store',
+    }).then((data) => data.items),
 
   librarySummary: () => request<LibrarySummary>('/api/me/library/summary'),
 

@@ -188,6 +188,9 @@ export interface DiscoverParams {
   providers?: number[];
   region?: string;
   minVotes?: number;
+  /** ISO dates (YYYY-MM-DD) bounding the release / first air date. */
+  releasedAfter?: string;
+  releasedBefore?: string;
 }
 
 export async function discover(kind: MediaKind, lang: Locale, params: DiscoverParams = {}) {
@@ -205,6 +208,8 @@ export async function discover(kind: MediaKind, lang: Locale, params: DiscoverPa
       with_watch_providers: byProvider ? params.providers!.join('|') : undefined,
       watch_region: byProvider ? params.region : undefined,
       with_watch_monetization_types: byProvider ? 'flatrate' : undefined,
+      [kind === 'movie' ? 'primary_release_date.gte' : 'first_air_date.gte']: params.releasedAfter,
+      [kind === 'movie' ? 'primary_release_date.lte' : 'first_air_date.lte']: params.releasedBefore,
     },
   });
   return mapPaged(data, kind);

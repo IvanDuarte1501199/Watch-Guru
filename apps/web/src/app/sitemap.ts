@@ -40,7 +40,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       listGuides(lang),
       getTrendingPeople(lang),
     ]);
-    guides.forEach((guide) => add(routes.guide(lang, guide.slug), guide.provider && guide.genre ? 0.6 : 0.8, 'weekly'));
+    guides.forEach((guide) =>
+      guide.mode === 'new'
+        ? add(routes.guide(lang, guide.slug), 0.8, 'daily')
+        : add(routes.guide(lang, guide.slug), guide.provider && guide.genre ? 0.6 : 0.8, 'weekly'),
+    );
     movieGenres.forEach((genre) => add(routes.genre(lang, 'movie', genre.id, genre.name), 0.6, 'weekly'));
     tvGenres.forEach((genre) => add(routes.genre(lang, 'tv', genre.id, genre.name), 0.6, 'weekly'));
     people.forEach((person) => add(routes.person(lang, person.id, person.name), 0.4, 'weekly'));
