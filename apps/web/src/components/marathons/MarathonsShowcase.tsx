@@ -4,6 +4,7 @@ import type { Dictionary } from '@/lib/i18n/get-dictionary';
 import { marathons } from '@/lib/marathons/data';
 import { loadMarathonCards } from '@/lib/marathons/load';
 import { routes } from '@/lib/routes';
+import { Carousel } from '@/components/ui/Carousel';
 import { MarathonCardLink } from './MarathonCardLink';
 
 /** Home rail of franchise marathons. */
@@ -21,13 +22,11 @@ export async function MarathonsShowcase({ lang, t }: { lang: Locale; t: Dictiona
           {t.viewAll} &rarr;
         </Link>
       </div>
-      <ul className="no-scrollbar -mx-4 flex snap-x scroll-px-4 gap-4 overflow-x-auto px-4 pt-1 pb-4 md:mx-0 md:px-0">
+      <Carousel label={t.marathons} itemClassName="w-[270px] sm:w-[290px]">
         {cards.map((card) => (
-          <li key={card.slug} className="w-[270px] shrink-0 snap-start sm:w-[290px]">
-            <MarathonCardLink card={card} lang={lang} t={t} />
-          </li>
+          <MarathonCardLink key={card.slug} card={card} lang={lang} t={t} />
         ))}
-      </ul>
+      </Carousel>
     </section>
   );
 }

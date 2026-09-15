@@ -14,6 +14,7 @@ import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 import { MarathonCardLink } from '@/components/marathons/MarathonCardLink';
 import { MarathonView } from '@/components/marathons/MarathonView';
+import { Carousel } from '@/components/ui/Carousel';
 
 export const revalidate = 86400;
 
@@ -137,13 +138,11 @@ export default async function MarathonPage({ params }: PageProps<'/[lang]/marath
 
       <section className="mt-16">
         <h2 className="h2-guru mb-4">{t.marathonOthers}</h2>
-        <ul className="no-scrollbar -mx-4 flex snap-x scroll-px-4 gap-4 overflow-x-auto px-4 pb-4 md:mx-0 md:px-0">
+        <Carousel label={t.marathonOthers} itemClassName="w-[260px]">
           {others.map((card) => (
-            <li key={card.slug} className="w-[260px] shrink-0 snap-start">
-              <MarathonCardLink card={card} lang={lang} t={t} />
-            </li>
+            <MarathonCardLink key={card.slug} card={card} lang={lang} t={t} />
           ))}
-        </ul>
+        </Carousel>
       </section>
     </div>
   );
