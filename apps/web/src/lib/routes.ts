@@ -44,6 +44,8 @@ export const routes = {
   terms: (lang: Locale) => `/${lang}/terms`,
   match: (lang: Locale) => `/${lang}/match`,
   guides: (lang: Locale) => `/${lang}/guides`,
+  marathons: (lang: Locale) => `/${lang}/marathons`,
+  marathon: (lang: Locale, slug: string) => `/${lang}/marathons/${slug}`,
   guide: (lang: Locale, slug: string) => `/${lang}/guides/${slug}`,
   similar: (lang: Locale, kind: MediaKind, id: number, title?: string) =>
     `/${lang}/${mediaSegment(kind)}/${withSlug(id, title)}/similar`,

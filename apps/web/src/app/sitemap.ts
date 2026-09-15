@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { getPublicLists } from '@/lib/backend';
 import { listGuides } from '@/lib/guides';
+import { marathons } from '@/lib/marathons/data';
 import { locales } from '@/lib/i18n/config';
 import { routes } from '@/lib/routes';
 import { SITE_URL } from '@/lib/site';
@@ -29,6 +30,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     add(routes.list(lang, 'movie'), 0.9, 'daily');
     add(routes.list(lang, 'tv'), 0.9, 'daily');
     add(routes.guides(lang), 0.9, 'weekly');
+    add(routes.marathons(lang), 0.9, 'weekly');
+    marathons.forEach((marathon) => add(routes.marathon(lang, marathon.slug), 0.9, 'weekly'));
     add(routes.trending(lang), 0.8, 'daily');
     add(routes.match(lang), 0.8, 'weekly');
     add(routes.privacy(lang), 0.2, 'weekly');

@@ -8,6 +8,7 @@ import { pageMetadata } from '@/lib/seo';
 import { rotatingPick } from '@/lib/site';
 import { discover, getCategory, getGenres, getTrendingAll, getTrendingPeople } from '@/lib/tmdb/api';
 import { AdSlot } from '@/components/ads/AdSlot';
+import { MarathonsShowcase } from '@/components/marathons/MarathonsShowcase';
 import { HeroCarousel } from '@/components/media/HeroCarousel';
 import { MagicSuggest } from '@/components/media/MagicSuggest';
 import { MatchPromo } from '@/components/media/MatchPromo';
@@ -82,6 +83,7 @@ export default async function HomePage({ params }: PageProps<'/[lang]'>) {
       </div>
 
       <HeroCarousel items={heroItems} />
+      <MarathonsShowcase lang={lang} t={t} />
 
       <MagicSuggest lang={lang} t={t} />
       <MatchPromo lang={lang} t={t} />
